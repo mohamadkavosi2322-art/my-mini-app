@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+><!DOCTYPE html>
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
@@ -28,15 +28,20 @@
             margin-top: 10px;
             cursor: pointer;
         }
+        .emoji-big {
+            font-size: 24px;
+        }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>🧠 ChatGPT</h2>
         <p>به ربات هوش مصنوعی خوش آمدید</p>
-        <button onclick="sendToBot('چت')">💬 چت</button>
-        <button onclick="sendToBot('راهنما')">❓ راهنما</button>
-        <button onclick="sendToBot('پشتیبانی')">🆘 پشتیبانی</button>
+        
+        <button onclick="sendToBot('چت هوشمند')">🧠 چت هوشمند</button>
+        <button onclick="sendToBot('تاریخچه چت')">📋 تاریخچه چت</button>
+        <button onclick="sendToBot('پشتیبانی')">👤 پشتیبانی</button>
+        <button onclick="openSettings()">⚙️ تنظیمات دلخواه</button>
     </div>
 
     <script>
@@ -50,6 +55,14 @@
                 tg.sendData(data);
             } else {
                 alert('دکمه: ' + data);
+            }
+        }
+
+        function openSettings() {
+            if (tg && tg.openLink) {
+                tg.openLink('https://ble.ir/Pixeruser');
+            } else {
+                alert('تنظیمات باز شد!');
             }
         }
     </script>
