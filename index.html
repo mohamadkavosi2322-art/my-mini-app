@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://tapi.bale.ai/miniapp.js?3"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: var(--tg-theme-bg-color, #fff);
+            color: var(--tg-theme-text-color, #000);
+        }
+        .card {
+            background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+        }
+        button {
+            background: var(--tg-theme-button-color, #0088cc);
+            color: var(--tg-theme-button-text-color, #fff);
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🧠 ChatGPT</h2>
+        <p>به ربات هوش مصنوعی خوش آمدید</p>
+        <button onclick="sendToBot('چت')">💬 چت</button>
+        <button onclick="sendToBot('راهنما')">❓ راهنما</button>
+        <button onclick="sendToBot('پشتیبانی')">🆘 پشتیبانی</button>
+    </div>
+
+    <script>
+        let tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+        }
+
+        function sendToBot(data) {
+            if (tg && tg.sendData) {
+                tg.sendData(data);
+            } else {
+                alert('دکمه: ' + data);
+            }
+        }
+    </script>
+</body>
+</html>
