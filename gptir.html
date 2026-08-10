@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT Iran</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e5e7eb;min-height:100vh;padding:20px;direction:rtl}
+        .app{max-width:900px;margin:0 auto}
+        .header{display:flex;justify-content:space-between;align-items:center;padding:12px 18px;background:#141414;border-radius:16px;border:1px solid #2a2a2a;margin-bottom:14px}
+        .header-left{display:flex;align-items:center;gap:12px}
+        .header-left .menu-btn{background:transparent;border:none;color:#e5e7eb;font-size:22px;cursor:pointer;padding:4px 8px;border-radius:8px}
+        .header-left .menu-btn:hover{background:rgba(255,255,255,0.05)}
+        .header-left h1{font-size:18px;font-weight:700}
+        .header-left h1 span{color:#3b82f6}
+        .header .badge{font-size:10px;color:#6b7280;background:#1f1f1f;padding:3px 10px;border-radius:20px}
+        .main{background:#141414;border-radius:16px;border:1px solid #2a2a2a;padding:20px;margin-bottom:14px;position:relative}
+        .chat-box{background:#1a1a1a;border-radius:12px;padding:16px;min-height:280px;max-height:380px;overflow-y:auto;margin-bottom:14px;border:1px solid #2a2a2a}
+        .chat-box::-webkit-scrollbar{width:4px}
+        .chat-box::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
+        .msg{padding:10px 16px;border-radius:12px;margin-bottom:6px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.8}
+        .msg.user{background:#3b82f6;color:#fff;margin-right:auto;text-align:right}
+        .msg.bot{background:rgba(255,255,255,0.06);color:#e5e7eb;margin-left:auto;text-align:left;border:1px solid #2a2a2a}
+        .msg.bot .cursor{display:inline-block;width:2px;height:18px;background:#3b82f6;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-right:2px}
+        @keyframes blink{50%{opacity:0}}
+        .input-area{display:flex;gap:12px;align-items:center;margin-top:4px}
+        .input-area input{flex:1;padding:12px 16px;border-radius:24px;border:1px solid #2a2a2a;font-size:14px;outline:none;font-family:inherit;background:#1a1a1a;color:#e5e7eb;transition:border .2s}
+        .input-area input::placeholder{color:#6b7280}
+        .input-area input:focus{border-color:#3b82f6}
+        .input-area .circle-btn{width:48px;height:48px;border-radius:50%;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-family:inherit}
+        .input-area .circle-btn:hover{transform:scale(1.05)}
+        .input-area .circle-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none}
+        .input-area .send-btn{background:#3b82f6;color:#fff}
+        .input-area .send-btn:hover{background:#2563eb}
+        .input-area .stop-btn{background:#ef4444;color:#fff;display:none}
+        .input-area .stop-btn:hover{background:#dc2626}
+        .footer{text-align:center;font-size:11px;color:#4b5563;padding-top:14px;border-top:1px solid #2a2a2a}
+        .footer span{color:#3b82f6}
+        .status{font-size:12px;color:#6b7280;text-align:center;margin-top:10px}
+
+        /* ===== سایدبار ===== */
+        .sidebar-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:100;display:none}
+        .sidebar-overlay.open{display:block}
+        .sidebar{position:fixed;top:0;right:0;bottom:0;width:320px;max-width:85%;background:#141414;z-index:200;transform:translateX(100%);transition:transform .3s ease;padding:20px;overflow-y:auto;border-left:1px solid #2a2a2a}
+        .sidebar.open{transform:translateX(0)}
+        .sidebar-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #2a2a2a}
+        .sidebar-header h2{font-size:18px;font-weight:600;color:#e5e7eb}
+        .sidebar-header .close-btn{background:transparent;border:none;color:#6b7280;font-size:22px;cursor:pointer}
+        .sidebar-section{margin-bottom:20px}
+        .sidebar-section .section-title{font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+        .sidebar-item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:10px;cursor:pointer;transition:all .2s;border:1px solid transparent}
+        .sidebar-item:hover{background:rgba(255,255,255,0.05);border-color:#2a2a2a}
+        .sidebar-item .label{font-size:13px;color:#e5e7eb}
+        .sidebar-item .value{font-size:12px;color:#6b7280}
+        .sidebar-item .check{color:#3b82f6}
+        .sidebar-item .color-dot{width:20px;height:20px;border-radius:50%;border:2px solid #2a2a2a;flex-shrink:0}
+        .color-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+        .color-grid .cbtn{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+        .color-grid .cbtn:hover{transform:scale(1.1)}
+        .color-grid .cbtn.active{border-color:#fff;box-shadow:0 0 10px rgba(255,255,255,0.2)}
+        .theme-buttons{display:flex;gap:6px;margin-top:6px}
+        .theme-buttons button{padding:6px 16px;border-radius:8px;border:1px solid #2a2a2a;background:transparent;color:#9ca3af;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s}
+        .theme-buttons button.active{background:rgba(59,130,246,0.2);color:#e5e7eb;border-color:#3b82f6}
+        .model-item{padding:8px 14px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:all .2s}
+        .model-item:hover{background:rgba(255,255,255,0.05)}
+        .model-item .name{font-size:13px;color:#e5e7eb}
+        .model-item .check{color:#3b82f6}
+        .history-list{margin-top:6px;max-height:200px;overflow-y:auto}
+        .history-list .h-item{padding:8px 12px;border-radius:8px;cursor:pointer;font-size:12px;color:#9ca3af;transition:all .2s;border-bottom:1px solid rgba(255,255,255,0.05)}
+        .history-list .h-item:hover{background:rgba(255,255,255,0.05);color:#e5e7eb}
+        .history-list .h-item.active{color:#3b82f6}
+        .history-list .h-item .h-time{font-size:9px;color:#6b7280;display:block;margin-top:2px}
+        .empty-history{text-align:center;padding:16px 0;font-size:12px;color:#6b7280}
+        @media(max-width:600px){body{padding:12px}.header{padding:10px 14px}.main{padding:14px}.sidebar{width:280px}}
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- هدر -->
+    <div class="header">
+        <div class="header-left">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <h1><span>GPT</span> Iran</h1>
+        </div>
+        <span class="badge">نسخه 3.0</span>
+    </div>
+
+    <!-- بخش اصلی -->
+    <div class="main">
+        <!-- چت باکس -->
+        <div class="chat-box" id="chatBox">
+            <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+        </div>
+
+        <!-- ورودی -->
+        <div class="input-area">
+            <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key=='Enter' && !event.shiftKey){event.preventDefault();sendMessage()}">
+            <button class="circle-btn send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+            <button class="circle-btn stop-btn" id="stopBtn" onclick="stopGeneration()">■</button>
+        </div>
+
+        <div class="status" id="statusText">وضعیت: آماده</div>
+    </div>
+
+    <!-- فوتر -->
+    <div class="footer">ساخته شده توسط <span>Bale-OpenAI</span></div>
+</div>
+
+<!-- ===== سایدبار ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2>☰ منو</h2>
+        <button class="close-btn" onclick="toggleSidebar()">✕</button>
+    </div>
+
+    <!-- انتخاب مدل -->
+    <div class="sidebar-section">
+        <div class="section-title">مدل هوش مصنوعی</div>
+        <div id="modelContainer">
+            <div class="model-item" data-model="gpt-4o-mini" onclick="selectModel('gpt-4o-mini')">
+                <span class="name">GPT-4o Mini</span>
+                <span class="check">✓</span>
+            </div>
+            <div class="model-item" data-model="gpt-4o" onclick="selectModel('gpt-4o')">
+                <span class="name">GPT-4o</span>
+                <span class="check"></span>
+            </div>
+            <div class="model-item" data-model="gpt-4" onclick="selectModel('gpt-4')">
+                <span class="name">GPT-4</span>
+                <span class="check"></span>
+            </div>
+            <div class="model-item" data-model="gpt-3.5-turbo" onclick="selectModel('gpt-3.5-turbo')">
+                <span class="name">GPT-3.5</span>
+                <span class="check"></span>
+            </div>
+            <div class="model-item" data-model="o1-mini" onclick="selectModel('o1-mini')">
+                <span class="name">O1 Mini</span>
+                <span class="check"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- انتخاب رنگ -->
+    <div class="sidebar-section">
+        <div class="section-title">رنگ</div>
+        <div class="color-grid" id="colorPicker">
+            <button class="cbtn active" style="background:#3b82f6" data-color="#3b82f6" title="آبی"></button>
+            <button class="cbtn" style="background:#ef4444" data-color="#ef4444" title="قرمز"></button>
+            <button class="cbtn" style="background:#ffffff" data-color="#ffffff" title="سفید"></button>
+            <button class="cbtn" style="background:#1a1a1a" data-color="#1a1a1a" title="مشکی"></button>
+            <button class="cbtn" style="background:#22c55e" data-color="#22c55e" title="سبز"></button>
+            <button class="cbtn" style="background:#ec4899" data-color="#ec4899" title="صورتی"></button>
+            <button class="cbtn" style="background:#8b5cf6" data-color="#8b5cf6" title="بنفش"></button>
+            <button class="cbtn" style="background:#eab308" data-color="#eab308" title="زرد"></button>
+            <button class="cbtn" style="background:#f97316" data-color="#f97316" title="نارنجی"></button>
+        </div>
+    </div>
+
+    <!-- انتخاب تم -->
+    <div class="sidebar-section">
+        <div class="section-title">تم</div>
+        <div class="theme-buttons" id="themeToggle">
+            <button class="active" data-theme="dark">تاریک</button>
+            <button data-theme="light">روشن</button>
+        </div>
+    </div>
+
+    <!-- تاریخچه -->
+    <div class="sidebar-section">
+        <div class="section-title">تاریخچه</div>
+        <button onclick="newChat()" style="width:100%;padding:8px 14px;border-radius:8px;border:1px solid #2a2a2a;background:transparent;color:#e5e7eb;font-size:13px;cursor:pointer;font-family:inherit;margin-bottom:8px">+ گفتگوی جدید</button>
+        <div class="history-list" id="historyList">
+            <div class="empty-history">تاریخچه خالی است</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const AVALAI_KEY = "aa-iuxSVnhoKQnYRRHavV6WnuohoCz1pzBUmJ2bJWRICxCXgejW";
+    const AVALAI_URL = "https://api.avalai.ir/v1/chat/completions";
+
+    let currentModel = "gpt-4o-mini";
+    let isWaiting = false;
+    let isStreaming = false;
+    let lastBotResponse = '';
+    let chatHistory = [];
+    let currentChatId = null;
+    let chatSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+    let currentColor = "#3b82f6";
+    let currentTheme = "dark";
+
+    // ===== سایدبار =====
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('sidebarOverlay').classList.toggle('open');
+    }
+
+    // ===== مدل =====
+    function selectModel(model) {
+        currentModel = model;
+        document.querySelectorAll('#modelContainer .model-item .check').forEach(el => el.textContent = '');
+        document.querySelector(`#modelContainer .model-item[data-model="${model}"] .check`).textContent = '✓';
+        updateStatus('مدل: ' + model);
+        toggleSidebar();
+    }
+
+    // ===== رنگ =====
+    function applyColor(color) {
+        currentColor = color;
+        document.querySelectorAll('.msg.user').forEach(el => el.style.background = color);
+        document.querySelectorAll('.send-btn').forEach(el => el.style.background = color);
+        document.querySelectorAll('.header h1 span').forEach(el => el.style.color = color);
+        document.querySelectorAll('.footer span').forEach(el => el.style.color = color);
+        document.querySelectorAll('.chat-box::-webkit-scrollbar-thumb').forEach(el => el.style.background = color);
+        document.querySelectorAll('.msg.bot .cursor').forEach(el => el.style.background = color);
+        document.querySelectorAll('.color-grid .cbtn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.color === color);
+        });
+        document.querySelectorAll('.model-item .check').forEach(el => el.style.color = color);
+        localStorage.setItem('chatColor', color);
+    }
+
+    document.querySelectorAll('.color-grid .cbtn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            applyColor(this.dataset.color);
+        });
+    });
+
+    // ===== تم =====
+    function applyTheme(theme) {
+        currentTheme = theme;
+        const body = document.body;
+        const isDark = theme === 'dark';
+        
+        body.style.background = isDark ? '#0a0a0a' : '#f5f7fa';
+        body.style.color = isDark ? '#e5e7eb' : '#1a1a1a';
+        
+        const borderColor = isDark ? '#2a2a2a' : '#d1d5db';
+        const bgColor = isDark ? '#141414' : '#ffffff';
+        const chatBg = isDark ? '#1a1a1a' : '#f9fafb';
+        
+        document.querySelectorAll('.header, .main, .sidebar').forEach(el => {
+            el.style.background = bgColor;
+            el.style.borderColor = borderColor;
+        });
+        document.querySelectorAll('.chat-box, .input-area input').forEach(el => {
+            el.style.background = chatBg;
+            el.style.borderColor = borderColor;
+            if(el.tagName === 'INPUT') el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.models button, .actions button, .sidebar-item, .model-item, .theme-buttons button').forEach(el => {
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.msg.bot').forEach(el => {
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.theme-buttons button').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.theme === theme);
+        });
+        
+        localStorage.setItem('chatTheme', theme);
+    }
+
+    document.querySelectorAll('.theme-buttons button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            applyTheme(this.dataset.theme);
+        });
+    });
+
+    // ===== تاریخچه =====
+    function saveSessions() {
+        localStorage.setItem('chatSessions', JSON.stringify(chatSessions));
+    }
+
+    function renderHistory() {
+        const list = document.getElementById('historyList');
+        if (chatSessions.length === 0) {
+            list.innerHTML = '<div class="empty-history">تاریخچه خالی است</div>';
+            return;
+        }
+        list.innerHTML = '';
+        chatSessions.forEach((session, index) => {
+            const div = document.createElement('div');
+            div.className = 'h-item' + (session.id === currentChatId ? ' active' : '');
+            div.innerHTML = `<span>${session.title}</span><span class="h-time">${session.time}</span>`;
+            div.onclick = () => loadSession(index);
+            list.appendChild(div);
+        });
+    }
+
+    function saveCurrentChat() {
+        if (chatHistory.length === 0) return;
+        const firstMsg = chatHistory.find(m => m.role === 'user');
+        const title = firstMsg ? firstMsg.content.slice(0, 30) + (firstMsg.content.length > 30 ? '...' : '') : 'گفتگو';
+        const existing = chatSessions.findIndex(s => s.id === currentChatId);
+        const session = {
+            id: currentChatId || 'chat_' + Date.now(),
+            title: title,
+            time: new Date().toLocaleString('fa-IR'),
+            messages: chatHistory
+        };
+        if (existing !== -1) {
+            chatSessions[existing] = session;
+        } else {
+            chatSessions.push(session);
+        }
+        if (chatSessions.length > 50) chatSessions.shift();
+        saveSessions();
+        renderHistory();
+    }
+
+    function loadSession(index) {
+        const session = chatSessions[index];
+        if (!session) return;
+        currentChatId = session.id;
+        chatHistory = JSON.parse(JSON.stringify(session.messages));
+        const box = document.getElementById('chatBox');
+        box.innerHTML = '';
+        chatHistory.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = 'msg ' + (msg.role === 'user' ? 'user' : 'bot');
+            div.textContent = msg.content;
+            box.appendChild(div);
+        });
+        if (chatHistory.length === 0) {
+            box.innerHTML = '<div class="msg bot">سلام. سوال خود را بپرسید.</div>';
+        }
+        box.scrollTop = box.scrollHeight;
+        renderHistory();
+        updateStatus('بارگذاری شد');
+        setTimeout(() => updateStatus('آماده'), 1000);
+        toggleSidebar();
+    }
+
+    function newChat() {
+        currentChatId = 'chat_' + Date.now();
+        chatHistory = [];
+        document.getElementById('chatBox').innerHTML = '<div class="msg bot">سلام. سوال خود را بپرسید.</div>';
+        lastBotResponse = '';
+        updateStatus('گفتگوی جدید');
+        setTimeout(() => updateStatus('آماده'), 1000);
+        renderHistory();
+        toggleSidebar();
+    }
+
+    // ===== چت =====
+    function updateStatus(text) {
+        document.getElementById('statusText').textContent = 'وضعیت: ' + text;
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+        if (!msg || isWaiting) return;
+
+        const box = document.getElementById('chatBox');
+        if (box.querySelector('.msg.bot')?.textContent === 'سلام. سوال خود را بپرسید.') {
+            box.innerHTML = '';
+        }
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'msg user';
+        userMsg.textContent = msg;
+        userMsg.style.background = currentColor;
+        box.appendChild(userMsg);
+        box.scrollTop = box.scrollHeight;
+
+        chatHistory.push({role: 'user', content: msg});
+        input.value = '';
+        isWaiting = true;
+        isStreaming = true;
+        document.getElementById('sendBtn').disabled = true;
+        document.getElementById('sendBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'flex';
+        updateStatus('در حال فکر کردن...');
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'msg bot';
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        botMsg.appendChild(cursor);
+        box.appendChild(botMsg);
+        box.scrollTop = box.scrollHeight;
+
+        try {
+            const response = await fetch(AVALAI_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + AVALAI_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: currentModel,
+                    messages: chatHistory,
+                    temperature: 0.7,
+                    max_tokens: 800
+                })
+            });
+
+            const data = await response.json();
+            if (data.choices && data.choices[0]) {
