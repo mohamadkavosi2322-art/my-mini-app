@@ -190,7 +190,7 @@
                 <button onclick="toggleVoice()" title="ورودی صوتی">🎤</button>
             </div>
             <button class="send-btn" id="sendBtn" onclick="sendMessage()">ارسال</button>
-            <button class="stop-btn" id="stopBtn" onclick="stopGeneration()">توقف</button>
+            <button class="stop-btn" id="stopBtn" onclick="stopGeneration()" style="display:none;">توقف</button>
         </div>
     </div>
 </div>
@@ -271,10 +271,8 @@
     let chatHistory = [];
     let messageId = 0;
     let isDark = true;
-    let currentChatId = null;
 
     // ===== DOM =====
-    const chatArea = document.getElementById('chatArea');
     const messagesContainer = document.getElementById('messagesContainer');
     const emptyState = document.getElementById('emptyState');
     const chatInput = document.getElementById('chatInput');
@@ -296,14 +294,9 @@
         document.getElementById('sidebar').classList.toggle('open');
     }
 
-    function closeSidebar() {
-        document.getElementById('sidebar').classList.remove('open');
-    }
-
     // ===== Modals =====
     function openModal(id) {
         document.getElementById(id).classList.add('open');
-        closeSidebar();
     }
 
     function closeModal(id) {
@@ -334,4 +327,6 @@
             'o1-mini': 'O1 Mini',
             'o1-preview': 'O1 Preview'
         };
-        document.getElementById('currentMo
+        document.getElementById('currentModelDisplay').textContent = names[model] || model;
+        document.querySelectorAll('#modelList .item .check').forEach(c => c.textContent = '');
+        document.querySelector(`#modelList .item[da
