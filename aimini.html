@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e5e7eb;min-height:100vh;padding:0;direction:rtl;transition:background .3s}
+        body.light{background:#f3f4f6;color:#111827}
+        .app{max-width:800px;margin:0 auto;height:100vh;display:flex;flex-direction:column}
+        
+        /* هدر */
+        .header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#141414;border-bottom:1px solid #2a2a2a;transition:background .3s}
+        body.light .header{background:#fff;border-bottom:1px solid #e5e7eb}
+        .header h1{font-size:18px;font-weight:600}
+        .header .badge{font-size:11px;color:#6b7280;background:#1f1f1f;padding:4px 12px;border-radius:20px}
+        body.light .header .badge{background:#f3f4f6}
+        .menu-btn{background:transparent;border:none;color:#e5e7eb;font-size:28px;cursor:pointer;padding:0 8px;transition:color .2s}
+        body.light .menu-btn{color:#111827}
+        .menu-btn:hover{color:#3b82f6}
+
+        /* سایدبار */
+        .sidebar{position:fixed;top:0;right:-320px;width:300px;height:100%;background:#141414;border-left:1px solid #2a2a2a;transition:right .3s;z-index:1000;padding:20px;overflow-y:auto}
+        body.light .sidebar{background:#fff;border-left:1px solid #e5e7eb}
+        .sidebar.open{right:0}
+        .sidebar-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999;display:none}
+        .sidebar-overlay.open{display:block}
+        .sidebar h2{font-size:16px;margin-bottom:16px;color:#6b7280}
+        .sidebar .close-btn{background:transparent;border:none;color:#e5e7eb;font-size:24px;cursor:pointer;float:left}
+        body.light .sidebar .close-btn{color:#111827}
+        .sidebar .history-item{padding:10px 14px;border-radius:8px;margin-bottom:6px;cursor:pointer;transition:background .2s;border:1px solid #2a2a2a;font-size:14px}
+        body.light .sidebar .history-item{border-color:#e5e7eb}
+        .sidebar .history-item:hover{background:#1f1f1f}
+        body.light .sidebar .history-item:hover{background:#f3f4f6}
+        .sidebar .history-item.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+        .sidebar .setting-group{margin-top:20px;padding-top:16px;border-top:1px solid #2a2a2a}
+        body.light .sidebar .setting-group{border-top-color:#e5e7eb}
+        .sidebar .setting-group label{display:block;font-size:13px;color:#6b7280;margin-bottom:8px}
+        .sidebar .color-options{display:flex;gap:8px;flex-wrap:wrap}
+        .sidebar .color-options button{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+        .sidebar .color-options button:hover{border-color:#fff}
+        .sidebar .color-options button.active{border-color:#fff;transform:scale(1.1)}
+        body.light .sidebar .color-options button.active{border-color:#111827}
+        .sidebar .theme-options{display:flex;gap:10px}
+        .sidebar .theme-options button{padding:6px 16px;border-radius:8px;border:1px solid #2a2a2a;background:transparent;color:#e5e7eb;cursor:pointer;transition:all .2s;font-family:inherit}
+        body.light .sidebar .theme-options button{color:#111827;border-color:#e5e7eb}
+        .sidebar .theme-options button.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+        .sidebar .theme-options button:hover{border-color:#3b82f6}
+
+        /* چت باکس */
+        .main{flex:1;display:flex;flex-direction:column;padding:16px 20px;background:#0a0a0a;transition:background .3s}
+        body.light .main{background:#f3f4f6}
+        .chat-box{flex:1;overflow-y:auto;padding:4px 0;min-height:0}
+        .chat-box::-webkit-scrollbar{width:4px}
+        .chat-box::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
+        .msg{padding:10px 16px;border-radius:12px;margin-bottom:8px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.8;animation:fadeIn .3s}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+        .msg.user{background:#3b82f6;color:#fff;margin-right:auto;text-align:right}
+        body.light .msg.user{background:#3b82f6}
+        .msg.bot{background:#1f1f1f;color:#e5e7eb;margin-left:auto;text-align:left;border:1px solid #2a2a2a}
+        body.light .msg.bot{background:#fff;color:#111827;border-color:#e5e7eb}
+        .msg .time{font-size:10px;color:#6b7280;display:block;margin-top:4px}
+        body.light .msg .time{color:#9ca3af}
+        .msg.bot .time{text-align:left}
+        .msg.user .time{text-align:right;color:rgba(255,255,255,0.7)}
+        .typing-indicator{display:inline-block;width:4px;height:4px;border-radius:50%;background:#6b7280;animation:typing 1.4s infinite;margin:0 2px}
+        .typing-indicator:nth-child(2){animation-delay:.2s}
+        .typing-indicator:nth-child(3){animation-delay:.4s}
+        @keyframes typing{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+        .stop-btn{background:transparent;border:1px solid #ef4444;color:#ef4444;border-radius:50%;width:36px;height:36px;font-size:20px;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+        .stop-btn:hover{background:#ef4444;color:#fff}
+
+        /* ورودی */
+        .input-area{display:flex;gap:10px;padding:12px 0 0;border-top:1px solid #2a2a2a;margin-top:auto;align-items:center}
+        body.light .input-area{border-top-color:#e5e7eb}
+        .input-area input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid #2a2a2a;font-size:14px;outline:none;font-family:inherit;background:#1a1a1a;color:#e5e7eb;transition:border .2s}
+        body.light .input-area input{background:#fff;color:#111827;border-color:#e5e7eb}
+        .input-area input::placeholder{color:#6b7280}
+        .input-area input:focus{border-color:#3b82f6}
+        
+        /* دکمه ارسال دایره‌ای با سایز مناسب */
+        .input-area .send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: #3b82f6;
+            color: #fff;
+            font-size: 26px;
+            cursor: pointer;
+            transition: background .2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+        .input-area .send-btn:hover{background:#2563eb}
+        .input-area .send-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+        /* فوتر */
+        .footer{text-align:center;font-size:11px;color:#4b5563;padding:12px 0;border-top:1px solid #2a2a2a;background:#0a0a0a;transition:background .3s}
+        body.light .footer{background:#f3f4f6;border-top-color:#e5e7eb}
+        .footer span{color:#3b82f6}
+        .status{font-size:12px;color:#6b7280;text-align:center;padding:4px 0}
+
+        @media(max-width:600px){.sidebar{width:280px;right:-280px}.header{padding:12px 16px}.main{padding:12px 16px}}
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <!-- هدر -->
+    <div class="header">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h1>ChatGPT</h1>
+        <span class="badge">نسخه 1.0</span>
+    </div>
+
+    <!-- سایدبار -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+    <div class="sidebar" id="sidebar">
+        <button class="close-btn" onclick="toggleSidebar()">✕</button>
+        <h2>📜 تاریخچه</h2>
+        <div id="historyList"></div>
+
+        <div class="setting-group">
+            <label>🎨 تم</label>
+            <div class="theme-options">
+                <button class="active" data-theme="dark" onclick="setTheme('dark')">تاریک</button>
+                <button data-theme="light" onclick="setTheme('light')">روشن</button>
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <label>🎨 رنگ دکمه‌ها</label>
+            <div class="color-options" id="colorOptions">
+                <button style="background:#3b82f6" data-color="#3b82f6" class="active"></button>
+                <button style="background:#ef4444" data-color="#ef4444"></button>
+                <button style="background:#22c55e" data-color="#22c55e"></button>
+                <button style="background:#eab308" data-color="#eab308"></button>
+                <button style="background:#f97316" data-color="#f97316"></button>
+                <button style="background:#ec4899" data-color="#ec4899"></button>
+                <button style="background:#8b5cf6" data-color="#8b5cf6"></button>
+                <button style="background:#d97706" data-color="#d97706"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- چت -->
+    <div class="main">
+        <div class="chat-box" id="chatBox">
+            <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key=='Enter') sendMessage()">
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+        </div>
+
+        <div class="status" id="statusText">وضعیت: آماده</div>
+    </div>
+
+    <div class="footer">ساخته شده با <span>OpenAI</span></div>
+</div>
+
+<script>
+    // ===== تنظیمات =====
+    const AVALAI_KEY = "aa-iuxSVnhoKQnYRRHavV6WnuohoCz1pzBUmJ2bJWRICxCXgejW";
+    const AVALAI_URL = "https://api.avalai.ir/v1/chat/completions";
+
+    let currentModel = "gpt-4o-mini";
+    let isWaiting = false;
+    let isStopped = false;
+    let lastBotResponse = '';
+    let chatHistory = [];
+    let fullResponse = '';
+    let typingInterval = null;
+    let currentChatId = Date.now();
+
+    // ===== المنت‌ها =====
+    const chatBox = document.getElementById('chatBox');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const statusText = document.getElementById('statusText');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    // ===== سایدبار =====
+    function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+        if (sidebar.classList.contains('open')) loadHistory();
+    }
+
+    // ===== تاریخچه =====
+    function loadHistory() {
+        const list = document.getElementById('historyList');
+        const chats = JSON.parse(localStorage.getItem('chatHistoryList') || '[]');
+        list.innerHTML = chats.length === 0 ? '<div style="color:#6b7280;font-size:13px">هیچ مکالمه‌ای موجود نیست</div>' : '';
+        chats.forEach((chat, index) => {
+            const div = document.createElement('div');
+            div.className = 'history-item' + (chat.id === currentChatId ? ' active' : '');
+            div.textContent = chat.title || `مکالمه ${index+1}`;
+            div.onclick = () => loadChat(chat.id);
+            list.appendChild(div);
+        });
+    }
+
+    function saveCurrentChat() {
+        const msgs = chatBox.querySelectorAll('.msg');
+        if (msgs.length <= 1) return;
+        const title = msgs[1]?.textContent?.slice(0, 30) || 'مکالمه جدید';
+        const chats = JSON.parse(localStorage.getItem('chatHistoryList') || '[]');
+        const content = [];
+        msgs.forEach(m => {
+            const role = m.classList.contains('user') ? 'user' : 'bot';
+            content.push({role, content: m.textContent.replace(/[\d]{1,2}:[\d]{2}/g, '').trim()});
+        });
+        const existing = chats.find(c => c.id === currentChatId);
+        if (existing) {
+            existing.title = title;
+            existing.content = content;
+        } else {
+            chats.push({id: currentChatId, title, content});
+        }
+        localStorage.setItem('chatHistoryList', JSON.stringify(chats));
+    }
+
+    function loadChat(id) {
+        const chats = JSON.parse(localStorage.getItem('chatHistoryList') || '[]');
+        const chat = chats.find(c => c.id === id);
+        if (!chat) return;
+        currentChatId = id;
+        chatBox.innerHTML = '';
+        chat.content.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = `msg ${msg.role}`;
+            div.textContent = msg.content;
+            chatBox.appendChild(div);
+        });
+        if (chatBox.children.length === 0) {
+            chatBox.innerHTML = '<div class="msg bot">سلام. سوال خود را بپرسید.</div>';
+        }
+        chatHistory = chat.content;
+        toggleSidebar();
+        chatBox.scrollTop = chatBox.scrollHeight;
+        saveCurrentChat();
+    }
+
+    // ===== تم =====
+    function setTheme(theme) {
+        document.body.classList.toggle('light', theme === 'light');
+        document.querySelectorAll('.theme-options button').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+        localStorage.setItem('theme', theme);
+    }
+
+    // ===== رنگ =====
+    document.querySelectorAll('#colorOptions button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#colorOptions button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            const color = this.dataset.color;
+            document.querySelectorAll('.send-btn, .msg.user, .sidebar .history-item.active, .sidebar .theme-options button.active').forEach(el => {
+                if (el.classList.contains('send-btn')) el.style.background = color;
+                else if (el.classList.contains('msg')) el.style.background = color;
+                else if (el.classList.contains('history-item')) el.style.background = color;
+                else if (el.classList.contains('theme-options')) el.style.background = color;
+            });
+            document.querySelectorAll('.input-area input:focus, .models button.active').forEach(el => {
+                el.style.borderColor = color;
+            });
+            document.querySelectorAll('.models button:hover').forEach(el => {
+                el.style.borderColor = color;
+            });
+            document.querySelectorAll('.sidebar .history-item:hover').forEach(el => {
+                el.style.borderColor = color;
+            });
+            localStorage.setItem('color', color);
+        });
+    });
+
+    // ===== تایپ روان =====
+    function typeMessage(element, text, callback) {
+        let index = 0;
+        fullResponse = text;
+        element.textContent = '';
+        const stopBtn = document.createElement('button');
+        stopBtn.className = 'stop-btn';
+        stopBtn.textContent = '■';
+        stopBtn.title = 'توقف تولید';
+        stopBtn.onclick = () => { isStopped = true; clearInterval(typingInterval); };
+        const parent = element.parentNode;
+        parent.insertBefore(stopBtn, element.nextSibling);
+
+        typingInterval = setInterval(() => {
+            if (isStopped) {
+                clearInterval(typingInterval);
+                stopBtn.remove();
+                if (callback) callback();
+                return;
+            }
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                index++;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } else {
+                clearInterval(typingInterval);
+                stopBtn.remove();
+                if (callback) callback();
+            }
+        }, 15);
+    }
+
+    // ===== ارسال پیام =====
+    async function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg || isWaiting) return;
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'msg user';
+        userMsg.textContent = msg;
+        chatBox.appendChild(userMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        chatHistory.push({role: 'user', content: msg});
+        chatInput.value = '';
+        isWaiting = true;
+        sendBtn.disabled = true;
+        statusText.textContent = 'وضعیت: در حال فکر کردن...';
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'msg bot';
+        const typingDiv = document.createElement('div');
+        typingDiv.style.display = 'flex';
+        typingDiv.style.gap = '4px';
+        typingDiv.style.padding = '4px 0';
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'typing-indicator';
+            typingDiv.appendChild(dot);
+        }
+        botMsg.appendChild(typingDiv);
+        chatBox.appendChild(botMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const response = await fetch(AVALAI_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + AVALAI_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: currentModel,
+                    messages: chatHistory,
+                    temperature: 0.7,
+                    max_tokens: 800
+                })
+            });
+
+            const data = await response.json();
+            if (data.choices && data.choices[0]) {
+                const reply = data.choices[0].message.content;
+                botMsg.innerHTML = '';
+                const textSpan = document.createElement('span');
+                botMsg.appendChild(textSpan);
+                isStopped = false;
+                await new Promise(resolve => {
+                    typeMessage(textSpan, reply, resolve);
+                });
+                lastBotResponse = reply;
+                chatHistory.push({role: 'assistant', content: reply});
+                statusText.textContent = 'وضعیت: پاسخ دریافت شد';
+                saveCurrentChat();
+            } else {
+                botMsg.innerHTML = '❌ خطا در دریافت پاسخ';
+                statusText.textContent = 'وضعیت: خطا';
+            }
+        } catch(e) {
+            botMsg.innerHTML = '❌ خطا در ارتباط با سرور';
+            statusText.textContent = 'وضعیت: خطا';
+        }
+
+        isWaiting = false;
+        sendBtn.disabled = false;
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // ===== ذخیره خودکار =====
+    setInterval(saveCurrentChat, 3000);
+
+    // ===== بارگذاری تنظیمات =====
+    (function loadSettings() {
+        const theme = localStorage.getItem('theme') || 'dark';
+        setTheme(theme);
+        const color = localStorage.getItem('color') || '#3b82f6';
+        document.querySelectorAll('#colorOptions button').forEach(b => {
+            b.classList.toggle('active', b.dataset.color === color);
+        });
+        document.querySelectorAll('.send-btn, .msg.user, .sidebar .history-item.active, .sidebar .theme-options button.active').forEach(el => {
+            if (el.classList.contains('send-btn')) el.style.background = color;
+            else if (el.classList.contains('msg')) el.style.background = color;
+            else if (el.classList.contains('history-item')) el.style.background = color;
+            else if (el.classList.contains('theme-options')) el.style.background = color;
+        });
+    })();
+
+    // ===== میانبر =====
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) toggleSidebar();
+    });
+</script>
+</body>
+</html>
