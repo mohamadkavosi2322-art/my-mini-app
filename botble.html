@@ -28,10 +28,10 @@
         .input-area input::placeholder{color:#6b7280}
         .input-area input:focus{border-color:#3b82f6}
         /* دکمه ارسال دایره‌ای */
-        .input-area .send-btn{width:40px;height:40px;border-radius:50%;border:none;background:#3b82f6;color:#fff;font-size:18px;cursor:pointer;font-weight:500;transition:background .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0}
+        .input-area .send-btn{width:44px;height:44px;border-radius:50%;border:none;background:#3b82f6;color:#fff;font-size:20px;cursor:pointer;transition:background .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0}
         .input-area .send-btn:hover{background:#2563eb}
         .input-area .send-btn:disabled{opacity:0.5;cursor:not-allowed}
-        .input-area .stop-btn{width:40px;height:40px;border-radius:50%;border:1px solid #ef4444;background:transparent;color:#ef4444;font-size:18px;cursor:pointer;transition:all .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0}
+        .input-area .stop-btn{width:44px;height:44px;border-radius:50%;border:1px solid #ef4444;background:transparent;color:#ef4444;font-size:20px;cursor:pointer;transition:all .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;padding:0}
         .input-area .stop-btn:hover{background:#ef4444;color:#fff}
         .input-area .keyboard-btn{background:transparent;border:none;color:#9ca3af;font-size:24px;cursor:pointer;padding:0 4px;font-family:inherit}
         .input-area .keyboard-btn:hover{color:#e5e7eb}
@@ -41,14 +41,12 @@
         .footer{text-align:center;font-size:11px;color:#4b5563;padding-top:16px;border-top:1px solid #2a2a2a}
         .footer span{color:#3b82f6}
         .status{font-size:12px;color:#6b7280;text-align:center;margin-top:10px}
-        /* دکمه نظر (𝕏) زیر پیام ربات */
         .msg-actions{display:flex;gap:6px;margin-top:4px;justify-content:flex-start}
         .msg-actions button{background:transparent;border:none;color:#6b7280;font-size:14px;cursor:pointer;padding:0 4px;font-family:inherit}
         .msg-actions button:hover{color:#e5e7eb}
         .comment-box{display:none;margin-top:4px;width:100%}
         .comment-box textarea{width:100%;padding:6px 10px;border-radius:8px;border:1px solid #2a2a2a;background:#1a1a1a;color:#e5e7eb;font-size:12px;font-family:inherit;resize:vertical;min-height:40px}
         .comment-box .send-comment{background:#3b82f6;color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:12px;cursor:pointer;margin-top:4px;font-family:inherit}
-        /* سایدبار تاریخچه و تنظیمات */
         .sidebar-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999}
         .sidebar-overlay.active{display:block}
         .sidebar{position:fixed;top:0;left:-300px;width:280px;height:100%;background:#141414;border-right:1px solid #2a2a2a;z-index:1000;padding:20px;overflow-y:auto;transition:left .3s;direction:ltr}
@@ -64,12 +62,11 @@
         .sidebar .color-name{font-size:13px;color:#9ca3af}
         .sidebar .lang-btn{background:transparent;border:1px solid #2a2a2a;color:#9ca3af;padding:4px 12px;border-radius:6px;cursor:pointer;font-size:13px;font-family:inherit;transition:all .2s;margin:0 2px}
         .sidebar .lang-btn.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+        .menu-btn{background:transparent;border:none;color:#e5e7eb;font-size:24px;cursor:pointer;font-family:inherit}
         @media(max-width:600px){body{padding:12px}.header{padding:12px 16px}.main{padding:16px}.sidebar{width:260px;left:-260px}}
-        /* کلاس‌های کمکی برای زبان */
         .lang-fa .en-only{display:none}
         .lang-en .fa-only{display:none}
         .lang-en{direction:ltr}
-        .lang-en .header h1{font-size:18px}
     </style>
 </head>
 <body>
@@ -79,7 +76,7 @@
         <h1 class="fa-only">هوش مصنوعی</h1>
         <h1 class="en-only" style="display:none">AI</h1>
         <div style="display:flex;align-items:center;gap:8px">
-            <button class="menu-btn" id="menuBtn" style="background:transparent;border:none;color:#e5e7eb;font-size:24px;cursor:pointer;font-family:inherit">☰</button>
+            <button class="menu-btn" id="menuBtn">☰</button>
             <span class="badge">نسخه 1.0</span>
         </div>
     </div>
@@ -91,7 +88,6 @@
         <h3 class="fa-only">تاریخچه</h3>
         <h3 class="en-only" style="display:none">History</h3>
         <div id="historyList"></div>
-
         <h3 class="fa-only" style="margin-top:20px">انتخاب رنگ</h3>
         <h3 class="en-only" style="display:none;margin-top:20px">Pick Color</h3>
         <div id="colorPicker">
@@ -104,7 +100,6 @@
             <div class="color-item" data-color="#8b5cf6"><div class="color-circle" style="background:#8b5cf6"></div><span class="color-name fa-only">بنفش</span><span class="color-name en-only" style="display:none">Purple</span></div>
             <div class="color-item" data-color="#d97706"><div class="color-circle" style="background:#d97706"></div><span class="color-name fa-only">قهوه‌ای</span><span class="color-name en-only" style="display:none">Brown</span></div>
         </div>
-
         <h3 class="fa-only" style="margin-top:20px">زبان</h3>
         <h3 class="en-only" style="display:none;margin-top:20px">Language</h3>
         <div>
@@ -115,7 +110,6 @@
 
     <!-- بخش اصلی -->
     <div class="main">
-        <!-- انتخاب مدل -->
         <div class="models" id="modelContainer">
             <button class="active" data-model="gpt-4o-mini">GPT-4o Mini</button>
             <button data-model="gpt-4o">GPT-4o</button>
@@ -124,19 +118,16 @@
             <button data-model="o1-mini">O1 Mini</button>
         </div>
 
-        <!-- چت باکس -->
         <div class="chat-box" id="chatBox">
             <div class="msg bot">سلام. سوال خود را بپرسید.</div>
         </div>
 
-        <!-- ورودی -->
         <div class="input-area">
             <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key=='Enter') sendMessage()">
-            <button class="keyboard-btn" id="keyboardBtn" title="باز کردن کیبورد">⌨</button>
+            <button class="keyboard-btn" id="keyboardBtn">⌨</button>
             <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
         </div>
 
-        <!-- دکمه‌های عملیات -->
         <div class="actions">
             <button onclick="copyLastResponse()" class="fa-only">کپی پاسخ</button>
             <button onclick="copyLastResponse()" class="en-only" style="display:none">Copy</button>
@@ -149,12 +140,10 @@
         <div class="status" id="statusText">وضعیت: آماده</div>
     </div>
 
-    <!-- فوتر -->
     <div class="footer"><span class="fa-only">ساخته شده با </span><span class="en-only" style="display:none">Made with </span><span>Bale OpenAI</span></div>
 </div>
 
 <script>
-    // ===== تنظیمات =====
     const AVALAI_KEY = "aa-iuxSVnhoKQnYRRHavV6WnuohoCz1pzBUmJ2bJWRICxCXgejW";
     const AVALAI_URL = "https://api.avalai.ir/v1/chat/completions";
 
@@ -163,9 +152,8 @@
     let lastBotResponse = '';
     let chatHistory = [];
     let currentChatId = Date.now();
-    let abortController = null; // برای توقف درخواست
+    let abortController = null;
 
-    // ===== المنت‌ها =====
     const chatBox = document.getElementById('chatBox');
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
@@ -176,7 +164,7 @@
     const closeSidebar = document.getElementById('closeSidebar');
     const appContainer = document.getElementById('appContainer');
 
-    // ===== انتخاب مدل =====
+    // انتخاب مدل
     document.querySelectorAll('#modelContainer button').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('#modelContainer button').forEach(b => b.classList.remove('active'));
@@ -186,23 +174,21 @@
         });
     });
 
-    // ===== توابع جانبی =====
     function updateStatus(text) {
         statusText.textContent = 'وضعیت: ' + text;
     }
 
-    // ===== سایدبار =====
+    // سایدبار
     function toggleSidebar(open) {
         sidebar.classList.toggle('open', open);
         overlay.classList.toggle('active', open);
         if (open) loadHistory();
     }
-
     menuBtn.addEventListener('click', () => toggleSidebar(true));
     closeSidebar.addEventListener('click', () => toggleSidebar(false));
     overlay.addEventListener('click', () => toggleSidebar(false));
 
-    // ===== تاریخچه =====
+    // تاریخچه
     function loadHistory() {
         const list = document.getElementById('historyList');
         const chats = JSON.parse(localStorage.getItem('chatHistoryList') || '[]');
@@ -247,7 +233,6 @@
             div.className = `msg ${msg.role}`;
             div.textContent = msg.content;
             chatBox.appendChild(div);
-            if (msg.role === 'bot') addCommentButton(div);
         });
         if (chatBox.children.length === 0) {
             chatBox.innerHTML = '<div class="msg bot">سلام. سوال خود را بپرسید.</div>';
@@ -258,7 +243,7 @@
         saveCurrentChat();
     }
 
-    // ===== افزودن دکمه نظر (𝕏) به پیام ربات =====
+    // افزودن دکمه نظر (𝕏)
     function addCommentButton(msgElement) {
         const wrapper = document.createElement('div');
         wrapper.style.cssText = 'display:flex;flex-direction:column;width:100%';
@@ -305,17 +290,15 @@
         wrapper.appendChild(actions);
     }
 
-    // ===== ارسال پیام =====
+    // ارسال پیام
     async function sendMessage() {
         const msg = chatInput.value.trim();
         if (!msg || isWaiting) return;
 
-        // حذف پیام خوش‌آمدگویی اگر اولین پیام باشد
         if (chatBox.children.length === 1 && chatBox.children[0].classList.contains('msg') && chatBox.children[0].textContent.includes('سلام')) {
             chatBox.innerHTML = '';
         }
 
-        // پیام کاربر
         const userMsg = document.createElement('div');
         userMsg.className = 'msg user';
         userMsg.textContent = msg;
@@ -328,7 +311,6 @@
         sendBtn.disabled = true;
         updateStatus('در حال فکر کردن...');
 
-        // دکمه توقف را به جای دکمه ارسال نشان می‌دهیم
         const stopBtn = document.createElement('button');
         stopBtn.className = 'stop-btn';
         stopBtn.textContent = '■';
@@ -342,8 +324,26 @@
             sendBtn.disabled = false;
             this.remove();
             updateStatus('متوقف شد');
-            // حذف پیام در حال تایپ اگر وجود داشت
             const typingMsg = chatBox.querySelector('.msg.bot.typing');
             if (typingMsg) typingMsg.remove();
         };
-        const inputArea = document.querySel
+        const inputArea = document.querySelector('.input-area');
+        inputArea.insertBefore(stopBtn, sendBtn);
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'msg bot typing';
+        botMsg.textContent = 'در حال نوشتن...';
+        chatBox.appendChild(botMsg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            abortController = new AbortController();
+            const response = await fetch(AVALAI_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + AVALAI_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: currentModel,
+                    messages: chatHis
