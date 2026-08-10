@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هوش مصنوعی</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e5e7eb;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px;direction:rtl}
+        .container{max-width:700px;width:100%;background:#141414;border-radius:24px;padding:30px;border:1px solid #2a2a2a}
+        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;border-bottom:1px solid #2a2a2a;padding-bottom:16px}
+        .header h1{font-size:20px;font-weight:600;color:#e5e7eb}
+        .header .status{font-size:12px;color:#6b7280;padding:4px 12px;border-radius:20px;background:#1f1f1f}
+        .chat-box{background:#1a1a1a;border-radius:16px;padding:16px;min-height:320px;max-height:400px;overflow-y:auto;margin-bottom:16px;border:1px solid #2a2a2a}
+        .chat-box::-webkit-scrollbar{width:4px}
+        .chat-box::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
+        .msg{padding:10px 16px;border-radius:12px;margin-bottom:8px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.8}
+        .msg.user{background:#3b82f6;color:#fff;margin-right:auto;text-align:right}
+        .msg.bot{background:#1f1f1f;color:#e5e7eb;margin-left:auto;text-align:left;border:1px solid #2a2a2a}
+        .msg.bot.typing{color:#6b7280}
+        .input-area{display:flex;gap:10px}
+        .input-area input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid #2a2a2a;font-size:14px;outline:none;font-family:inherit;background:#1a1a1a;color:#e5e7eb;transition:border .2s}
+        .input-area input::placeholder{color:#6b7280}
+        .input-area input:focus{border-color:#3b82f6}
+        .input-area button{padding:12px 24px;border-radius:12px;border:none;background:#3b82f6;color:#fff;font-size:14px;cursor:pointer;font-weight:500;transition:background .2s;font-family:inherit}
+        .input-area button:hover{background:#2563eb}
+        .input-area button:disabled{opacity:0.5;cursor:not-allowed}
+        .actions{display:flex;gap:6px;margin-top:12px;justify-content:center;border-top:1px solid #2a2a2a;padding-top:12px}
+        .actions button{background:transparent;border:1px solid #2a2a2a;color:#9ca3af;padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;font-family:inherit}
+        .actions button:hover{background:#1f1f1f;border-color:#3b82f6;color:#e5e7eb}
+        .footer{text-align:center;font-size:11px;color:#4b5563;margin-top:16px;border-top:1px solid #2a2a2a;padding-top:14px}
+        .footer span{color:#3b82f6}
+        .status-text{font-size:12px;color:#6b7280;margin-top:10px;text-align:center}
+        @media(max-width:600px){.container{padding:20px}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>هوش مصنوعی</h1>
+        <span class="status">آنلاین</span>
+    </div>
+
+    <div class="chat-box" id="chatBox">
+        <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+    </div>
+
+    <div class="input-area">
+        <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key=='Enter') sendMessage()">
+        <button id="sendBtn" onclick="sendMessage()">ارسال</button>
+    </div>
+
+    <div class="actions">
+        <button onclick="copyLastResponse()">کپی</button>
+        <button onclick="clearChat()">پاک کردن</button>
+        <button onclick="exportChat()">خروجی</button>
+    </div>
+
+    <div class="status-text" id="statusText">وضعیت: آماده</div>
+    <div class="footer">ساخته شده با <span>هوش مصنوعی</span></div>
+</div>
+
+<script>
+    const AVALAI_KEY = "aa-iuxSVnhoKQnYRRHavV6WnuohoCz1pzBUmJ2bJWRICxCXgejW";
+    const AVALAI_URL = "https://api.avalai.ir/v1/chat/completions";
+
+    let isWaiting = false;
+    let lastBotResponse = '';
+
+    function updateStatus(text) {
+        document.getElementById('statusText').textContent = 'وضعیت: ' + text;
+    }
+
+    async function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+        if (!msg || isWaiting) return;
+
+        const box = document.getElementById('chatBox');
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'msg user';
+        userMsg.textContent = msg;
+        box.appendChild(userMsg);
+        box.scrollTop = box.scrollHeight;
+
+        input.value = '';
+        isWaiting = true;
+        document.getElementById('sendBtn').disabled = true;
+        updateStatus('در حال فکر کردن...');
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'msg bot typing';
+        botMsg.textContent = 'در حال نوشتن...';
+        box.appendChild(botMsg);
+        box.scrollTop = box.scrollHeight;
+
+        try {
+            const response = await fetch(AVALAI_URL, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + AVALAI_KEY,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4o-mini',
+                    messages: [{role: 'user', content: msg}],
+                    temperature: 0.7,
+                    max_tokens: 800
+                })
+            });
+
+            const data = await response.json();
+            if (data.choices && data.choices[0]) {
+                const reply = data.choices[0].message.content;
+                botMsg.className = 'msg bot';
+                botMsg.textContent = reply;
+                lastBotResponse = reply;
+                updateStatus('پاسخ دریافت شد');
+            } else {
+                botMsg.className = 'msg bot';
+                botMsg.textContent = 'خطا در دریافت پاسخ';
+                updateStatus('خطا');
+            }
+        } catch(e) {
+            botMsg.className = 'msg bot';
+            botMsg.textContent = 'خطا در ارتباط با سرور';
+            updateStatus('خطا');
+        }
+
+        isWaiting = false;
+        document.getElementById('sendBtn').disabled = false;
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function copyLastResponse() {
+        if (lastBotResponse) {
+            navigator.clipboard.writeText(lastBotResponse).then(() => {
+                updateStatus('پاسخ کپی شد');
+                setTimeout(() => updateStatus('آماده'), 1500);
+            }).catch(() => {
+                updateStatus('خطا در کپی');
+            });
+        } else {
+            updateStatus('پاسخی برای کپی وجود ندارد');
+            setTimeout(() => updateStatus('آماده'), 1500);
+        }
+    }
+
+    function clearChat() {
+        const box = document.getElementById('chatBox');
+        box.innerHTML = '<div class="msg bot">گفتگو پاک شد. سوال جدیدی دارید؟</div>';
+        lastBotResponse = '';
+        updateStatus('گفتگو پاک شد');
+        setTimeout(() => updateStatus('آماده'), 1500);
+    }
+
+    function exportChat() {
+        const box = document.getElementById('chatBox');
+        const messages = box.querySelectorAll('.msg');
+        let text = 'گفتگوی هوش مصنوعی\n' + '='.repeat(30) + '\n\n';
+        messages.forEach(msg => {
+            const role = msg.classList.contains('user') ? 'شما' : 'هوش مصنوعی';
+            text += role + ': ' + msg.textContent + '\n\n';
+        });
+        text += '='.repeat(30) + '\nتاریخ: ' + new Date().toLocaleString('fa-IR');
+
+        const blob = new Blob([text], {type: 'text/plain'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'گفتگو_' + new Date().toISOString().slice(0,10) + '.txt';
+        a.click();
+        URL.revokeObjectURL(url);
+        updateStatus('خروجی گرفته شد');
+        setTimeout(() => updateStatus('آماده'), 1500);
+    }
+</script>
+</body>
+</html>
