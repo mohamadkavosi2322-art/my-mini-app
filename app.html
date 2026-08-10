@@ -3,330 +3,409 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>هوش مصنوعی</title>
+    <title>ChatGPT</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e5e7eb;min-height:100vh;direction:rtl}
-        ::-webkit-scrollbar{width:4px}
-        ::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
-        ::-webkit-scrollbar-track{background:#1a1a1a}
-
-        .app{display:flex;height:100vh;overflow:hidden}
-        .sidebar{width:280px;background:#141414;border-left:1px solid #2a2a2a;display:flex;flex-direction:column;flex-shrink:0;transition:transform .3s ease;overflow:hidden}
-        .sidebar-header{padding:16px 20px;border-bottom:1px solid #2a2a2a;display:flex;align-items:center;justify-content:space-between}
-        .sidebar-header .logo{font-size:18px;font-weight:600;color:#e5e7eb}
-        .sidebar-header .close-btn{display:none;background:none;border:none;font-size:20px;color:#6b7280;cursor:pointer}
-        .sidebar-search{padding:12px 16px}
-        .sidebar-search input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid #2a2a2a;background:#1a1a1a;color:#e5e7eb;font-size:14px;outline:none}
-        .sidebar-search input::placeholder{color:#6b7280}
-        .sidebar-search input:focus{border-color:#3b82f6}
-        .sidebar-nav{flex:1;overflow-y:auto;padding:8px 12px}
-        .sidebar-nav .nav-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:background .2s;color:#9ca3af;font-size:14px;width:100%;border:none;background:none;font-family:inherit;text-align:right}
-        .sidebar-nav .nav-item:hover{background:#1f1f1f;color:#e5e7eb}
-        .sidebar-nav .nav-item.active{background:#1f1f1f;color:#e5e7eb}
-        .sidebar-nav .divider{height:1px;background:#2a2a2a;margin:8px 0}
-        .sidebar-footer{padding:12px 16px;border-top:1px solid #2a2a2a}
-        .sidebar-footer .nav-item{color:#6b7280;font-size:13px}
-        .sidebar-footer .nav-item:hover{color:#e5e7eb}
-
-        .main{flex:1;display:flex;flex-direction:column;min-width:0;background:#0a0a0a}
-        .main-header{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #2a2a2a;background:#0a0a0a;flex-shrink:0}
-        .main-header-left{display:flex;align-items:center;gap:12px}
-        .main-header-left .menu-btn{display:none;background:none;border:none;font-size:22px;color:#e5e7eb;cursor:pointer}
-        .main-header-left .title{font-size:18px;font-weight:600;color:#e5e7eb}
-        .main-header-right{display:flex;align-items:center;gap:6px}
-        .main-header-right button{background:transparent;border:1px solid #2a2a2a;color:#9ca3af;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer;transition:all .2s;font-family:inherit}
-        .main-header-right button:hover{border-color:#3b82f6;color:#e5e7eb}
-
-        .chat-area{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:12px}
-        .chat-area .empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;color:#6b7280;text-align:center}
-        .chat-area .empty .title{font-size:24px;font-weight:600;color:#e5e7eb}
-        .chat-area .empty .sub{font-size:14px;color:#6b7280}
-        .chat-area .empty .suggestions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:8px}
-        .chat-area .empty .suggestions button{padding:8px 16px;border-radius:20px;border:1px solid #2a2a2a;background:transparent;color:#9ca3af;font-size:13px;cursor:pointer;transition:all .2s;font-family:inherit}
-        .chat-area .empty .suggestions button:hover{border-color:#3b82f6;color:#e5e7eb}
-
-        .msg{display:flex;gap:12px;max-width:85%;animation:fadeIn .3s ease}
-        .msg.user{align-self:flex-end;flex-direction:row-reverse}
-        .msg.assistant{align-self:flex-start}
-        .msg .avatar{width:32px;height:32px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
-        .msg.user .avatar{background:#3b82f6;color:#fff}
-        .msg.assistant .avatar{background:#1f1f1f;color:#e5e7eb;border:1px solid #2a2a2a}
-        .msg .bubble{padding:10px 14px;border-radius:14px;word-wrap:break-word;line-height:1.7;font-size:14px;min-width:40px;position:relative}
-        .msg.user .bubble{background:#3b82f6;color:#fff;border-bottom-left-radius:4px}
-        .msg.assistant .bubble{background:#1a1a1a;color:#e5e7eb;border:1px solid #2a2a2a;border-bottom-right-radius:4px}
-        .msg .bubble .time{font-size:10px;color:#6b7280;margin-top:4px;display:block}
-        .msg.user .bubble .time{color:rgba(255,255,255,0.6)}
-        .msg .bubble .actions{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;opacity:0;transition:opacity .2s}
-        .msg:hover .bubble .actions{opacity:1}
-        .msg .bubble .actions button{background:transparent;border:none;color:#6b7280;font-size:12px;cursor:pointer;padding:2px 6px;border-radius:4px;font-family:inherit}
-        .msg .bubble .actions button:hover{background:#1f1f1f;color:#e5e7eb}
-        .msg .bubble .actions button.liked{color:#3b82f6}
-        .msg .bubble .actions button.disliked{color:#ef4444}
-        .msg .bubble .cursor{display:inline-block;width:2px;height:18px;background:#3b82f6;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-right:2px}
+        body{font-family:system-ui,-apple-system,sans-serif;min-height:100vh;padding:20px;direction:rtl;transition:all .3s}
+        .app{max-width:900px;margin:0 auto}
+        .header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-radius:16px;border:1px solid;margin-bottom:16px;transition:all .3s}
+        .header h1{font-size:20px;font-weight:700}
+        .header h1 span{color:#3b82f6}
+        .header .badge{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,0.1)}
+        .main{background:rgba(255,255,255,0.05);border-radius:16px;border:1px solid;padding:20px;margin-bottom:16px;transition:all .3s}
+        .top-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+        .top-bar button{background:transparent;border:1px solid;padding:5px 12px;border-radius:8px;font-size:11px;cursor:pointer;transition:all .2s;font-family:inherit}
+        .top-bar button.active{border-color:#3b82f6}
+        .models{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid}
+        .models button{background:transparent;border:1px solid;padding:5px 12px;border-radius:8px;font-size:11px;cursor:pointer;transition:all .2s;font-family:inherit}
+        .models button.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
+        .history-area{display:flex;gap:16px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid}
+        .history-list{width:200px;flex-shrink:0;border-radius:12px;padding:8px;border:1px solid;max-height:200px;overflow-y:auto}
+        .history-list .h-item{padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;transition:all .2s;border-bottom:1px solid rgba(255,255,255,0.05)}
+        .history-list .h-item:hover{background:rgba(255,255,255,0.05)}
+        .history-list .h-item.active{background:rgba(59,130,246,0.2)}
+        .history-list .h-item .h-time{font-size:9px;opacity:0.5;display:block;margin-top:2px}
+        .chat-box{flex:1;border-radius:12px;padding:16px;border:1px solid;min-height:250px;max-height:350px;overflow-y:auto}
+        .chat-box::-webkit-scrollbar{width:4px}
+        .chat-box::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
+        .msg{padding:10px 16px;border-radius:12px;margin-bottom:6px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.8}
+        .msg.user{background:#3b82f6;color:#fff;margin-right:auto;text-align:right}
+        .msg.bot{background:rgba(255,255,255,0.08);margin-left:auto;text-align:left;border:1px solid rgba(255,255,255,0.1)}
+        .msg.bot.typing{opacity:0.6}
+        .msg.bot .cursor{display:inline-block;width:2px;height:18px;background:#3b82f6;animation:blink 1s step-end infinite;vertical-align:text-bottom;margin-right:2px}
         @keyframes blink{50%{opacity:0}}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-        .input-area{display:flex;gap:10px;padding:12px 20px;border-top:1px solid #2a2a2a;background:#0a0a0a;flex-shrink:0}
-        .input-area .wrapper{flex:1;display:flex;gap:8px;background:#1a1a1a;border-radius:14px;padding:4px 6px;border:1px solid #2a2a2a;transition:border .2s}
-        .input-area .wrapper:focus-within{border-color:#3b82f6}
-        .input-area .wrapper input{flex:1;border:none;background:transparent;padding:10px 12px;font-size:14px;outline:none;font-family:inherit;color:#e5e7eb;min-height:44px}
-        .input-area .wrapper input::placeholder{color:#6b7280}
-        .input-area .wrapper button{background:transparent;border:none;color:#6b7280;padding:8px;cursor:pointer;border-radius:8px;font-size:16px;transition:background .2s}
-        .input-area .wrapper button:hover{background:#1f1f1f}
-        .input-area .send-btn{padding:10px 24px;border-radius:12px;border:none;background:#3b82f6;color:#fff;font-size:14px;cursor:pointer;font-weight:500;transition:background .2s;font-family:inherit}
-        .input-area .send-btn:hover{background:#2563eb}
-        .input-area .send-btn:disabled{opacity:0.5;cursor:not-allowed}
-        .input-area .stop-btn{padding:10px 24px;border-radius:12px;border:none;background:#ef4444;color:#fff;font-size:14px;cursor:pointer;font-weight:500;transition:background .2s;font-family:inherit;display:none}
-        .input-area .stop-btn:hover{background:#dc2626}
-
-        .bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:#141414;border-top:1px solid #2a2a2a;padding:6px 0;z-index:100;justify-content:space-around}
-        .bottom-nav button{background:none;border:none;color:#6b7280;font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 12px;cursor:pointer;font-family:inherit}
-        .bottom-nav button.active{color:#3b82f6}
-        .bottom-nav button .icon{font-size:18px}
-
-        .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1f1f1f;color:#e5e7eb;padding:8px 20px;border-radius:10px;font-size:13px;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none;border:1px solid #2a2a2a}
-        .toast.show{opacity:1}
-
-        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:150;display:none;align-items:center;justify-content:center}
-        .modal-overlay.open{display:flex}
-        .modal{background:#141414;border-radius:16px;padding:24px;max-width:480px;width:90%;max-height:80vh;overflow-y:auto;border:1px solid #2a2a2a;animation:modalIn .2s ease}
-        @keyframes modalIn{from{transform:scale(0.95);opacity:0}to{transform:scale(1);opacity:1}}
-        .modal .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-        .modal .modal-header h3{font-size:18px;font-weight:600;color:#e5e7eb}
-        .modal .modal-header .close{background:none;border:none;font-size:20px;color:#6b7280;cursor:pointer}
-        .modal .modal-body{display:flex;flex-direction:column;gap:12px}
-        .modal .modal-body .item{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#1a1a1a;border-radius:10px;cursor:pointer;border:1px solid #2a2a2a;transition:all .2s}
-        .modal .modal-body .item:hover{border-color:#3b82f6}
-        .modal .modal-body .item .label{font-size:14px;color:#e5e7eb}
-        .modal .modal-body .item .value{font-size:13px;color:#6b7280}
-        .modal .modal-body .item .check{color:#3b82f6}
-        .modal .modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
-        .modal .modal-footer button{padding:8px 20px;border-radius:10px;border:none;font-size:14px;cursor:pointer;font-family:inherit;transition:background .2s}
-        .modal .modal-footer .primary{background:#3b82f6;color:#fff}
-        .modal .modal-footer .primary:hover{background:#2563eb}
-        .modal .modal-footer .secondary{background:#1f1f1f;color:#9ca3af;border:1px solid #2a2a2a}
-        .modal .modal-footer .secondary:hover{background:#2a2a2a}
-
-        @media(max-width:768px){
-            .sidebar{position:fixed;top:0;right:0;bottom:0;z-index:120;transform:translateX(100%);width:280px;border-radius:0}
-            .sidebar.open{transform:translateX(0)}
-            .sidebar-header .close-btn{display:block}
-            .main-header-left .menu-btn{display:block}
-            .bottom-nav{display:flex}
-            .chat-area{padding:16px}
-            .msg{max-width:92%}
-            .input-area{padding:10px 12px;padding-bottom:70px}
-        }
-        @media(min-width:769px){
-            .sidebar{position:relative;transform:none!important}
-            .sidebar-header .close-btn{display:none}
-            .main-header-left .menu-btn{display:none}
-            .bottom-nav{display:none}
-        }
-        @media(max-width:480px){
-            .msg .bubble{font-size:13px;padding:8px 12px}
-            .input-area .wrapper input{font-size:13px;padding:8px 10px}
-            .input-area .send-btn{padding:8px 16px;font-size:13px}
-            .modal{padding:16px;width:95%}
-        }
+        .input-area{display:flex;gap:10px;margin-top:12px}
+        .input-area input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid;font-size:14px;outline:none;font-family:inherit;background:transparent;transition:all .3s}
+        .input-area input:focus{border-color:#3b82f6}
+        .input-area .send-btn{padding:12px 20px;border-radius:12px;border:none;font-size:18px;cursor:pointer;font-weight:500;transition:all .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;min-width:50px}
+        .input-area .send-btn:hover{transform:scale(1.05)}
+        .input-area .send-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+        .input-area .stop-btn{padding:12px 20px;border-radius:12px;border:none;font-size:16px;cursor:pointer;font-weight:500;transition:all .2s;font-family:inherit;display:none;align-items:center;justify-content:center;min-width:50px;background:#ef4444;color:#fff}
+        .input-area .stop-btn:hover{transform:scale(1.05)}
+        .actions{display:flex;gap:6px;margin-top:12px;justify-content:center;padding-top:12px;border-top:1px solid;flex-wrap:wrap}
+        .actions button{background:transparent;border:1px solid;padding:5px 14px;border-radius:8px;font-size:11px;cursor:pointer;transition:all .2s;font-family:inherit}
+        .actions button:hover{background:rgba(255,255,255,0.05)}
+        .footer{text-align:center;font-size:12px;padding-top:16px;border-top:1px solid}
+        .footer span{color:#3b82f6}
+        .status{font-size:12px;text-align:center;margin-top:10px;opacity:0.6}
+        .color-picker{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+        .color-picker .cbtn{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+        .color-picker .cbtn:hover{transform:scale(1.15)}
+        .color-picker .cbtn.active{border-color:#fff;box-shadow:0 0 10px rgba(255,255,255,0.3)}
+        .empty-history{text-align:center;padding:20px 0;font-size:13px;opacity:0.5}
+        .theme-toggle{display:flex;gap:6px;margin-top:8px}
+        .theme-toggle button{padding:4px 14px;border-radius:8px;border:1px solid;cursor:pointer;font-size:12px;font-family:inherit;background:transparent;transition:all .2s}
+        .theme-toggle button:hover{background:rgba(255,255,255,0.05)}
+        .theme-toggle button.active{background:rgba(59,130,246,0.2)}
+        @media(max-width:700px){.history-area{flex-direction:column}.history-list{width:100%;max-height:120px}}
     </style>
 </head>
 <body>
-
-<div class="app">
-    <!-- سایدبار -->
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <span class="logo">هوش مصنوعی</span>
-            <button class="close-btn" onclick="toggleSidebar()">✕</button>
-        </div>
-        <div class="sidebar-search">
-            <input type="text" placeholder="جستجوی گفتگوها..." id="searchChats" oninput="filterChats(this.value)">
-        </div>
-        <div class="sidebar-nav" id="chatList">
-            <button class="nav-item active" onclick="newChat()">گفتگوی جدید</button>
-            <div class="divider"></div>
-            <div id="historyContainer"></div>
-        </div>
-        <div class="sidebar-footer">
-            <button class="nav-item" onclick="showSettings()">تنظیمات</button>
-            <button class="nav-item" onclick="showProfile()">پروفایل</button>
-        </div>
+<div class="app" id="app">
+    <!-- هدر -->
+    <div class="header" id="header">
+        <h1><span>Chat</span>GPT</h1>
+        <span class="badge">نسخه 3.0</span>
     </div>
 
     <!-- بخش اصلی -->
-    <div class="main">
-        <div class="main-header">
-            <div class="main-header-left">
-                <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-                <span class="title" id="pageTitle">گفتگوی جدید</span>
+    <div class="main" id="main">
+        <!-- انتخاب رنگ -->
+        <div class="top-bar">
+            <span style="font-size:12px;opacity:0.6;margin-left:8px;">رنگ: </span>
+            <div class="color-picker" id="colorPicker">
+                <button class="cbtn active" style="background:#3b82f6" data-color="#3b82f6" title="آبی"></button>
+                <button class="cbtn" style="background:#ef4444" data-color="#ef4444" title="قرمز"></button>
+                <button class="cbtn" style="background:#ffffff" data-color="#ffffff" title="سفید"></button>
+                <button class="cbtn" style="background:#1a1a1a" data-color="#1a1a1a" title="مشکی"></button>
+                <button class="cbtn" style="background:#22c55e" data-color="#22c55e" title="سبز"></button>
+                <button class="cbtn" style="background:#ec4899" data-color="#ec4899" title="صورتی"></button>
+                <button class="cbtn" style="background:#8b5cf6" data-color="#8b5cf6" title="بنفش"></button>
+                <button class="cbtn" style="background:#eab308" data-color="#eab308" title="زرد"></button>
+                <button class="cbtn" style="background:#f97316" data-color="#f97316" title="نارنجی"></button>
             </div>
-            <div class="main-header-right">
-                <button onclick="showSettings()">تنظیمات</button>
-                <button onclick="showProfile()">پروفایل</button>
+            <span style="font-size:12px;opacity:0.6;margin-right:12px;margin-left:8px;">تم: </span>
+            <div class="theme-toggle" id="themeToggle">
+                <button class="active" data-theme="dark">تاریک</button>
+                <button data-theme="light">روشن</button>
             </div>
         </div>
 
-        <!-- چت -->
-        <div class="chat-area" id="chatArea">
-            <div class="empty" id="emptyState">
-                <div class="title">هوش مصنوعی</div>
-                <div class="sub">هر سوالی دارید، بپرسید</div>
-                <div class="suggestions">
-                    <button onclick="sendQuick('چگونه میتوانم برنامه‌نویسی را یاد بگیرم؟')">برنامه‌نویسی</button>
-                    <button onclick="sendQuick('بهترین کتاب‌های تاریخ کدامند؟')">تاریخ</button>
-                    <button onclick="sendQuick('چطور یک کسب‌وکار آنلاین راه‌اندازی کنم؟')">کسب‌وکار</button>
-                </div>
+        <!-- انتخاب مدل -->
+        <div class="models" id="modelContainer">
+            <button class="active" data-model="gpt-4o-mini">GPT-4o Mini</button>
+            <button data-model="gpt-4o">GPT-4o</button>
+            <button data-model="gpt-4">GPT-4</button>
+            <button data-model="gpt-3.5-turbo">GPT-3.5</button>
+            <button data-model="o1-mini">O1 Mini</button>
+        </div>
+
+        <!-- تاریخچه + چت -->
+        <div class="history-area">
+            <div class="history-list" id="historyList">
+                <div class="empty-history">تاریخچه خالی است</div>
             </div>
-            <div id="messagesContainer"></div>
+            <div class="chat-box" id="chatBox">
+                <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+            </div>
         </div>
 
         <!-- ورودی -->
         <div class="input-area">
-            <div class="wrapper">
-                <button onclick="attachFile()" title="ضمیمه">📎</button>
-                <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key=='Enter' && !event.shiftKey){event.preventDefault();sendMessage()}">
-                <button onclick="toggleVoice()" title="ورودی صوتی">🎤</button>
-            </div>
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">ارسال</button>
-            <button class="stop-btn" id="stopBtn" onclick="stopGeneration()" style="display:none;">توقف</button>
+            <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." onkeydown="if(event.key=='Enter') sendMessage()">
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+            <button class="stop-btn" id="stopBtn" onclick="stopGeneration()">■</button>
         </div>
+
+        <!-- دکمه‌های عملیات -->
+        <div class="actions">
+            <button onclick="copyLastResponse()">کپی پاسخ</button>
+            <button onclick="clearChat()">پاک کردن چت</button>
+            <button onclick="exportChat()">خروجی چت</button>
+            <button onclick="newChat()">گفتگوی جدید</button>
+        </div>
+
+        <div class="status" id="statusText">وضعیت: آماده</div>
     </div>
-</div>
 
-<!-- منوی پایین (موبایل) -->
-<div class="bottom-nav" id="bottomNav">
-    <button class="active" onclick="newChat()"><span class="icon">➕</span>جدید</button>
-    <button onclick="showSettings()"><span class="icon">⚙️</span>تنظیمات</button>
-    <button onclick="showProfile()"><span class="icon">👤</span>پروفایل</button>
+    <!-- فوتر -->
+    <div class="footer" id="footer">ساخته شده توسط <span>Bale-OpenAI</span></div>
 </div>
-
-<!-- تنظیمات مودال -->
-<div class="modal-overlay" id="settingsModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>تنظیمات</h3>
-            <button class="close" onclick="closeModal('settingsModal')">✕</button>
-        </div>
-        <div class="modal-body">
-            <div class="item" onclick="toggleTheme()"><span class="label">حالت تاریک</span><span class="value" id="themeStatus">روشن</span></div>
-            <div class="item" onclick="showModelModal()"><span class="label">مدل هوش مصنوعی</span><span class="value" id="currentModelDisplay">GPT-4o Mini</span></div>
-            <div class="item" onclick="clearAllChats()"><span class="label" style="color:#ef4444;">پاک کردن همه گفتگوها</span><span class="value">🗑️</span></div>
-            <div class="item" onclick="alert('نسخه 1.0.0')"><span class="label">درباره برنامه</span><span class="value">‹</span></div>
-        </div>
-    </div>
-</div>
-
-<!-- پروفایل مودال -->
-<div class="modal-overlay" id="profileModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>پروفایل</h3>
-            <button class="close" onclick="closeModal('profileModal')">✕</button>
-        </div>
-        <div class="modal-body">
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0">
-                <div style="width:64px;height:64px;border-radius:50%;background:#1f1f1f;display:flex;align-items:center;justify-content:center;font-size:28px;border:2px solid #3b82f6">👤</div>
-                <div style="font-size:18px;font-weight:600">کاربر</div>
-                <div style="font-size:13px;color:#6b7280">user@email.com</div>
-            </div>
-            <div class="item" onclick="alert('ویرایش پروفایل')"><span class="label">ویرایش پروفایل</span><span class="value">✏️</span></div>
-            <div class="item" onclick="alert('تغییر رمز عبور')"><span class="label">تغییر رمز عبور</span><span class="value">🔒</span></div>
-            <div class="item" onclick="alert('مدیریت حساب')"><span class="label">مدیریت حساب</span><span class="value">⚙️</span></div>
-            <div class="item" onclick="logout()"><span class="label" style="color:#ef4444;">خروج</span><span class="value">🚪</span></div>
-        </div>
-    </div>
-</div>
-
-<!-- انتخاب مدل مودال -->
-<div class="modal-overlay" id="modelModal">
-    <div class="modal">
-        <div class="modal-header">
-            <h3>انتخاب مدل</h3>
-            <button class="close" onclick="closeModal('modelModal')">✕</button>
-        </div>
-        <div class="modal-body" id="modelList">
-            <div class="item" data-model="gpt-4o-mini" onclick="selectModel('gpt-4o-mini')"><span class="label">GPT-4o Mini</span><span class="check">✓</span></div>
-            <div class="item" data-model="gpt-4o" onclick="selectModel('gpt-4o')"><span class="label">GPT-4o</span><span class="check"></span></div>
-            <div class="item" data-model="gpt-4" onclick="selectModel('gpt-4')"><span class="label">GPT-4</span><span class="check"></span></div>
-            <div class="item" data-model="gpt-3.5-turbo" onclick="selectModel('gpt-3.5-turbo')"><span class="label">GPT-3.5</span><span class="check"></span></div>
-            <div class="item" data-model="o1-mini" onclick="selectModel('o1-mini')"><span class="label">O1 Mini</span><span class="check"></span></div>
-            <div class="item" data-model="o1-preview" onclick="selectModel('o1-preview')"><span class="label">O1 Preview</span><span class="check"></span></div>
-        </div>
-    </div>
-</div>
-
-<!-- توست -->
-<div class="toast" id="toast"></div>
 
 <script>
-    // ===== Config =====
     const AVALAI_KEY = "aa-iuxSVnhoKQnYRRHavV6WnuohoCz1pzBUmJ2bJWRICxCXgejW";
     const AVALAI_URL = "https://api.avalai.ir/v1/chat/completions";
 
     let currentModel = "gpt-4o-mini";
     let isWaiting = false;
     let isStreaming = false;
+    let lastBotResponse = '';
     let chatHistory = [];
-    let messageId = 0;
-    let isDark = true;
+    let currentChatId = null;
+    let chatSessions = JSON.parse(localStorage.getItem('chatSessions')) || [];
+    let currentColor = "#3b82f6";
+    let currentTheme = "dark";
 
-    // ===== DOM =====
-    const messagesContainer = document.getElementById('messagesContainer');
-    const emptyState = document.getElementById('emptyState');
-    const chatInput = document.getElementById('chatInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const pageTitle = document.getElementById('pageTitle');
-
-    // ===== Toast =====
-    function showToast(text) {
-        const t = document.getElementById('toast');
-        t.textContent = text;
-        t.classList.add('show');
-        clearTimeout(t._timeout);
-        t._timeout = setTimeout(() => t.classList.remove('show'), 2000);
+    // ===== تایپ کلمه به کلمه =====
+    async function typeMessage(element, text, speed = 15) {
+        element.textContent = '';
+        const chars = text.split('');
+        for (let i = 0; i < chars.length; i++) {
+            if (!isStreaming) break;
+            element.textContent += chars[i];
+            element.parentElement.scrollTop = element.parentElement.scrollHeight;
+            await new Promise(r => setTimeout(r, speed));
+        }
+        return element.textContent;
     }
 
-    // ===== Sidebar =====
-    function toggleSidebar() {
-        document.getElementById('sidebar').classList.toggle('open');
+    // ===== ذخیره و تاریخچه =====
+    function saveSessions() {
+        localStorage.setItem('chatSessions', JSON.stringify(chatSessions));
     }
 
-    // ===== Modals =====
-    function openModal(id) {
-        document.getElementById(id).classList.add('open');
+    function renderHistory() {
+        const list = document.getElementById('historyList');
+        if (chatSessions.length === 0) {
+            list.innerHTML = '<div class="empty-history">تاریخچه خالی است</div>';
+            return;
+        }
+        list.innerHTML = '';
+        chatSessions.forEach((session, index) => {
+            const div = document.createElement('div');
+            div.className = 'h-item' + (session.id === currentChatId ? ' active' : '');
+            div.innerHTML = `<span>${session.title}</span><span class="h-time">${session.time}</span>`;
+            div.onclick = () => loadSession(index);
+            list.appendChild(div);
+        });
     }
 
-    function closeModal(id) {
-        document.getElementById(id).classList.remove('open');
-    }
-
-    function showSettings() { openModal('settingsModal'); }
-    function showProfile() { openModal('profileModal'); }
-    function showModelModal() { openModal('modelModal'); }
-
-    // ===== Theme =====
-    function toggleTheme() {
-        isDark = !isDark;
-        document.getElementById('themeStatus').textContent = isDark ? 'روشن' : 'خاموش';
-        document.body.style.background = isDark ? '#0a0a0a' : '#f5f7fa';
-        document.body.style.color = isDark ? '#e5e7eb' : '#1a1a1a';
-        showToast(isDark ? 'حالت تاریک فعال شد' : 'حالت روشن فعال شد');
-    }
-
-    // ===== Model =====
-    function selectModel(model) {
-        currentModel = model;
-        const names = {
-            'gpt-4o-mini': 'GPT-4o Mini',
-            'gpt-4o': 'GPT-4o',
-            'gpt-4': 'GPT-4',
-            'gpt-3.5-turbo': 'GPT-3.5',
-            'o1-mini': 'O1 Mini',
-            'o1-preview': 'O1 Preview'
+    function saveCurrentChat() {
+        if (chatHistory.length === 0) return;
+        const firstMsg = chatHistory.find(m => m.role === 'user');
+        const title = firstMsg ? firstMsg.content.slice(0, 30) + (firstMsg.content.length > 30 ? '...' : '') : 'گفتگو';
+        const existing = chatSessions.findIndex(s => s.id === currentChatId);
+        const session = {
+            id: currentChatId || 'chat_' + Date.now(),
+            title: title,
+            time: new Date().toLocaleString('fa-IR'),
+            messages: chatHistory
         };
-        document.getElementById('currentModelDisplay').textContent = names[model] || model;
-        document.querySelectorAll('#modelList .item .check').forEach(c => c.textContent = '');
-        document.querySelector(`#modelList .item[da
+        if (existing !== -1) {
+            chatSessions[existing] = session;
+        } else {
+            chatSessions.push(session);
+        }
+        if (chatSessions.length > 50) chatSessions.shift();
+        saveSessions();
+        renderHistory();
+    }
+
+    function loadSession(index) {
+        const session = chatSessions[index];
+        if (!session) return;
+        currentChatId = session.id;
+        chatHistory = JSON.parse(JSON.stringify(session.messages));
+        const box = document.getElementById('chatBox');
+        box.innerHTML = '';
+        chatHistory.forEach(msg => {
+            const div = document.createElement('div');
+            div.className = 'msg ' + (msg.role === 'user' ? 'user' : 'bot');
+            div.textContent = msg.content;
+            box.appendChild(div);
+        });
+        if (chatHistory.length === 0) {
+            box.innerHTML = '<div class="msg bot">سلام. سوال خود را بپرسید.</div>';
+        }
+        box.scrollTop = box.scrollHeight;
+        renderHistory();
+        updateStatus('بارگذاری شد');
+        setTimeout(() => updateStatus('آماده'), 1000);
+    }
+
+    function newChat() {
+        currentChatId = 'chat_' + Date.now();
+        chatHistory = [];
+        document.getElementById('chatBox').innerHTML = '<div class="msg bot">سلام. سوال خود را بپرسید.</div>';
+        lastBotResponse = '';
+        updateStatus('گفتگوی جدید');
+        setTimeout(() => updateStatus('آماده'), 1000);
+        renderHistory();
+    }
+
+    // ===== رنگ و تم =====
+    function applyColor(color) {
+        currentColor = color;
+        document.documentElement.style.setProperty('--accent', color);
+        document.querySelectorAll('.msg.user').forEach(el => {
+            el.style.background = color;
+        });
+        document.querySelectorAll('.models button.active').forEach(el => {
+            el.style.background = color;
+            el.style.borderColor = color;
+        });
+        document.querySelectorAll('.send-btn').forEach(el => {
+            el.style.background = color;
+        });
+        document.querySelectorAll('.header h1 span').forEach(el => {
+            el.style.color = color;
+        });
+        document.querySelectorAll('.footer span').forEach(el => {
+            el.style.color = color;
+        });
+        document.querySelectorAll('.chat-box::-webkit-scrollbar-thumb').forEach(el => {
+            el.style.background = color;
+        });
+        document.querySelectorAll('.msg.bot .cursor').forEach(el => {
+            el.style.background = color;
+        });
+        document.querySelectorAll('.top-bar button.active').forEach(el => {
+            el.style.borderColor = color;
+        });
+        document.querySelectorAll('.input-area input:focus').forEach(el => {
+            el.style.borderColor = color;
+        });
+        document.querySelectorAll('.color-picker .cbtn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.color === color);
+        });
+        localStorage.setItem('chatColor', color);
+    }
+
+    function applyTheme(theme) {
+        currentTheme = theme;
+        const body = document.body;
+        const header = document.getElementById('header');
+        const main = document.getElementById('main');
+        const footer = document.getElementById('footer');
+        const isDark = theme === 'dark';
+        
+        body.style.background = isDark ? '#0a0a0a' : '#f5f7fa';
+        body.style.color = isDark ? '#e5e7eb' : '#1a1a1a';
+        
+        const borderColor = isDark ? '#2a2a2a' : '#d1d5db';
+        const bgColor = isDark ? '#141414' : '#ffffff';
+        const mainBg = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)';
+        
+        header.style.background = bgColor;
+        header.style.borderColor = borderColor;
+        header.style.color = body.style.color;
+        
+        main.style.background = mainBg;
+        main.style.borderColor = borderColor;
+        
+        footer.style.borderColor = borderColor;
+        footer.style.color = body.style.color;
+        
+        document.querySelectorAll('.models').forEach(el => el.style.borderColor = borderColor);
+        document.querySelectorAll('.history-area').forEach(el => el.style.borderColor = borderColor);
+        document.querySelectorAll('.history-list').forEach(el => {
+            el.style.background = isDark ? '#1a1a1a' : '#f9fafb';
+            el.style.borderColor = borderColor;
+        });
+        document.querySelectorAll('.chat-box').forEach(el => {
+            el.style.background = isDark ? '#1a1a1a' : '#f9fafb';
+            el.style.borderColor = borderColor;
+        });
+        document.querySelectorAll('.input-area input').forEach(el => {
+            el.style.background = isDark ? '#1a1a1a' : '#f9fafb';
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.actions').forEach(el => el.style.borderColor = borderColor);
+        document.querySelectorAll('.top-bar button').forEach(el => {
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.models button').forEach(el => {
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.color-picker .cbtn').forEach(el => {
+            el.style.borderColor = borderColor;
+        });
+        document.querySelectorAll('.theme-toggle button').forEach(el => {
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        document.querySelectorAll('.theme-toggle button.active').forEach(el => {
+            el.style.background = isDark ? 'rgba(59,130,246,0.2)' : 'rgba(59,130,246,0.1)';
+        });
+        
+        document.querySelectorAll('.msg.bot').forEach(el => {
+            el.style.borderColor = borderColor;
+            el.style.color = body.style.color;
+        });
+        
+        localStorage.setItem('chatTheme', theme);
+    }
+
+    // ===== انتخاب رنگ =====
+    document.querySelectorAll('.color-picker .cbtn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            applyColor(this.dataset.color);
+        });
+    });
+
+    // ===== انتخاب تم =====
+    document.querySelectorAll('.theme-toggle button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.theme-toggle button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            applyTheme(this.dataset.theme);
+        });
+    });
+
+    // ===== انتخاب مدل =====
+    document.querySelectorAll('#modelContainer button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#modelContainer button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentModel = this.dataset.model;
+            updateStatus('مدل: ' + this.textContent);
+            // اعمال رنگ روی دکمه فعال
+            this.style.background = currentColor;
+            this.style.borderColor = currentColor;
+        });
+    });
+
+    function updateStatus(text) {
+        document.getElementById('statusText').textContent = 'وضعیت: ' + text;
+    }
+
+    // ===== چت با تایپ کلمه به کلمه =====
+    async function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+        if (!msg || isWaiting) return;
+
+        const box = document.getElementById('chatBox');
+        if (box.querySelector('.msg.bot')?.textContent === 'سلام. سوال خود را بپرسید.') {
+            box.innerHTML = '';
+        }
+
+        const userMsg = document.createElement('div');
+        userMsg.className = 'msg user';
+        userMsg.textContent = msg;
+        userMsg.style.background = currentColor;
+        box.appendChild(userMsg);
+        box.scrollTop = box.scrollHeight;
+
+        chatHistory.push({role: 'user', content: msg});
+        input.value = '';
+        isWaiting = true;
+        isStreaming = true;
+        document.getElementById('sendBtn').disabled = true;
+        document.getElementById('sendBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'flex';
+        updateStatus('در حال فکر کردن...');
+
+        const botMsg = document.createElement('div');
+        botMsg.className = 'msg bot typing';
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        botMsg.textContent = '';
+        botMsg.appendChild(cursor);
+        box.appendChild(botMsg);
+        box.scrollTop = box.scrollHeight;
+
+       
