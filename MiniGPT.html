@@ -167,7 +167,7 @@
                 existing.content = content;
                 existing.title = content[0]?.content?.slice(0, 30) || 'مکالمه جدید';
             } else {
-                chats.push({ id: currentChatId, title: content[0]?.content?.slice(0, 30) || 'مکالمه חדש', content });
+                chats.push({ id: currentChatId, title: content[0]?.content?.slice(0, 30) || 'مکالمه جدید', content });
             }
             setHistory(chats);
             renderHistory();
@@ -303,4 +303,4 @@
             if (msg) {
                 navigator.clipboard.writeText(msg.textContent).then(() => {
                     btn.style.color = '#22c55e';
-         
+        
