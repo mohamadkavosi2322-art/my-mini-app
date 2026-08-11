@@ -283,6 +283,15 @@
             text-align: center;
             margin-top: 10px;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+        .status svg {
+            width: 12px;
+            height: 12px;
+            fill: #22c55e;
         }
         @media (max-width: 600px) {
             body {
@@ -377,7 +386,10 @@
                 <button class="send-btn" id="sendBtn" onclick="sendMessage()">ارسال</button>
             </div>
 
-            <div class="status" id="statusText">وضعیت: آماده</div>
+            <div class="status">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                وضعیت: فعال
+            </div>
         </div>
     </div>
 
@@ -408,7 +420,10 @@
                 document.querySelectorAll('.dropdown-menu .model-item').forEach(i => i.classList.remove('active'));
                 this.classList.add('active');
                 currentModel = this.dataset.model;
-                updateStatus('مدل: ' + this.textContent.trim());
+                document.querySelector('.status').innerHTML = `
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                    وضعیت: فعال · مدل: ${this.textContent.trim()}
+                `;
                 dropdown.classList.remove('open');
             });
         });
@@ -454,10 +469,6 @@
         }
 
         // ===== چت =====
-        function updateStatus(text) {
-            document.getElementById('statusText').textContent = 'وضعیت: ' + text;
-        }
-
         async function sendMessage() {
             const input = document.getElementById('chatInput');
             const msg = input.value.trim();
@@ -479,7 +490,10 @@
             input.value = '';
             isWaiting = true;
             document.getElementById('sendBtn').disabled = true;
-            updateStatus('در حال فکر کردن...');
+            document.querySelector('.status').innerHTML = `
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                وضعیت: در حال فکر کردن...
+            `;
 
             const botWrapper = document.createElement('div');
             botWrapper.className = 'msg-wrapper';
@@ -512,9 +526,11 @@
                     botMsg.textContent = reply;
                     lastBotResponse = reply;
                     chatHistory.push({ role: 'assistant', content: reply });
-                    updateStatus('پاسخ دریافت شد');
+                    document.querySelector('.status').innerHTML = `
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg>
+                        وضعیت: فعال · پاسخ دریافت شد
+                    `;
                     
-                    // اضافه کردن دکمه‌های زیر پیام
                     const actions = document.createElement('div');
                     actions.className = 'msg-actions';
                     actions.innerHTML = `
@@ -528,13 +544,4 @@
                             <svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg>
                         </button>
                         <button onclick="feedbackMessage(this)" title="بازخورد">
-                            <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg>
-                        </button>
-                        <button onclick="shareMessage(this)" title="اشتراک‌گذاری">
-                            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                        </button>
-                    `;
-                    botWrapper.appendChild(actions);
-                } else {
-                    botMsg.className = 'msg bot';
-               
+                            <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1
