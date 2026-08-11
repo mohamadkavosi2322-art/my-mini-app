@@ -48,14 +48,12 @@
         .input-area input{flex:1;padding:12px 16px;border-radius:12px;border:1px solid #2a2a2a;font-size:14px;outline:none;font-family:inherit;background:#1a1a1a;color:#e5e7eb;transition:border .2s}
         .input-area input::placeholder{color:#6b7280}
         .input-area input:focus{border-color:#3b82f6}
-        .input-area .send-btn{width:44px;height:44px;border-radius:50%;border:none;background:#3b82f6;color:#fff;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+        .input-area .send-btn{width:44px;height:44px;border-radius:50%;border:none;background:#3b82f6;color:#fff;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;font-size:22px;font-weight:700}
         .input-area .send-btn:hover{transform:scale(1.04);background:#2563eb}
         .input-area .send-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-        .input-area .send-btn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-        .input-area .stop-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid #ef4444;background:transparent;color:#ef4444;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
+        .input-area .stop-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid #ef4444;background:transparent;color:#ef4444;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;font-size:22px;font-weight:700}
         .input-area .stop-btn:hover{background:#ef4444;color:#fff}
-        .input-area .stop-btn svg{width:22px;height:22px;fill:#ef4444}
-        @media(max-width:600px){body{padding:12px}.header{padding:12px 16px}.main{padding:16px}.dropdown-menu{left:-10px;min-width:160px}.input-area .send-btn,.input-area .stop-btn{width:38px;height:38px}.input-area .send-btn svg{width:20px;height:20px}}
+        @media(max-width:600px){body{padding:12px}.header{padding:12px 16px}.main{padding:16px}.dropdown-menu{left:-10px;min-width:160px}.input-area .send-btn,.input-area .stop-btn{width:38px;height:38px}.input-area .send-btn{font-size:18px}}
     </style>
 </head>
 <body>
@@ -117,9 +115,7 @@
 
             <div class="input-area">
                 <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." />
-                <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-                    <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                </button>
+                <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
             </div>
         </div>
     </div>
@@ -307,4 +303,13 @@
                 if (index < text.length) {
                     element.textContent += text.charAt(index);
                     index++;
-                    document.getElement
+                    document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+                } else {
+                    clearInterval(typingInterval);
+                }
+            }, 15);
+        }
+
+        // ===== ارسال پیام =====
+        async function sendMessage() {
+        
