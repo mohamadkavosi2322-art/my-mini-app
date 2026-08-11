@@ -6,9 +6,9 @@
     <title>MiniGPT</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e5e7eb;min-height:100vh;padding:20px;direction:rtl;user-select:none}
+        body{font-family:system-ui,-apple-system,sans-serif;background:#000000;color:#e5e7eb;min-height:100vh;padding:20px;direction:rtl;user-select:none}
         .app{max-width:800px;margin:0 auto;display:flex;flex-direction:column;height:95vh}
-        .header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#0d0d0d;border-radius:16px;border:1px solid #1a1a1a;margin-bottom:16px;flex-shrink:0}
+        .header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#0a0a0a;border-radius:16px;border:1px solid #1a1a1a;margin-bottom:16px;flex-shrink:0}
         .header-left{display:flex;align-items:center;gap:10px}
         .header-left .logo-wrapper{width:36px;height:36px;border-radius:50%;overflow:hidden;border:1.5px solid #1a1a1a;flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center}
         .header-left .logo-wrapper img{width:100%;height:100%;object-fit:cover}
@@ -17,7 +17,7 @@
         .header-actions .menu-btn{background:transparent;border:1.5px solid #1a1a1a;color:#9ca3af;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
         .header-actions .menu-btn:hover{border-color:#3b82f6;color:#e5e7eb;background:#1a1a1a}
         .header-actions .menu-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-        .dropdown-menu{display:none;position:absolute;top:45px;left:0;background:#0d0d0d;border:1px solid #1a1a1a;border-radius:12px;padding:8px;min-width:200px;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,0.6);max-height:400px;overflow-y:auto}
+        .dropdown-menu{display:none;position:absolute;top:45px;left:0;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:8px;min-width:200px;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,0.6);max-height:400px;overflow-y:auto}
         .dropdown-menu.open{display:block}
         .dropdown-menu .section-title{color:#6b7280;font-size:11px;padding:4px 12px;margin-top:4px}
         .dropdown-menu .model-item{display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:8px;cursor:pointer;transition:all .2s;color:#9ca3af;font-size:13px}
@@ -28,8 +28,8 @@
         .dropdown-menu .history-item:hover{background:#1a1a1a;color:#e5e7eb}
         .dropdown-menu .history-item .del-btn{background:transparent;border:none;color:#ef4444;cursor:pointer;font-size:12px}
         .dropdown-menu .history-item .del-btn:hover{color:#dc2626}
-        .main{background:#0d0d0d;border-radius:16px;border:1px solid #1a1a1a;padding:20px;flex:1;display:flex;flex-direction:column}
-        .chat-box{background:#0d0d0d;border-radius:12px;padding:16px;overflow-y:auto;border:1px solid #1a1a1a;flex:1;min-height:0;margin-bottom:12px}
+        .main{background:#0a0a0a;border-radius:16px;border:1px solid #1a1a1a;padding:20px;flex:1;display:flex;flex-direction:column}
+        .chat-box{background:#0a0a0a;border-radius:12px;padding:16px;overflow-y:auto;border:1px solid #1a1a1a;flex:1;min-height:0;margin-bottom:12px}
         .chat-box::-webkit-scrollbar{width:4px}
         .chat-box::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
         .msg-wrapper{display:flex;flex-direction:column;margin-bottom:8px}
@@ -44,11 +44,9 @@
         .msg-actions button svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
         .msg-actions button.liked{color:#22c55e}
         .msg-actions button.disliked{color:#ef4444}
-        .msg-actions .edit-btn{display:none}
-        .msg-wrapper.user:hover .edit-btn{display:inline-flex}
-        .input-area{position:sticky;bottom:0;z-index:10;background:#0d0d0d;padding:12px 0;display:flex;gap:8px;align-items:center;border-top:1px solid #1a1a1a;margin-top:auto;flex-shrink:0}
+        .input-area{position:sticky;bottom:0;z-index:10;background:#0a0a0a;padding:12px 0;display:flex;gap:8px;align-items:center;border-top:1px solid #1a1a1a;margin-top:auto;flex-shrink:0}
         .input-area .input-wrapper{position:relative;flex:1;display:flex;align-items:center}
-        .input-area input{width:100%;padding:12px 50px 12px 16px;border-radius:25px;border:1px solid #1a1a1a;font-size:14px;outline:none;font-family:inherit;background:#0d0d0d;color:#e5e7eb;transition:border .2s;height:48px;text-align:right}
+        .input-area input{width:100%;padding:12px 50px 12px 16px;border-radius:25px;border:1px solid #1a1a1a;font-size:14px;outline:none;font-family:inherit;background:#0a0a0a;color:#e5e7eb;transition:border .2s;height:48px;text-align:right}
         .input-area input::placeholder{color:#6b7280;text-align:right}
         .input-area input:focus{border-color:#3b82f6}
         .input-area .send-btn{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:#3b82f6;color:#fff;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0;z-index:2;font-size:24px;font-weight:700}
@@ -291,11 +289,20 @@
             }
         }
 
-        // ===== دکمه ویرایش برای پیام‌های کاربر =====
-        function addEditButton(wrapper) {
-            const actions = wrapper.querySelector('.msg-actions');
-            if (!actions) return;
-            const editBtn = document.createElement('button');
-            editBtn.className = 'edit-btn';
-            editBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
-            ed
+        // ===== آپلود فایل =====
+        function handleFiles(files) {
+            for (let file of files) {
+                alert('فایل آپلود شد: ' + file.name);
+            }
+        }
+
+        // ===== تایپ روان =====
+        function typeMessage(element, text) {
+            let index = 0;
+            element.textContent = '';
+            clearInterval(typingInterval);
+            typingInterval = setInterval(() => {
+                if (index < text.length) {
+                    element.textContent += text.charAt(index);
+                    index++;
+                    const chatBox = document.getElementById('chatBox')
