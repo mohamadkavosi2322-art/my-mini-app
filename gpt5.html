@@ -14,7 +14,7 @@
         .header-left .logo-wrapper img{width:100%;height:100%;object-fit:cover}
         .header h1{font-size:18px;font-weight:600}
         .header-actions{display:flex;align-items:center;gap:10px;position:relative}
-        .header-actions .menu-btn{background:transparent;border:1.5px solid #1a1a1a;color:#9ca3af;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+        .header-actions .menu-btn{background:transparent;border:1.5px solid #1a1a1a;color:#9ca3af;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;border:none}
         .header-actions .menu-btn:hover{border-color:#3b82f6;color:#e5e7eb;background:#1a1a1a}
         .header-actions .menu-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
         .dropdown-menu{display:none;position:absolute;top:45px;left:0;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:8px;min-width:200px;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,0.6);max-height:400px;overflow-y:auto}
@@ -73,28 +73,28 @@
                 <h1>ChatGPT</h1>
             </div>
             <div class="header-actions">
-                <button class="menu-btn" id="menuBtn" onclick="toggleDropdown()">
+                <button class="menu-btn" id="menuBtn">
                     <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <div class="section-title">مدل‌ها</div>
-                    <div class="model-item active" data-model="gpt-4o-mini" onclick="selectModel(this)">
+                    <div class="model-item active" data-model="gpt-4o-mini">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4o Mini" />
                         GPT-4o Mini
                     </div>
-                    <div class="model-item" data-model="gpt-4o" onclick="selectModel(this)">
+                    <div class="model-item" data-model="gpt-4o">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4o" />
                         GPT-4o
                     </div>
-                    <div class="model-item" data-model="gpt-4" onclick="selectModel(this)">
+                    <div class="model-item" data-model="gpt-4">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4" />
                         GPT-4
                     </div>
-                    <div class="model-item" data-model="gpt-3.5-turbo" onclick="selectModel(this)">
+                    <div class="model-item" data-model="gpt-3.5-turbo">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-3.5" />
                         GPT-3.5
                     </div>
-                    <div class="model-item" data-model="o1-mini" onclick="selectModel(this)">
+                    <div class="model-item" data-model="o1-mini">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="O1 Mini" />
                         O1 Mini
                     </div>
@@ -110,23 +110,23 @@
                 <div class="msg-wrapper">
                     <div class="msg bot">سلام. سوال خود را بپرسید.</div>
                     <div class="msg-actions">
-                        <button onclick="copyMessage(this)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                        <button onclick="likeMessage(this)"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
-                        <button onclick="dislikeMessage(this)"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
-                        <button onclick="feedbackMessage(this)"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
+                        <button class="copy-btn"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                        <button class="like-btn"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                        <button class="dislike-btn"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
+                        <button class="feedback-btn"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
                     </div>
                 </div>
             </div>
 
             <!-- نوار ارسال -->
             <div class="input-area">
-                <button class="action-btn" onclick="document.getElementById('fileInput').click()">
+                <button class="action-btn" id="fileBtn">
                     <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
                 </button>
-                <input type="file" id="fileInput" class="file-input" multiple onchange="handleFiles(this.files)" />
+                <input type="file" id="fileInput" class="file-input" multiple />
                 <div class="input-wrapper">
                     <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." />
-                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+                    <button class="send-btn" id="sendBtn">↑</button>
                 </div>
             </div>
         </div>
@@ -142,6 +142,15 @@
         let chatHistory = [];
         let typingInterval = null;
         let currentChatId = Date.now();
+
+        // ===== المنت‌ها =====
+        const chatBox = document.getElementById('chatBox');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const menuBtn = document.getElementById('menuBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const fileBtn = document.getElementById('fileBtn');
+        const fileInput = document.getElementById('fileInput');
 
         // ===== تاریخچه =====
         function getHistory() {
@@ -180,8 +189,7 @@
             const chat = chats.find(c => c.id === id);
             if (!chat) return;
             currentChatId = id;
-            const box = document.getElementById('chatBox');
-            box.innerHTML = '';
+            chatBox.innerHTML = '';
             chat.content.forEach(msg => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'msg-wrapper';
@@ -193,16 +201,16 @@
                     const actions = document.createElement('div');
                     actions.className = 'msg-actions';
                     actions.innerHTML = `
-                        <button onclick="copyMessage(this)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                        <button onclick="likeMessage(this)"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
-                        <button onclick="dislikeMessage(this)"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
-                        <button onclick="feedbackMessage(this)"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
+                        <button class="copy-btn"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                        <button class="like-btn"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                        <button class="dislike-btn"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
+                        <button class="feedback-btn"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
                     `;
                     wrapper.appendChild(actions);
                 }
                 box.appendChild(wrapper);
             });
-            document.getElementById('dropdownMenu').classList.remove('open');
+            dropdownMenu.classList.remove('open');
             box.scrollTop = box.scrollHeight;
         }
 
@@ -213,14 +221,14 @@
             if (chats.length > 0) {
                 loadChat(chats[0].id);
             } else {
-                document.getElementById('chatBox').innerHTML = `
+                chatBox.innerHTML = `
                     <div class="msg-wrapper">
                         <div class="msg bot">سلام. سوال خود را بپرسید.</div>
                         <div class="msg-actions">
-                            <button onclick="copyMessage(this)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
-                            <button onclick="likeMessage(this)"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
-                            <button onclick="dislikeMessage(this)"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
-                            <button onclick="feedbackMessage(this)"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
+                            <button class="copy-btn"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                            <button class="like-btn"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                            <button class="dislike-btn"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
+                            <button class="feedback-btn"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
                         </div>
                     </div>
                 `;
@@ -242,67 +250,55 @@
                 const div = document.createElement('div');
                 div.className = 'history-item';
                 div.innerHTML = `
-                    <span onclick="loadChat(${chat.id})">${chat.title}</span>
-                    <button class="del-btn" onclick="event.stopPropagation();deleteChat(${chat.id})">✕</button>
+                    <span data-id="${chat.id}">${chat.title}</span>
+                    <button class="del-btn" data-id="${chat.id}">✕</button>
                 `;
                 list.appendChild(div);
             });
         }
 
-        // ===== منوی مدل =====
-        function toggleDropdown() {
-            document.getElementById('dropdownMenu').classList.toggle('open');
-            if (document.getElementById('dropdownMenu').classList.contains('open')) renderHistory();
-        }
+        // ===== دکمه‌های زیر پیام (با addEventListener) =====
+        function setupMessageActions() {
+            document.querySelectorAll('.msg-actions').forEach(actions => {
+                const copyBtn = actions.querySelector('.copy-btn');
+                const likeBtn = actions.querySelector('.like-btn');
+                const dislikeBtn = actions.querySelector('.dislike-btn');
+                const feedbackBtn = actions.querySelector('.feedback-btn');
 
-        function selectModel(element) {
-            document.querySelectorAll('.dropdown-menu .model-item').forEach(i => i.classList.remove('active'));
-            element.classList.add('active');
-            currentModel = element.dataset.model;
-            document.getElementById('dropdownMenu').classList.remove('open');
-        }
+                if (copyBtn) {
+                    copyBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const wrapper = this.closest('.msg-wrapper');
+                        const msg = wrapper.querySelector('.msg');
+                        if (msg) {
+                            navigator.clipboard.writeText(msg.textContent).then(() => {
+                                this.style.color = '#22c55e';
+                                setTimeout(() => this.style.color = '', 1500);
+                            });
+                        }
+                    });
+                }
 
-        // ===== دکمه‌های زیر پیام =====
-        function copyMessage(btn) {
-            const msgWrapper = btn.closest('.msg-wrapper');
-            const msg = msgWrapper.querySelector('.msg');
-            if (msg) {
-                navigator.clipboard.writeText(msg.textContent).then(() => {
-                    btn.style.color = '#22c55e';
-                    setTimeout(() => btn.style.color = '', 1500);
-                });
-            }
-        }
+                if (likeBtn) {
+                    likeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const wrapper = this.closest('.msg-actions');
+                        const dislike = wrapper.querySelector('.dislike-btn');
+                        if (dislike) dislike.classList.remove('liked');
+                        this.classList.toggle('liked');
+                    });
+                }
 
-        function likeMessage(btn) {
-            btn.classList.toggle('liked');
-        }
+                if (dislikeBtn) {
+                    dislikeBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const wrapper = this.closest('.msg-actions');
+                        const like = wrapper.querySelector('.like-btn');
+                        if (like) like.classList.remove('liked');
+                        this.classList.toggle('liked');
+                    });
+                }
 
-        function dislikeMessage(btn) {
-            btn.classList.toggle('disliked');
-        }
-
-        function feedbackMessage(btn) {
-            const feedback = prompt('نظر خود را بنویسید:');
-            if (feedback) {
-                alert('ChatGPT می‌گوید: بازخورد شما ثبت شد');
-            }
-        }
-
-        // ===== آپلود فایل =====
-        function handleFiles(files) {
-            for (let file of files) {
-                alert('فایل آپلود شد: ' + file.name);
-            }
-        }
-
-        // ===== تایپ روان =====
-        function typeMessage(element, text) {
-            let index = 0;
-            element.textContent = '';
-            clearInterval(typingInterval);
-            typingInterval = setInterval(() => {
-                if (index < text.length) {
-                    element.textContent += text.charAt(index);
-                    index++;
-                    const chatBox = document.getElementById('chatBox')
+                if (feedbackBtn) {
+                    feedbackBtn.addEventListener('click', function(e) {
+           
