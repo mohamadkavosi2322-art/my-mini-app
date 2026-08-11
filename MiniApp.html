@@ -6,7 +6,7 @@
     <title>MiniGPT — AI Workspace</title>
     <style>
         /* ============================================================
-           1. RESET & CSS VARIABLES (Design Tokens)
+           1. RESET & CSS VARIABLES
            ============================================================ */
         *,
         *::before,
@@ -17,19 +17,8 @@
         }
 
         :root {
-            /* -------- Colors -------- */
-            --primary-50: #eff6ff;
-            --primary-100: #dbeafe;
-            --primary-200: #bfdbfe;
-            --primary-300: #93c5fd;
-            --primary-400: #60a5fa;
             --primary-500: #3b82f6;
             --primary-600: #2563eb;
-            --primary-700: #1d4ed8;
-            --primary-800: #1e40af;
-            --primary-900: #1e3a8a;
-            --primary-950: #172554;
-
             --neutral-50: #f8fafc;
             --neutral-100: #f1f5f9;
             --neutral-200: #e2e8f0;
@@ -41,132 +30,71 @@
             --neutral-800: #1e293b;
             --neutral-900: #0f172a;
             --neutral-950: #020617;
-
             --success-500: #22c55e;
-            --warning-500: #f59e0b;
             --error-500: #ef4444;
-
-            /* -------- Light Theme (default) -------- */
             --bg-primary: var(--neutral-50);
             --bg-secondary: #ffffff;
             --bg-surface: var(--neutral-100);
             --bg-input: #ffffff;
-            --bg-hover: var(--neutral-200);
-            --bg-active: var(--neutral-300);
-
             --text-primary: var(--neutral-900);
             --text-secondary: var(--neutral-700);
             --text-muted: var(--neutral-500);
-            --text-disabled: var(--neutral-400);
-            --text-inverse: #ffffff;
-
             --border-primary: var(--neutral-200);
-            --border-secondary: var(--neutral-300);
             --border-focus: var(--primary-500);
-            --border-error: var(--error-500);
-            --border-success: var(--success-500);
-
             --accent-primary: var(--primary-500);
             --accent-hover: var(--primary-600);
-            --accent-active: var(--primary-700);
-
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
-            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
-            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.10), 0 8px 16px rgba(0, 0, 0, 0.04);
-
-            /* -------- Spacing -------- */
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+            --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.10);
             --sp-1: 4px;
             --sp-2: 8px;
             --sp-3: 12px;
             --sp-4: 16px;
             --sp-5: 20px;
             --sp-6: 24px;
-            --sp-8: 32px;
-            --sp-10: 40px;
-            --sp-12: 48px;
-            --sp-16: 64px;
-
-            /* -------- Typography -------- */
-            --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-            --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
             --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
             --radius-xl: 16px;
             --radius-full: 9999px;
-
-            /* -------- Transitions -------- */
             --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-            /* -------- Sizing -------- */
+            --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+            --font-mono: "JetBrains Mono", "Fira Code", monospace;
             --header-height: 56px;
-            --sidebar-width: 280px;
-            --sidebar-collapsed: 64px;
             --max-width: 900px;
         }
 
-        /* -------- Dark Theme -------- */
         [data-theme="dark"] {
             --bg-primary: var(--neutral-950);
             --bg-secondary: var(--neutral-900);
             --bg-surface: var(--neutral-800);
             --bg-input: var(--neutral-800);
-            --bg-hover: var(--neutral-700);
-            --bg-active: var(--neutral-600);
-
             --text-primary: var(--neutral-50);
             --text-secondary: var(--neutral-300);
             --text-muted: var(--neutral-500);
-            --text-disabled: var(--neutral-600);
-            --text-inverse: var(--neutral-950);
-
             --border-primary: var(--neutral-700);
-            --border-secondary: var(--neutral-600);
-            --border-focus: var(--primary-500);
-            --border-error: var(--error-500);
-            --border-success: var(--success-500);
-
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
             --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
             --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.7);
         }
 
-        /* -------- System Theme -------- */
-        @media (prefers-color-scheme: dark) {
+        @media(prefers-color-scheme:dark) {
             [data-theme="system"] {
                 --bg-primary: var(--neutral-950);
                 --bg-secondary: var(--neutral-900);
                 --bg-surface: var(--neutral-800);
                 --bg-input: var(--neutral-800);
-                --bg-hover: var(--neutral-700);
-                --bg-active: var(--neutral-600);
-
                 --text-primary: var(--neutral-50);
                 --text-secondary: var(--neutral-300);
                 --text-muted: var(--neutral-500);
-                --text-disabled: var(--neutral-600);
-                --text-inverse: var(--neutral-950);
-
                 --border-primary: var(--neutral-700);
-                --border-secondary: var(--neutral-600);
-
-                --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-                --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
                 --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.6);
                 --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.7);
             }
         }
 
-        /* ============================================================
-           2. BASE
-           ============================================================ */
         html {
             font-family: var(--font-sans);
             font-size: 16px;
-            -webkit-text-size-adjust: 100%;
         }
 
         body {
@@ -182,7 +110,6 @@
             margin: 0;
         }
 
-        /* -------- Scrollbar -------- */
         ::-webkit-scrollbar {
             width: 5px;
             height: 5px;
@@ -194,13 +121,7 @@
             background: var(--accent-primary);
             border-radius: var(--radius-full);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-hover);
-        }
 
-        /* ============================================================
-           3. APP SHELL
-           ============================================================ */
         .app {
             width: 100%;
             max-width: var(--max-width);
@@ -213,13 +134,9 @@
             flex-direction: column;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
-            position: relative;
             transition: background var(--transition-slow), border-color var(--transition-slow);
         }
 
-        /* ============================================================
-           4. HEADER
-           ============================================================ */
         .header {
             display: flex;
             justify-content: space-between;
@@ -265,9 +182,6 @@
             gap: var(--sp-1);
         }
 
-        /* ============================================================
-           5. ICON BUTTON (SVG System)
-           ============================================================ */
         .icon-btn {
             background: transparent;
             border: 1.5px solid var(--border-primary);
@@ -291,15 +205,6 @@
             transform: scale(1.04);
         }
 
-        .icon-btn:active {
-            transform: scale(0.94);
-        }
-
-        .icon-btn:focus-visible {
-            outline: 2px solid var(--border-focus);
-            outline-offset: 2px;
-        }
-
         .icon-btn svg {
             width: 18px;
             height: 18px;
@@ -310,31 +215,6 @@
             stroke-linejoin: round;
         }
 
-        .icon-btn .tooltip {
-            position: absolute;
-            bottom: calc(100% + 6px);
-            left: 50%;
-            transform: translateX(-50%) scale(0.9);
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            padding: var(--sp-1) var(--sp-2);
-            border-radius: var(--radius-sm);
-            font-size: 11px;
-            border: 1px solid var(--border-primary);
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: all var(--transition);
-        }
-
-        .icon-btn:hover .tooltip {
-            opacity: 1;
-            transform: translateX(-50%) scale(1);
-        }
-
-        /* ============================================================
-           6. SIDEBAR
-           ============================================================ */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -344,7 +224,6 @@
             opacity: 0;
             transition: opacity var(--transition-slow);
             backdrop-filter: blur(2px);
-            -webkit-backdrop-filter: blur(2px);
         }
 
         .sidebar-overlay.active {
@@ -521,9 +400,6 @@
             border-color: var(--accent-primary);
         }
 
-        /* ============================================================
-           7. MAIN CONTENT
-           ============================================================ */
         .main {
             flex: 1;
             display: flex;
@@ -534,9 +410,6 @@
             transition: background var(--transition-slow);
         }
 
-        /* ============================================================
-           8. MODEL SELECTOR
-           ============================================================ */
         .model-selector {
             display: flex;
             gap: var(--sp-1);
@@ -571,9 +444,6 @@
             border-color: var(--accent-primary);
         }
 
-        /* ============================================================
-           9. CHAT BOX
-           ============================================================ */
         .chat-box {
             flex: 1;
             overflow-y: auto;
@@ -585,7 +455,6 @@
             scroll-behavior: smooth;
         }
 
-        /* -------- Message -------- */
         .msg-wrapper {
             display: flex;
             flex-direction: column;
@@ -612,4 +481,171 @@
             font-size: 14px;
             line-height: 1.7;
             border: 1px solid transparent;
-            transition: all var(--t
+            transition: all var(--transition);
+            position: relative;
+        }
+
+        .msg-wrapper.user .msg {
+            background: var(--accent-primary);
+            color: #fff;
+            margin-right: auto;
+            text-align: right;
+            border-bottom-right-radius: var(--radius-sm);
+        }
+
+        .msg-wrapper.bot .msg {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            margin-left: auto;
+            text-align: left;
+            border: 1px solid var(--border-primary);
+            border-bottom-left-radius: var(--radius-sm);
+        }
+
+        .msg-wrapper.bot .msg.typing {
+            color: var(--text-muted);
+            border-color: transparent;
+            background: transparent;
+        }
+
+        .msg-actions {
+            display: flex;
+            gap: var(--sp-1);
+            flex-wrap: wrap;
+            margin-top: var(--sp-1);
+            margin-right: var(--sp-1);
+            opacity: 0.25;
+            transition: opacity var(--transition);
+        }
+
+        .msg-wrapper:hover .msg-actions,
+        .msg-actions:focus-within {
+            opacity: 1;
+        }
+
+        .msg-actions button {
+            background: transparent;
+            border: 1.5px solid var(--border-primary);
+            color: var(--text-muted);
+            padding: 2px var(--sp-2);
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font-sans);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--sp-1);
+            font-weight: 500;
+        }
+
+        .msg-actions button:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+            background: var(--bg-surface);
+        }
+
+        .msg-actions button.active-like {
+            border-color: var(--success-500);
+            color: var(--success-500);
+        }
+
+        .msg-actions button.active-dislike {
+            border-color: var(--error-500);
+            color: var(--error-500);
+        }
+
+        .msg-actions button .count {
+            font-size: 9px;
+            opacity: 0.6;
+        }
+
+        .msg-actions button svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .code-block {
+            background: var(--neutral-950);
+            border-radius: var(--radius-md);
+            padding: var(--sp-3) var(--sp-4);
+            margin: var(--sp-2) 0 var(--sp-1);
+            border: 1px solid var(--border-primary);
+            direction: ltr;
+            text-align: left;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block pre {
+            color: #e5e7eb;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .code-block .copy-code-btn {
+            position: absolute;
+            top: var(--sp-1);
+            left: var(--sp-1);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--neutral-400);
+            padding: var(--sp-1) var(--sp-2);
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-family: var(--font-sans);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--sp-1);
+        }
+
+        .code-block .copy-code-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #e5e7eb;
+        }
+
+        .code-block .copy-code-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .composer {
+            display: flex;
+            gap: var(--sp-2);
+            align-items: center;
+            padding: var(--sp-2) 0;
+            border-top: 1px solid var(--border-primary);
+            flex-shrink: 0;
+            background: var(--bg-primary);
+            transition: background var(--transition-slow), border-color var(--transition-slow);
+        }
+
+        .composer input {
+            flex: 1;
+            padding: var(--sp-2) var(--sp-3);
+            border-radius: var(--radius-lg);
+            border: 1.5px solid var(--border-primary);
+            font-size: 14px;
+            outline: none;
+            font-family: var(--font-sans);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: border var(--transition), background var(--transition-slow);
+            min-he
