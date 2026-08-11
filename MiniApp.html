@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini AI Pro</title>
     <style>
-        /* ========================================
+        /* ============================================
            RESET & BASE
-        ======================================== */
+           ============================================ */
         * {
             margin: 0;
             padding: 0;
@@ -50,16 +50,13 @@
             align-items: center;
             padding: 16px;
         }
-        /* ========================================
-           SCROLLBAR
-        ======================================== */
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
 
-        /* ========================================
+        /* ============================================
            APP SHELL
-        ======================================== */
+           ============================================ */
         .app {
             width: 100%;
             max-width: 800px;
@@ -75,9 +72,10 @@
             position: relative;
             transition: background var(--transition), border-color var(--transition);
         }
-        /* ========================================
+
+        /* ============================================
            HEADER
-        ======================================== */
+           ============================================ */
         .header {
             display: flex;
             justify-content: space-between;
@@ -141,9 +139,9 @@
             stroke-linejoin: round;
         }
 
-        /* ========================================
-           SIDEBAR (Drawer)
-        ======================================== */
+        /* ============================================
+           SIDEBAR
+           ============================================ */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -239,9 +237,9 @@
             border-color: var(--accent);
         }
 
-        /* ========================================
+        /* ============================================
            MAIN CONTENT
-        ======================================== */
+           ============================================ */
         .main {
             flex: 1;
             display: flex;
@@ -251,9 +249,10 @@
             background: var(--bg-primary);
             transition: background var(--transition);
         }
-        /* ========================================
+
+        /* ============================================
            MODEL SELECTOR
-        ======================================== */
+           ============================================ */
         .model-selector {
             display: flex;
             gap: 6px;
@@ -282,9 +281,9 @@
             border-color: var(--accent);
         }
 
-        /* ========================================
+        /* ============================================
            CHAT BOX
-        ======================================== */
+           ============================================ */
         .chat-box {
             flex: 1;
             overflow-y: auto;
@@ -328,7 +327,8 @@
             color: var(--text-secondary);
             border-color: transparent;
         }
-        /* Message Actions (توخالی) */
+
+        /* Message Actions */
         .msg-actions {
             display: flex;
             gap: 4px;
@@ -372,9 +372,9 @@
             opacity: 0.6;
         }
 
-        /* ========================================
+        /* ============================================
            CODE BLOCK
-        ======================================== */
+           ============================================ */
         .code-block {
             background: #0d0d0d;
             border-radius: 10px;
@@ -413,9 +413,9 @@
             color: #e5e7eb;
         }
 
-        /* ========================================
+        /* ============================================
            COMPOSER
-        ======================================== */
+           ============================================ */
         .composer {
             display: flex;
             gap: 8px;
@@ -509,9 +509,9 @@
             stroke-linejoin: round;
         }
 
-        /* ========================================
+        /* ============================================
            STATUS / FOOTER
-        ======================================== */
+           ============================================ */
         .status {
             font-size: 12px;
             color: var(--text-secondary);
@@ -533,9 +533,9 @@
             color: var(--accent);
         }
 
-        /* ========================================
+        /* ============================================
            RESPONSIVE
-        ======================================== */
+           ============================================ */
         @media (max-width: 600px) {
             body { padding: 8px; }
             .app { border-radius: 16px; max-height: 100vh; }
@@ -565,7 +565,7 @@
         </div>
     </header>
 
-    <!-- ===== SIDEBAR (Drawer) ===== -->
+    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
     <aside class="sidebar" id="sidebar">
         <button class="close-btn" id="closeSidebar" aria-label="بستن منو">✕</button>
@@ -601,4 +601,4 @@
             <button class="action-btn" id="searchBtn" title="جستجو" onclick="alert('جستجو...')">
                 <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5"/></svg>
             </button>
-            <button class="action-btn" id="chatBtn" title="چت" onc
+            <button class="action-btn" id="chatBtn" title="چت" onclick="document.getElementByI
