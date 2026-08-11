@@ -8,8 +8,6 @@
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:system-ui,-apple-system,sans-serif;background:#0a0a0a;color:#e5e7eb;min-height:100vh;padding:20px;direction:rtl}
         .app{max-width:800px;margin:0 auto;display:flex;flex-direction:column;height:95vh}
-        
-        /* ===== هدر بالا (ثابت) ===== */
         .header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#0d0d0d;border-radius:16px;border:1px solid #1a1a1a;margin-bottom:16px;flex-shrink:0}
         .header-left{display:flex;align-items:center;gap:10px}
         .header-left .logo-wrapper{width:36px;height:36px;border-radius:50%;overflow:hidden;border:1.5px solid #1a1a1a;flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center}
@@ -30,8 +28,6 @@
         .dropdown-menu .history-item:hover{background:#1a1a1a;color:#e5e7eb}
         .dropdown-menu .history-item .del-btn{background:transparent;border:none;color:#ef4444;cursor:pointer;font-size:12px}
         .dropdown-menu .history-item .del-btn:hover{color:#dc2626}
-        
-        /* ===== بخش اصلی ===== */
         .main{background:#0d0d0d;border-radius:16px;border:1px solid #1a1a1a;padding:20px;flex:1;display:flex;flex-direction:column;position:relative}
         .chat-box{background:#0d0d0d;border-radius:12px;padding:16px;overflow-y:auto;border:1px solid #1a1a1a;flex:1;min-height:0;margin-bottom:12px}
         .chat-box::-webkit-scrollbar{width:4px}
@@ -41,17 +37,15 @@
         .msg.user{background:#3b82f6;color:#fff;margin-right:auto;text-align:right}
         .msg.bot{background:#1a1a1a;color:#e5e7eb;margin-left:auto;text-align:left;border:1px solid #1a1a1a}
         .msg.bot.typing{color:#6b7280}
-        .msg-actions{display:flex;gap:6px;margin-top:4px;margin-right:4px;opacity:0;transition:opacity .2s}
+        .msg-actions{display:flex;gap:6px;margin-top:4px;margin-right:4px;opacity:0.5;transition:opacity .2s}
         .msg-wrapper:hover .msg-actions{opacity:1}
         .msg-actions button{background:transparent;border:none;color:#9ca3af;padding:4px 8px;border-radius:6px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;font-size:12px}
         .msg-actions button:hover{background:#1a1a1a;color:#e5e7eb}
         .msg-actions button svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
         .msg-actions button.liked{color:#22c55e}
         .msg-actions button.disliked{color:#ef4444}
-        .msg-actions.user-actions{position:absolute;top:-10px;left:10px;opacity:0;transition:opacity .3s}
-        .msg-wrapper.user:hover .user-actions{opacity:1}
-        
-        /* ===== نوار ارسال (ثابت در پایین) ===== */
+        .msg-actions .edit-btn{display:none}
+        .msg-wrapper.user:hover .edit-btn{display:flex}
         .input-area{position:sticky;bottom:0;z-index:10;background:#0d0d0d;padding:12px 0;display:flex;gap:8px;align-items:center;border-top:1px solid #1a1a1a;margin-top:auto;flex-shrink:0}
         .input-area .input-wrapper{position:relative;flex:1;display:flex;align-items:center}
         .input-area input{width:100%;padding:12px 50px 12px 16px;border-radius:25px;border:1px solid #1a1a1a;font-size:14px;outline:none;font-family:inherit;background:#0d0d0d;color:#e5e7eb;transition:border .2s;height:48px;text-align:right}
@@ -300,5 +294,7 @@
         // ===== دکمه ویرایش برای پیام‌های کاربر (با نگه داشتن) =====
         function addEditButton(wrapper) {
             const actions = document.createElement('div');
-            actions.className = 'msg-actions user-actions';
-            const editBtn = document.createElement('butto
+            actions.className = 'msg-actions';
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-btn';
+            editBtn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1
