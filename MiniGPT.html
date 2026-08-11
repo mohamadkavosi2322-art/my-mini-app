@@ -139,16 +139,20 @@
             border: 1px solid #2a2a2a;
             padding: 20px;
             margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
         }
         .chat-box {
             background: #1a1a1a;
             border-radius: 12px;
             padding: 16px;
-            min-height: 350px;
-            max-height: 420px;
+            min-height: 400px;
+            max-height: 550px;
             overflow-y: auto;
             margin-bottom: 16px;
             border: 1px solid #2a2a2a;
+            flex: 1;
         }
         .chat-box::-webkit-scrollbar {
             width: 4px;
@@ -157,10 +161,14 @@
             background: #3b82f6;
             border-radius: 4px;
         }
+        .msg-wrapper {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 8px;
+        }
         .msg {
             padding: 10px 16px;
             border-radius: 12px;
-            margin-bottom: 8px;
             max-width: 85%;
             word-wrap: break-word;
             font-size: 14px;
@@ -181,6 +189,49 @@
         }
         .msg.bot.typing {
             color: #6b7280;
+        }
+        .msg-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+            margin-right: 4px;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+        .msg-wrapper:hover .msg-actions {
+            opacity: 1;
+        }
+        .msg-actions button {
+            background: transparent;
+            border: none;
+            color: #9ca3af;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+        }
+        .msg-actions button:hover {
+            background: #1a1a1a;
+            color: #e5e7eb;
+        }
+        .msg-actions button svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .msg-actions button.liked {
+            color: #22c55e;
+        }
+        .msg-actions button.disliked {
+            color: #ef4444;
         }
         .input-area {
             display: flex;
@@ -248,16 +299,6 @@
             border-color: #3b82f6;
             color: #e5e7eb;
         }
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            color: #4b5563;
-            padding-top: 16px;
-            border-top: 1px solid #2a2a2a;
-        }
-        .footer span {
-            color: #3b82f6;
-        }
         .status {
             font-size: 12px;
             color: #6b7280;
@@ -275,8 +316,8 @@
                 padding: 16px;
             }
             .chat-box {
-                min-height: 280px;
-                max-height: 350px;
+                min-height: 300px;
+                max-height: 400px;
             }
             .dropdown-menu {
                 left: -10px;
@@ -333,7 +374,26 @@
         <div class="main">
             <!-- چت باکس -->
             <div class="chat-box" id="chatBox">
-                <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+                <div class="msg-wrapper">
+                    <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+                    <div class="msg-actions">
+                        <button onclick="copyMessage(this)" title="کپی">
+                            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <button onclick="likeMessage(this)" title="لایک">
+                            <svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                        </button>
+                        <button onclick="dislikeMessage(this)" title="دیس‌لایک">
+                            <svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg>
+                        </button>
+                        <button onclick="feedbackMessage(this)" title="بازخورد">
+                            <svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg>
+                        </button>
+                        <button onclick="shareMessage(this)" title="اشتراک‌گذاری">
+                            <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- ورودی -->
@@ -351,9 +411,6 @@
 
             <div class="status" id="statusText">وضعیت: آماده</div>
         </div>
-
-        <!-- فوتر -->
-        <div class="footer">ساخته شده با <span>Bale OpenAI</span></div>
     </div>
 
     <script>
@@ -388,6 +445,46 @@
             });
         });
 
+        // ===== دکمه‌های زیر پیام =====
+        function copyMessage(btn) {
+            const msgWrapper = btn.closest('.msg-wrapper');
+            const msg = msgWrapper.querySelector('.msg');
+            if (msg) {
+                navigator.clipboard.writeText(msg.textContent).then(() => {
+                    btn.style.color = '#22c55e';
+                    setTimeout(() => btn.style.color = '', 1500);
+                });
+            }
+        }
+
+        function likeMessage(btn) {
+            btn.classList.toggle('liked');
+        }
+
+        function dislikeMessage(btn) {
+            btn.classList.toggle('disliked');
+        }
+
+        function feedbackMessage(btn) {
+            const feedback = prompt('نظر خود را بنویسید:');
+            if (feedback) {
+                alert('بازخورد شما ثبت شد: ' + feedback);
+            }
+        }
+
+        function shareMessage(btn) {
+            const msgWrapper = btn.closest('.msg-wrapper');
+            const msg = msgWrapper.querySelector('.msg');
+            if (msg && navigator.share) {
+                navigator.share({ text: msg.textContent }).catch(() => {});
+            } else if (msg) {
+                navigator.clipboard.writeText(msg.textContent).then(() => {
+                    btn.style.color = '#22c55e';
+                    setTimeout(() => btn.style.color = '', 1500);
+                });
+            }
+        }
+
         // ===== چت =====
         function updateStatus(text) {
             document.getElementById('statusText').textContent = 'وضعیت: ' + text;
@@ -400,10 +497,13 @@
 
             const box = document.getElementById('chatBox');
 
+            const userWrapper = document.createElement('div');
+            userWrapper.className = 'msg-wrapper';
             const userMsg = document.createElement('div');
             userMsg.className = 'msg user';
             userMsg.textContent = msg;
-            box.appendChild(userMsg);
+            userWrapper.appendChild(userMsg);
+            box.appendChild(userWrapper);
             box.scrollTop = box.scrollHeight;
 
             chatHistory.push({ role: 'user', content: msg });
@@ -413,10 +513,13 @@
             document.getElementById('sendBtn').disabled = true;
             updateStatus('در حال فکر کردن...');
 
+            const botWrapper = document.createElement('div');
+            botWrapper.className = 'msg-wrapper';
             const botMsg = document.createElement('div');
             botMsg.className = 'msg bot typing';
             botMsg.textContent = 'در حال نوشتن...';
-            box.appendChild(botMsg);
+            botWrapper.appendChild(botMsg);
+            box.appendChild(botWrapper);
             box.scrollTop = box.scrollHeight;
 
             try {
@@ -442,65 +545,16 @@
                     lastBotResponse = reply;
                     chatHistory.push({ role: 'assistant', content: reply });
                     updateStatus('پاسخ دریافت شد');
-                } else {
-                    botMsg.className = 'msg bot';
-                    botMsg.textContent = 'خطا در دریافت پاسخ';
-                    updateStatus('خطا');
-                }
-            } catch (e) {
-                botMsg.className = 'msg bot';
-                botMsg.textContent = 'خطا در ارتباط با سرور';
-                updateStatus('خطا');
-            }
-
-            isWaiting = false;
-            document.getElementById('sendBtn').disabled = false;
-            box.scrollTop = box.scrollHeight;
-        }
-
-        function copyLastResponse() {
-            if (lastBotResponse) {
-                navigator.clipboard.writeText(lastBotResponse).then(() => {
-                    updateStatus('پاسخ کپی شد');
-                    setTimeout(() => updateStatus('آماده'), 1500);
-                }).catch(() => {
-                    updateStatus('خطا در کپی');
-                });
-            } else {
-                updateStatus('پاسخی برای کپی وجود ندارد');
-                setTimeout(() => updateStatus('آماده'), 1500);
-            }
-        }
-
-        function clearChat() {
-            const box = document.getElementById('chatBox');
-            box.innerHTML = '<div class="msg bot">گفتگو پاک شد. سوال جدیدی دارید؟</div>';
-            chatHistory = [];
-            lastBotResponse = '';
-            updateStatus('گفتگو پاک شد');
-            setTimeout(() => updateStatus('آماده'), 1500);
-        }
-
-        function exportChat() {
-            const box = document.getElementById('chatBox');
-            const messages = box.querySelectorAll('.msg');
-            let text = 'گفتگوی هوش مصنوعی\n' + '='.repeat(30) + '\n\n';
-            messages.forEach(msg => {
-                const role = msg.classList.contains('user') ? 'شما' : 'هوش مصنوعی';
-                text += role + ': ' + msg.textContent + '\n\n';
-            });
-            text += '='.repeat(30) + '\nتاریخ: ' + new Date().toLocaleString('fa-IR');
-
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'گفتگو_' + new Date().toISOString().slice(0, 10) + '.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-            updateStatus('خروجی گرفته شد');
-            setTimeout(() => updateStatus('آماده'), 1500);
-        }
-    </script>
-</body>
-</html>
+                    
+                    // اضافه کردن دکمه‌های زیر پیام
+                    const actions = document.createElement('div');
+                    actions.className = 'msg-actions';
+                    actions.innerHTML = `
+                        <button onclick="copyMessage(this)" title="کپی">
+                            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        </button>
+                        <button onclick="likeMessage(this)" title="لایک">
+                            <svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                        </button>
+                        <button onclick="dislikeMessage(this)" title="دیس‌لایک">
+                            <svg viewBox="0 0 24 24"><path d="M10 15v4
