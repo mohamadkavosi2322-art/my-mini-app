@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MiniGPT</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui,-apple-system,sans-serif;background:#000000;color:#e5e7eb;min-height:100vh;padding:20px;direction:rtl;user-select:none}
+        .app{max-width:800px;margin:0 auto;display:flex;flex-direction:column;height:95vh}
+        .header{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:#0a0a0a;border-radius:16px;border:1px solid #1a1a1a;margin-bottom:16px;flex-shrink:0}
+        .header-left{display:flex;align-items:center;gap:10px}
+        .header-left .logo-wrapper{width:36px;height:36px;border-radius:50%;overflow:hidden;border:1.5px solid #1a1a1a;flex-shrink:0;background:#fff;display:flex;align-items:center;justify-content:center}
+        .header-left .logo-wrapper img{width:100%;height:100%;object-fit:cover}
+        .header h1{font-size:18px;font-weight:600}
+        .header-actions{display:flex;align-items:center;gap:10px;position:relative}
+        .header-actions .menu-btn{background:transparent;border:1.5px solid #1a1a1a;color:#9ca3af;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s}
+        .header-actions .menu-btn:hover{border-color:#3b82f6;color:#e5e7eb;background:#1a1a1a}
+        .header-actions .menu-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .dropdown-menu{display:none;position:absolute;top:45px;left:0;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:12px;padding:8px;min-width:200px;z-index:100;box-shadow:0 8px 30px rgba(0,0,0,0.6);max-height:400px;overflow-y:auto}
+        .dropdown-menu.open{display:block}
+        .dropdown-menu .section-title{color:#6b7280;font-size:11px;padding:4px 12px;margin-top:4px}
+        .dropdown-menu .model-item{display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:8px;cursor:pointer;transition:all .2s;color:#9ca3af;font-size:13px}
+        .dropdown-menu .model-item:hover{background:#1a1a1a;color:#e5e7eb}
+        .dropdown-menu .model-item.active{background:#3b82f6;color:#fff}
+        .dropdown-menu .model-item img{width:24px;height:24px;border-radius:4px;object-fit:cover;border:1px solid #1a1a1a}
+        .dropdown-menu .history-item{padding:6px 12px;border-radius:8px;cursor:pointer;transition:all .2s;color:#9ca3af;font-size:13px;border-bottom:1px solid #1a1a1a;display:flex;justify-content:space-between;align-items:center}
+        .dropdown-menu .history-item:hover{background:#1a1a1a;color:#e5e7eb}
+        .dropdown-menu .history-item .del-btn{background:transparent;border:none;color:#ef4444;cursor:pointer;font-size:12px}
+        .dropdown-menu .history-item .del-btn:hover{color:#dc2626}
+        .main-actions{display:flex;justify-content:center;gap:12px;margin-bottom:16px;flex-shrink:0;flex-wrap:wrap}
+        .main-actions .action-card{display:flex;flex-direction:column;align-items:center;gap:4px;background:#0a0a0a;border:1px solid #1a1a1a;border-radius:14px;padding:10px 16px;cursor:pointer;transition:all .2s;min-width:70px}
+        .main-actions .action-card:hover{transform:translateY(-3px);border-color:#3b82f6}
+        .main-actions .action-card svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .main-actions .action-card .label{font-size:12px;font-weight:600}
+        .main-actions .action-card.image .label{color:#3b82f6}
+        .main-actions .action-card.image svg{color:#3b82f6}
+        .main-actions .action-card.audio .label{color:#22c55e}
+        .main-actions .action-card.audio svg{color:#22c55e}
+        .main-actions .action-card.video .label{color:#ef4444}
+        .main-actions .action-card.video svg{color:#ef4444}
+        .main-actions .action-card.pdf .label{color:#eab308}
+        .main-actions .action-card.pdf svg{color:#eab308}
+        .main{background:#0a0a0a;border-radius:16px;border:1px solid #1a1a1a;padding:20px;flex:1;display:flex;flex-direction:column}
+        .chat-box{background:#0a0a0a;border-radius:12px;padding:16px;overflow-y:auto;border:1px solid #1a1a1a;flex:1;min-height:0;margin-bottom:12px}
+        .chat-box::-webkit-scrollbar{width:4px}
+        .chat-box::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:4px}
+        .msg-wrapper{display:flex;flex-direction:column;margin-bottom:8px}
+        .msg{padding:10px 16px;border-radius:12px;max-width:85%;word-wrap:break-word;font-size:14px;line-height:1.8;user-select:text}
+        .msg.user{background:#3b82f6;color:#fff;margin-right:auto;text-align:right}
+        .msg.bot{background:#1a1a1a;color:#e5e7eb;margin-left:auto;text-align:left;border:1px solid #1a1a1a}
+        .msg.bot.typing{color:#6b7280}
+        .msg-actions{display:flex;gap:6px;margin-top:4px;margin-right:4px;opacity:0.5;transition:opacity .2s}
+        .msg-wrapper:hover .msg-actions{opacity:1}
+        .msg-actions button{background:transparent;border:none;color:#9ca3af;padding:4px 8px;border-radius:6px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;font-size:12px}
+        .msg-actions button:hover{background:#1a1a1a;color:#e5e7eb}
+        .msg-actions button svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .msg-actions button.liked{color:#22c55e}
+        .msg-actions button.disliked{color:#ef4444}
+        .input-area{position:sticky;bottom:0;z-index:10;background:#0a0a0a;padding:12px 0;display:flex;gap:8px;align-items:center;border-top:1px solid #1a1a1a;margin-top:auto;flex-shrink:0}
+        .input-area .input-wrapper{position:relative;flex:1;display:flex;align-items:center}
+        .input-area input{width:100%;padding:12px 50px 12px 16px;border-radius:25px;border:1px solid #1a1a1a;font-size:14px;outline:none;font-family:inherit;background:#0a0a0a;color:#e5e7eb;transition:border .2s;height:48px;text-align:right}
+        .input-area input::placeholder{color:#6b7280;text-align:right}
+        .input-area input:focus{border-color:#3b82f6}
+        .input-area .send-btn{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:none;background:#3b82f6;color:#fff;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0;z-index:2;font-size:20px;font-weight:700}
+        .input-area .send-btn:hover{transform:translateY(-50%) scale(1.04);background:#2563eb}
+        .input-area .send-btn:disabled{opacity:0.5;cursor:not-allowed;transform:translateY(-50%) scale(1)}
+        .input-area .stop-btn{position:absolute;left:6px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;border:2px solid #3b82f6;background:#3b82f6;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;padding:0;z-index:2}
+        .input-area .stop-btn svg{width:18px;height:18px;fill:#ffffff}
+        .input-area .stop-btn:hover{transform:translateY(-50%) scale(1.04)}
+        .input-area .action-btn{width:36px;height:36px;border-radius:50%;border:1px solid #1a1a1a;background:transparent;color:#9ca3af;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+        .input-area .action-btn:hover{background:#1a1a1a;border-color:#3b82f6;color:#e5e7eb}
+        .input-area .action-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+        .input-area .file-input{display:none}
+        @media(max-width:600px){body{padding:12px}.header{padding:12px 16px}.main{padding:16px}.dropdown-menu{left:-10px;min-width:160px}.input-area input{height:42px;padding:10px 42px 10px 12px}.input-area .send-btn{width:32px;height:32px;font-size:16px}.input-area .stop-btn{width:32px;height:32px}.input-area .action-btn{width:32px;height:32px}.input-area .action-btn svg{width:16px;height:16px}.main-actions{gap:8px}.main-actions .action-card{padding:8px 12px;min-width:56px}.main-actions .action-card svg{width:20px;height:20px}.main-actions .action-card .label{font-size:10px}}
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- هدر -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo-wrapper">
+                    <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="MiniGPT Logo" />
+                </div>
+                <h1>ChatGPT</h1>
+            </div>
+            <div class="header-actions">
+                <button class="menu-btn" id="menuBtn">
+                    <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="section-title">مدل‌ها</div>
+                    <div class="model-item active" data-model="gpt-4o-mini">
+                        <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4o Mini" />
+                        GPT-4o Mini
+                    </div>
+                    <div class="model-item" data-model="gpt-4o">
+                        <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4o" />
+                        GPT-4o
+                    </div>
+                    <div class="model-item" data-model="gpt-4">
+                        <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4" />
+                        GPT-4
+                    </div>
+                    <div class="model-item" data-model="gpt-3.5-turbo">
+                        <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-3.5" />
+                        GPT-3.5
+                    </div>
+                    <div class="model-item" data-model="o1-mini">
+                        <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="O1 Mini" />
+                        O1 Mini
+                    </div>
+                    <div class="section-title" style="margin-top:8px">تاریخچه</div>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- دکمه‌های اصلی -->
+        <div class="main-actions">
+            <div class="action-card image" onclick="alert('ساخت تصویر')">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                <span class="label">ساخت تصویر</span>
+            </div>
+            <div class="action-card audio" onclick="alert('ساخت صدا')">
+                <svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                <span class="label">ساخت صدا</span>
+            </div>
+            <div class="action-card video" onclick="alert('ساخت ویدئو')">
+                <svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                <span class="label">ساخت ویدئو</span>
+            </div>
+            <div class="action-card pdf" onclick="alert('ساخت PDF')">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15v-4h2a1.5 1.5 0 0 1 0 3h-2"/><path d="M15 11h1.5a1.5 1.5 0 0 1 0 3H15v-3z"/><path d="M17 15v-4"/></svg>
+                <span class="label">ساخت PDF</span>
+            </div>
+        </div>
+
+        <!-- بخش اصلی -->
+        <div class="main">
+            <div class="chat-box" id="chatBox">
+                <div class="msg-wrapper">
+                    <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+                    <div class="msg-actions">
+                        <button onclick="copyMessage(this)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                        <button onclick="likeMessage(this)"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                        <button onclick="dislikeMessage(this)"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
+                        <button onclick="feedbackMessage(this)"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- نوار ارسال -->
+            <div class="input-area">
+                <button class="action-btn" onclick="document.getElementById('fileInput').click()">
+                    <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                </button>
+                <input type="file" id="fileInput" class="file-input" multiple onchange="handleFiles(this.files)" />
+                <div class="input-wrapper">
+                    <input type="text" id="chatInput" placeholder="پیام خود را بنویسید..." />
+                    <button class="send-btn" id="sendBtn" onclick="sendMessage()">↑</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const AVALAI_KEY = "aa-7Z6scGydDdrtJA67WKgoj8cX1ztH9rgeULRwEUB1L7sZeKId";
+        const AVALAI_URL = "https://api.avalai.ir/v1/chat/completions";
+
+        let currentModel = "gpt-4o-mini";
+        let isWaiting = false;
+        let lastBotResponse = '';
+        let chatHistory = [];
+        let typingInterval = null;
+        let currentChatId = Date.now();
+
+        // ===== تاریخچه =====
+        function getHistory() {
+            try { return JSON.parse(localStorage.getItem('gpt7_history')) || []; } catch { return []; }
+        }
+
+        function setHistory(chats) {
+            localStorage.setItem('gpt7_history', JSON.stringify(chats));
+        }
+
+        function saveCurrentChat() {
+            const wrappers = document.querySelectorAll('.msg-wrapper');
+            if (wrappers.length <= 1) return;
+            const chats = getHistory();
+            const content = [];
+            wrappers.forEach(w => {
+                const msg = w.querySelector('.msg');
+                if (msg) {
+                    const role = w.classList.contains('user') ? 'user' : 'bot';
+                    content.push({ role, content: msg.textContent });
+                }
+            });
+            const existing = chats.find(c => c.id === currentChatId);
+            if (existing) {
+                existing.content = content;
+                existing.title = content[0]?.content?.slice(0, 30) || 'مکالمه جدید';
+            } else {
+                chats.push({ id: currentChatId, title: content[0]?.content?.slice(0, 30) || 'مکالمه جدید', content });
+            }
+            setHistory(chats);
+            renderHistory();
+        }
+
+        function loadChat(id) {
+            const chats = getHistory();
+            const chat = chats.find(c => c.id === id);
+            if (!chat) return;
+            currentChatId = id;
+            document.getElementById('chatBox').innerHTML = '';
+            chat.content.forEach(msg => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'msg-wrapper';
+                const div = document.createElement('div');
+                div.className = `msg ${msg.role}`;
+                div.textContent = msg.content;
+                wrapper.appendChild(div);
+                if (msg.role === 'bot') {
+                    const actions = document.createElement('div');
+                    actions.className = 'msg-actions';
+                    actions.innerHTML = `
+                        <button onclick="copyMessage(this)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                        <button onclick="likeMessage(this)"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                        <button onclick="dislikeMessage(this)"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
+                        <button onclick="feedbackMessage(this)"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
+                    `;
+                    wrapper.appendChild(actions);
+                }
+                document.getElementById('chatBox').appendChild(wrapper);
+            });
+            document.getElementById('dropdownMenu').classList.remove('open');
+            document.getElementById('chatBox').scrollTop = document.getElementById('chatBox').scrollHeight;
+        }
+
+        function deleteChat(id) {
+            let chats = getHistory();
+            chats = chats.filter(c => c.id !== id);
+            setHistory(chats);
+            if (chats.length > 0) {
+                loadChat(chats[0].id);
+            } else {
+                document.getElementById('chatBox').innerHTML = `
+                    <div class="msg-wrapper">
+                        <div class="msg bot">سلام. سوال خود را بپرسید.</div>
+                        <div class="msg-actions">
+                            <button onclick="copyMessage(this)"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+                            <button onclick="likeMessage(this)"><svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 1.98-1.72l1.38-9A2 2 0 0 0 19.66 9H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></button>
+                            <button onclick="dislikeMessage(this)"><svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-1.98 1.72l-1.38 9A2 2 0 0 0 4.34 15H10z"/><path d="M17 2h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3"/></svg></button>
+                            <button onclick="feedbackMessage(this)"><svg viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/><path d="M8 9h8"/><path d="M8 12h5"/></svg></button>
+                        </div>
+                    </div>
+                `;
+                chatHistory = [];
+                currentChatId = Date.now();
+            }
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const list = document.getElementById('historyList');
+            const chats = getHistory();
+            list.innerHTML = '';
+            if (chats.length === 0) {
+                list.innerHTML = '<div style="color:#
