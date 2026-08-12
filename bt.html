@@ -1,0 +1,80 @@
+html
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مینی اپ هوش مصنوعی</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+padding: 20px;
+}
+#chat-container {
+background: white;
+border-radius: 5px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+padding: 20px;
+max-width: 400px;
+margin: auto;
+}
+#messages {
+height: 300px;
+overflow-y: auto;
+border: 1px solid #ddd;
+padding: 10px;
+margin-bottom: 10px;
+}
+#user-input {
+width: calc(100% - 60px);
+padding: 10px;
+}
+#send-button {
+padding: 10px;
+}
+</style>
+</head>
+<body>
+‌
+<div id="chat-container">
+<h2>مینی اپ هوش مصنوعی</h2>
+<div id="messages"></div>
+<input type="text" id="user-input" placeholder="سوال خود را بپرسید...">
+<button id="send-button">ارسال</button>
+</div>
+‌
+<script>
+const messagesDiv = document.getElementById('messages');
+const userInput = document.getElementById('user-input');
+const sendButton = document.getElementById('send-button');
+‌
+sendButton.addEventListener('click', () => {
+const userText = userInput.value;
+if (userText) {
+addMessage('شما: ' + userText);
+userInput.value = '';
+‌
+// پاسخ‌های پیش‌فرض
+let aiResponse;
+if (userText.includes('سلام')) {
+aiResponse = 'سلام! چطور می‌توانم به شما کمک کنم؟';
+} else if (userText.includes('خوبی')) {
+aiResponse = 'بله، من خوبم! شما چطورید؟';
+} else {
+aiResponse = 'متاسفم، نمی‌دانم چطور به این سوال پاسخ دهم.';
+}
+addMessage('هوش مصنوعی: ' + aiResponse);
+}
+});
+‌
+function addMessage(message) {
+const messageElement = document.createElement('div');
+messageElement.textContent = message;
+messagesDiv.appendChild(messageElement);
+messagesDiv.scrollTop = messagesDiv.scrollHeight; // به پایین اسکرول می‌کند
+}
+</script>
+‌
+</body>
+</html>
