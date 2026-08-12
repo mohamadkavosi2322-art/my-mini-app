@@ -86,28 +86,28 @@
                 <h1>ChatGPT</h1>
             </div>
             <div class="header-actions">
-                <button class="menu-btn" id="menuBtn" onclick="toggleDropdown()">
+                <button class="menu-btn" id="menuBtn">
                     <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                 </button>
                 <div class="dropdown-menu" id="dropdownMenu">
                     <div class="section-title">مدل‌ها</div>
-                    <div class="model-item active" data-model="gpt-4o-mini" onclick="selectModel(this)">
+                    <div class="model-item active" data-model="gpt-4o-mini">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4o Mini" />
                         GPT-4o Mini
                     </div>
-                    <div class="model-item" data-model="gpt-4o" onclick="selectModel(this)">
+                    <div class="model-item" data-model="gpt-4o">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4o" />
                         GPT-4o
                     </div>
-                    <div class="model-item" data-model="gpt-4" onclick="selectModel(this)">
+                    <div class="model-item" data-model="gpt-4">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-4" />
                         GPT-4
                     </div>
-                    <div class="model-item" data-model="gpt-3.5-turbo" onclick="selectModel(this)">
+                    <div class="model-item" data-model="gpt-3.5-turbo">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="GPT-3.5" />
                         GPT-3.5
                     </div>
-                    <div class="model-item" data-model="o1-mini" onclick="selectModel(this)">
+                    <div class="model-item" data-model="o1-mini">
                         <img src="https://raw.githubusercontent.com/mohamadkavosi2322-art/my-mini-app/main/file_000000009dc481f4beac7bb7a39278af.png" alt="O1 Mini" />
                         O1 Mini
                     </div>
@@ -213,8 +213,7 @@
             const chat = chats.find(c => c.id === id);
             if (!chat) return;
             currentChatId = id;
-            const box = document.getElementById('chatBox');
-            box.innerHTML = '';
+            chatBox.innerHTML = '';
             chat.content.forEach(msg => {
                 const wrapper = document.createElement('div');
                 wrapper.className = 'msg-wrapper';
@@ -235,7 +234,7 @@
                 }
                 box.appendChild(wrapper);
             });
-            document.getElementById('dropdownMenu').classList.remove('open');
+            dropdownMenu.classList.remove('open');
             box.scrollTop = box.scrollHeight;
         }
 
@@ -246,7 +245,7 @@
             if (chats.length > 0) {
                 loadChat(chats[0].id);
             } else {
-                document.getElementById('chatBox').innerHTML = `
+                chatBox.innerHTML = `
                     <div class="msg-wrapper">
                         <div class="msg bot">سلام. سوال خود را بپرسید.</div>
                         <div class="msg-actions">
@@ -265,4 +264,10 @@
 
         function renderHistory() {
             const list = document.getElementById('historyList');
-            
+            const chats = getHistory();
+            list.innerHTML = '';
+            if (chats.length === 0) {
+                list.innerHTML = '<div style="color:#6b7280;font-size:12px;padding:4px 12px;">هیچ مکالمه‌ای نیست</div>';
+                return;
+            }
+            chats.f
