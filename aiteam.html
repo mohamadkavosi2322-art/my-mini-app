@@ -65,12 +65,6 @@
             background: #f0f2f5;
             border-color: #d1d5db;
         }
-        body.light .send-btn {
-            background: #7c3aed;
-        }
-        body.light .send-btn:hover {
-            box-shadow: 0 8px 30px rgba(124, 58, 237, 0.4);
-        }
 
         /* ===== APP ===== */
         .app {
@@ -264,13 +258,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px 0 10px 0;
-            gap: 14px;
+            padding: 10px 0 10px 0;
+            gap: 12px;
         }
 
         .model-avatar {
-            width: 80px;
-            height: 80px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             border: 3px solid #a855f7;
             padding: 4px;
@@ -304,8 +298,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             width: 100%;
-            max-width: 320px;
-            margin-top: 6px;
+            max-width: 340px;
+            margin-top: 4px;
         }
 
         .action-btn {
@@ -318,7 +312,7 @@
             border: 1px solid rgba(255, 255, 255, 0.08);
             background: rgba(255, 255, 255, 0.02);
             color: #ffffff;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             transition: 0.3s;
@@ -330,8 +324,8 @@
             background: rgba(255, 255, 255, 0.05);
         }
         .action-btn svg {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
         }
 
         .action-btn.video svg {
@@ -410,10 +404,10 @@
             color: #666;
         }
 
-        /* ===== SEND BUTTON ===== */
+        /* ===== SEND BUTTON - PURPLE CIRCLE ===== */
         .send-btn {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             border: none;
             background: #a855f7;
@@ -430,8 +424,8 @@
             box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
         }
         .send-btn svg {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             stroke: #ffffff;
             stroke-width: 2.5;
             fill: none;
@@ -507,23 +501,23 @@
             }
             .action-btn {
                 padding: 8px 10px;
-                font-size: 11px;
+                font-size: 12px;
             }
             .action-btn svg {
-                width: 16px;
-                height: 16px;
+                width: 18px;
+                height: 18px;
             }
             .model-avatar {
-                width: 65px;
-                height: 65px;
+                width: 90px;
+                height: 90px;
             }
             .send-btn {
-                width: 44px;
-                height: 44px;
+                width: 48px;
+                height: 48px;
             }
             .send-btn svg {
-                width: 20px;
-                height: 20px;
+                width: 22px;
+                height: 22px;
             }
         }
     </style>
@@ -620,8 +614,16 @@
                 <div class="model-name" id="modelName">GPT-4</div>
                 <div class="model-provider" id="modelProvider">OpenAI</div>
 
-                <!-- Action Buttons - 2x2 Grid -->
+                <!-- Action Buttons - 2x2 Grid (ALL 4) -->
                 <div class="action-buttons">
+                    <button class="action-btn image" onclick="actionHandler('image')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="2" y="2" width="20" height="20" rx="2"/>
+                            <circle cx="8" cy="8" r="3"/>
+                            <path d="M22 16l-6-6-4 4-4-4-6 6"/>
+                        </svg>
+                        Image
+                    </button>
                     <button class="action-btn video" onclick="actionHandler('video')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -629,8 +631,4 @@
                         </svg>
                         Video
                     </button>
-                    <button class="action-btn image" onclick="actionHandler('image')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="2"/>
-                            <circle cx="8" cy="8" r="3"/>
-                            
+                    <button 
