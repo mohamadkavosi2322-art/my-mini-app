@@ -40,6 +40,7 @@
             overflow: hidden;
         }
         
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -59,6 +60,7 @@
             font-size: 22px;
             font-weight: 700;
             color: #a855f7;
+            /* این تکون نمیخوره */ 
         }
         
         .model-badge {
@@ -92,6 +94,7 @@
             stroke-linecap: round;
         }
         
+        /* ===== MENU ===== */
         .menu-dropdown {
             position: absolute;
             top: 80px;
@@ -139,6 +142,7 @@
             margin: 6px 16px;
         }
         
+        /* ===== CHAT AREA ===== */
         .chat-area {
             flex: 1;
             overflow-y: auto;
@@ -155,6 +159,7 @@
             border-radius: 10px;
         }
         
+        /* ===== MESSAGES ===== */
         .message {
             margin-bottom: 16px;
             padding: 12px 18px;
@@ -177,13 +182,7 @@
             margin-left: auto;
             border-bottom-left-radius: 4px;
         }
-        .message.bot {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-        }
-        .message.user {
+        .message.bot, .message.user {
             -webkit-user-select: text;
             -moz-user-select: text;
             -ms-user-select: text;
@@ -195,6 +194,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        /* ===== MODEL DISPLAY ===== */
         .model-display {
             display: flex;
             flex-direction: column;
@@ -202,6 +202,10 @@
             justify-content: center;
             padding: 10px 0 10px 0;
             gap: 12px;
+            transition: all 0.5s ease;
+        }
+        .model-display.hidden {
+            display: none;
         }
         
         .model-avatar {
@@ -234,6 +238,7 @@
             border: 1px solid rgba(255,255,255,0.06);
         }
         
+        /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -241,6 +246,9 @@
             width: 100%;
             max-width: 360px;
             margin-top: 6px;
+        }
+        .action-buttons.hidden {
+            display: none;
         }
         
         .action-btn {
@@ -256,9 +264,14 @@
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             font-family: inherit;
             width: 100%;
+        }
+        .action-btn:active {
+            background: #3b82f6 !important;
+            border-color: #3b82f6 !important;
+            transform: scale(0.95);
         }
         .action-btn:hover {
             transform: translateY(-2px);
@@ -280,6 +293,13 @@
         .action-btn.image:hover {
             background: rgba(59,130,246,0.08);
         }
+        .action-btn.image:active {
+            background: #3b82f6 !important;
+            color: #ffffff !important;
+        }
+        .action-btn.image:active svg {
+            stroke: #ffffff !important;
+        }
         
         .action-btn.video svg {
             stroke: #ef4444;
@@ -291,6 +311,13 @@
         }
         .action-btn.video:hover {
             background: rgba(239,68,68,0.08);
+        }
+        .action-btn.video:active {
+            background: #ef4444 !important;
+            color: #ffffff !important;
+        }
+        .action-btn.video:active svg {
+            stroke: #ffffff !important;
         }
         
         .action-btn.audio svg {
@@ -304,6 +331,13 @@
         .action-btn.audio:hover {
             background: rgba(34,197,94,0.08);
         }
+        .action-btn.audio:active {
+            background: #22c55e !important;
+            color: #ffffff !important;
+        }
+        .action-btn.audio:active svg {
+            stroke: #ffffff !important;
+        }
         
         .action-btn.pdf svg {
             stroke: #eab308;
@@ -316,18 +350,28 @@
         .action-btn.pdf:hover {
             background: rgba(234,179,8,0.08);
         }
+        .action-btn.pdf:active {
+            background: #eab308 !important;
+            color: #ffffff !important;
+        }
+        .action-btn.pdf:active svg {
+            stroke: #ffffff !important;
+        }
         
+        /* ===== INPUT ===== */
         .input-area {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             padding-top: 14px;
             border-top: 1px solid rgba(255,255,255,0.06);
             flex-shrink: 0;
             align-items: center;
+            position: relative;
         }
         .input-area input {
             flex: 1;
-            padding: 12px 18px;
+            padding: 10px 16px;
+            padding-right: 50px;
             border-radius: 14px;
             border: 1px solid rgba(255,255,255,0.08);
             background: rgba(255,255,255,0.04);
@@ -335,6 +379,7 @@
             font-size: 14px;
             outline: none;
             font-family: inherit;
+            height: 44px;
         }
         .input-area input:focus {
             border-color: #a855f7;
@@ -350,8 +395,8 @@
         }
         
         .send-btn {
-            width: 52px;
-            height: 52px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             border: none;
             background: #a855f7;
@@ -362,21 +407,26 @@
             justify-content: center;
             flex-shrink: 0;
             padding: 0;
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
         }
         .send-btn:hover {
-            transform: scale(1.05);
+            transform: translateY(-50%) scale(1.05);
             box-shadow: 0 8px 30px rgba(168,85,247,0.4);
         }
         .send-btn svg {
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             stroke: #ffffff;
-            stroke-width: 2.5;
+            stroke-width: 3;
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
         
+        /* ===== HISTORY ===== */
         .history-panel {
             position: absolute;
             left: -320px;
@@ -445,12 +495,16 @@
                 height: 100px;
             }
             .send-btn {
-                width: 48px;
-                height: 48px;
+                width: 34px;
+                height: 34px;
             }
             .send-btn svg {
-                width: 22px;
-                height: 22px;
+                width: 16px;
+                height: 16px;
+            }
+            .input-area input {
+                padding-right: 44px;
+                height: 40px;
             }
         }
     </style>
@@ -459,9 +513,10 @@
 
 <div class="app" id="app">
 
+    <!-- ===== HEADER ===== -->
     <div class="header">
         <div class="header-left">
-            <span class="logo">AI Team</span>
+            <span class="logo" id="logoText">AI Team</span>
             <span class="model-badge" id="currentModelBadge">OpenAI</span>
         </div>
         <div class="header-right">
@@ -488,6 +543,7 @@
         </div>
     </div>
 
+    <!-- ===== MENU ===== -->
     <div class="menu-dropdown" id="menuDropdown">
         <button class="menu-item" onclick="selectModel('OpenAI')">
             <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
@@ -502,6 +558,10 @@
             DeepSeek
         </button>
         <div class="menu-divider"></div>
+        <button class="menu-item" onclick="toggleLanguage()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span id="langText">فارسی</span>
+        </button>
         <button class="menu-item" onclick="toggleHistory()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             History
@@ -516,11 +576,13 @@
         </button>
     </div>
 
+    <!-- ===== HISTORY ===== -->
     <div class="history-panel" id="historyPanel">
         <h3>History</h3>
         <div id="historyList"></div>
     </div>
 
+    <!-- ===== CHAT ===== -->
     <div class="chat-area" id="chatArea">
 
         <div class="model-display" id="modelDisplay">
@@ -530,79 +592,26 @@
             <div class="model-name" id="modelName">GPT-4</div>
             <div class="model-provider" id="modelProvider">OpenAI</div>
 
-            <div class="action-buttons">
+            <div class="action-buttons" id="actionButtons">
                 <button class="action-btn image" onclick="actionHandler('image')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8" cy="8" r="3"/><path d="M22 16l-6-6-4 4-4-4-6 6"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="2" width="20" height="20" rx="2"/>
+                        <circle cx="8" cy="8" r="3"/>
+                        <path d="M22 16l-6-6-4 4-4-4-6 6"/>
+                    </svg>
                     Image
                 </button>
                 <button class="action-btn video" onclick="actionHandler('video')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polygon points="10 6 18 12 10 18"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"/>
+                        <polygon points="10 6 18 12 10 18"/>
+                    </svg>
                     Video
                 </button>
                 <button class="action-btn audio" onclick="actionHandler('audio')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M8 6v12M16 6v12M4 10v4M20 10v4"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M8 6v12M16 6v12M4 10v4M20 10v4"/>
+                    </svg>
                     Audio
                 </button>
-                <button class="action-btn pdf" onclick="actionHandler('pdf')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="16" x2="16" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                    PDF
-                </button>
-            </div>
-        </div>
-
-        <div id="messages"></div>
-    </div>
-
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter') sendMessage()" />
-        <button class="send-btn" onclick="sendMessage()" aria-label="Send">
-            <svg viewBox="0 0 24 24">
-                <line x1="22" y1="2" x2="11" y2="13"/>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-        </button>
-    </div>
-
-</div>
-
-<script>
-    let currentModel = 'OpenAI';
-    let chatHistory = [];
-    let allConversations = JSON.parse(localStorage.getItem('aiteam_history') || '[]');
-
-    const modelAvatars = {
-        'OpenAI': 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true',
-        'Gemini': 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true',
-        'DeepSeek': 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true'
-    };
-
-    const modelDisplayNames = {
-        'OpenAI': 'GPT-4 Turbo',
-        'Gemini': 'Gemini Pro 1.5',
-        'DeepSeek': 'DeepSeek-V3'
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadHistory();
-        updateModelDisplay();
-        addWelcomeMessage();
-    });
-
-    function toggleMenu() {
-        document.getElementById('menuDropdown').classList.toggle('active');
-    }
-
-    function toggleHistory() {
-        document.getElementById('historyPanel').classList.toggle('active');
-        renderHistory();
-        document.getElementById('menuDropdown').classList.remove('active');
-    }
-
-    function toggleTheme() {
-        document.body.classList.toggle('light');
-        const btn = document.getElementById('themeBtn');
-        btn.querySelector('svg').style.stroke = document.body.classList.contains('light') ? '#1a1a2e' : '#ffffff';
-        // تغییر پس‌زمینه برای حالت روشن
-        if(document.body.classList.contains('light')){
-            document.querySelector('.app').style.background = '#ffffff';
-            document.querySelector('.chat-area').style.back
+                <button class="actio
