@@ -99,7 +99,7 @@
             background: #1a1a2e;
             border-radius: 16px;
             padding: 12px 0;
-            min-width: 240px;
+            min-width: 280px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
             border: 1px solid rgba(255,255,255,0.06);
             display: none;
@@ -271,88 +271,35 @@
         }
         .action-btn:active {
             transform: scale(0.95);
-            background: rgba(255,255,255,0.1);
         }
         .action-btn svg {
             width: 20px;
             height: 20px;
         }
         
-        .action-btn.image svg {
-            stroke: #3b82f6;
-            fill: none;
-        }
-        .action-btn.image {
-            border-color: rgba(59,130,246,0.3);
-            color: #3b82f6;
-        }
-        .action-btn.image:hover {
-            background: rgba(59,130,246,0.08);
-        }
-        .action-btn.image:active {
-            background: #3b82f6 !important;
-            color: #fff !important;
-        }
-        .action-btn.image:active svg {
-            stroke: #fff !important;
-        }
+        .action-btn.image svg { stroke: #3b82f6; fill: none; }
+        .action-btn.image { border-color: rgba(59,130,246,0.3); color: #3b82f6; }
+        .action-btn.image:hover { background: rgba(59,130,246,0.08); }
+        .action-btn.image:active { background: #3b82f6 !important; color: #fff !important; }
+        .action-btn.image:active svg { stroke: #fff !important; }
         
-        .action-btn.video svg {
-            stroke: #ef4444;
-            fill: none;
-        }
-        .action-btn.video {
-            border-color: rgba(239,68,68,0.3);
-            color: #ef4444;
-        }
-        .action-btn.video:hover {
-            background: rgba(239,68,68,0.08);
-        }
-        .action-btn.video:active {
-            background: #ef4444 !important;
-            color: #fff !important;
-        }
-        .action-btn.video:active svg {
-            stroke: #fff !important;
-        }
+        .action-btn.video svg { stroke: #ef4444; fill: none; }
+        .action-btn.video { border-color: rgba(239,68,68,0.3); color: #ef4444; }
+        .action-btn.video:hover { background: rgba(239,68,68,0.08); }
+        .action-btn.video:active { background: #ef4444 !important; color: #fff !important; }
+        .action-btn.video:active svg { stroke: #fff !important; }
         
-        .action-btn.audio svg {
-            stroke: #22c55e;
-            fill: none;
-        }
-        .action-btn.audio {
-            border-color: rgba(34,197,94,0.3);
-            color: #22c55e;
-        }
-        .action-btn.audio:hover {
-            background: rgba(34,197,94,0.08);
-        }
-        .action-btn.audio:active {
-            background: #22c55e !important;
-            color: #fff !important;
-        }
-        .action-btn.audio:active svg {
-            stroke: #fff !important;
-        }
+        .action-btn.audio svg { stroke: #22c55e; fill: none; }
+        .action-btn.audio { border-color: rgba(34,197,94,0.3); color: #22c55e; }
+        .action-btn.audio:hover { background: rgba(34,197,94,0.08); }
+        .action-btn.audio:active { background: #22c55e !important; color: #fff !important; }
+        .action-btn.audio:active svg { stroke: #fff !important; }
         
-        .action-btn.pdf svg {
-            stroke: #eab308;
-            fill: none;
-        }
-        .action-btn.pdf {
-            border-color: rgba(234,179,8,0.3);
-            color: #eab308;
-        }
-        .action-btn.pdf:hover {
-            background: rgba(234,179,8,0.08);
-        }
-        .action-btn.pdf:active {
-            background: #eab308 !important;
-            color: #fff !important;
-        }
-        .action-btn.pdf:active svg {
-            stroke: #fff !important;
-        }
+        .action-btn.pdf svg { stroke: #eab308; fill: none; }
+        .action-btn.pdf { border-color: rgba(234,179,8,0.3); color: #eab308; }
+        .action-btn.pdf:hover { background: rgba(234,179,8,0.08); }
+        .action-btn.pdf:active { background: #eab308 !important; color: #fff !important; }
+        .action-btn.pdf:active svg { stroke: #fff !important; }
         
         .input-area {
             display: flex;
@@ -552,7 +499,9 @@
         </div>
     </div>
 
+    <!-- ===== منوی همبرگری با همه دکمه‌ها ===== -->
     <div class="menu-dropdown" id="menuDropdown">
+        <!-- دکمه‌های انتخاب مدل -->
         <button class="menu-item" onclick="selectModel('OpenAI')">
             <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
             OpenAI
@@ -566,6 +515,8 @@
             DeepSeek
         </button>
         <div class="menu-divider"></div>
+        
+        <!-- دکمه‌های اصلی منو -->
         <button class="menu-item" onclick="toggleLanguage()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
             <span id="langText">فارسی</span>
@@ -583,6 +534,8 @@
             Export
         </button>
         <div class="menu-divider"></div>
+        
+        <!-- دکمه‌های اضافی -->
         <button class="menu-item" onclick="showModelsList()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
             Models
@@ -590,6 +543,14 @@
         <button class="menu-item" onclick="showModeration()">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 7 2 17 12 22 22 17 22 7"/><line x1="12" y1="12" x2="12" y2="22"/></svg>
             Moderation
+        </button>
+        <button class="menu-item" onclick="showUserStatus()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            Status
+        </button>
+        <button class="menu-item" onclick="showPlans()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            Plans
         </button>
     </div>
 
@@ -612,5 +573,4 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8" cy="8" r="3"/><path d="M22 16l-6-6-4 4-4-4-6 6"/></svg>
                     Image
                 </button>
-                <button class="action-btn video" onclick="actionHandler('video')">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="
+                <button 
