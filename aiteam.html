@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AI Team</title>
     <style>
-        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background: #000000;
@@ -20,53 +23,8 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            transition: background 0.3s, color 0.3s;
         }
-
-        body.light {
-            background: #f0f2f5;
-            color: #1a1a2e;
-        }
-        body.light .app {
-            background: #ffffff;
-        }
-        body.light .chat-area {
-            background: #f8f9fa;
-        }
-        body.light .message.user {
-            background: #e3f2fd;
-        }
-        body.light .message.bot {
-            background: #ffffff;
-        }
-        body.light .menu-dropdown {
-            background: #ffffff;
-        }
-        body.light .menu-dropdown .menu-item {
-            color: #1a1a2e;
-        }
-        body.light .menu-dropdown .menu-item:hover {
-            background: #f0f2f5;
-        }
-        body.light .history-panel {
-            background: #ffffff;
-        }
-        body.light .history-item {
-            color: #1a1a2e;
-        }
-        body.light .history-item:hover {
-            background: #f0f2f5;
-        }
-        body.light .hamburger svg line {
-            stroke: #1a1a2e;
-        }
-        body.light .input-area input {
-            color: #1a1a2e;
-            background: #f0f2f5;
-            border-color: #d1d5db;
-        }
-
-        /* ===== APP ===== */
+        
         .app {
             width: 100%;
             max-width: 1100px;
@@ -77,64 +35,52 @@
             padding: 24px;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
-            transition: background 0.3s;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
             position: relative;
             overflow: hidden;
         }
-
-        /* ===== HEADER ===== */
+        
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding-bottom: 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
             flex-shrink: 0;
         }
-
+        
         .header-left {
             display: flex;
             align-items: center;
             gap: 14px;
         }
-
+        
         .logo {
             font-size: 22px;
             font-weight: 700;
-            letter-spacing: -0.5px;
             color: #a855f7;
         }
-
+        
         .model-badge {
             font-size: 12px;
-            background: rgba(168, 85, 247, 0.2);
+            background: rgba(168,85,247,0.2);
             padding: 4px 14px;
             border-radius: 20px;
             color: #a855f7;
-            border: 1px solid rgba(168, 85, 247, 0.3);
-            font-weight: 500;
+            border: 1px solid rgba(168,85,247,0.3);
         }
-
+        
         .header-right {
             display: flex;
             align-items: center;
             gap: 16px;
         }
-
-        /* ===== HAMBURGER ===== */
+        
         .hamburger {
             background: transparent;
             border: none;
             cursor: pointer;
             padding: 4px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .hamburger:hover {
-            opacity: 0.7;
         }
         .hamburger svg {
             width: 28px;
@@ -144,10 +90,8 @@
             stroke: #ffffff;
             stroke-width: 2.5;
             stroke-linecap: round;
-            transition: 0.3s;
         }
-
-        /* ===== MENU DROPDOWN ===== */
+        
         .menu-dropdown {
             position: absolute;
             top: 80px;
@@ -156,17 +100,15 @@
             border-radius: 16px;
             padding: 12px 0;
             min-width: 240px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.06);
             display: none;
             z-index: 1000;
-            max-height: 400px;
-            overflow-y: auto;
         }
         .menu-dropdown.active {
             display: block;
         }
-
+        
         .menu-dropdown .menu-item {
             display: flex;
             align-items: center;
@@ -174,7 +116,6 @@
             padding: 12px 20px;
             color: #e0e0e0;
             font-size: 14px;
-            transition: 0.2s;
             cursor: pointer;
             border: none;
             background: none;
@@ -183,7 +124,7 @@
             font-family: inherit;
         }
         .menu-dropdown .menu-item:hover {
-            background: rgba(168, 85, 247, 0.1);
+            background: rgba(168,85,247,0.1);
         }
         .menu-dropdown .menu-item img {
             width: 28px;
@@ -191,14 +132,13 @@
             border-radius: 6px;
             object-fit: cover;
         }
-
+        
         .menu-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.06);
             margin: 6px 16px;
         }
-
-        /* ===== CHAT AREA ===== */
+        
         .chat-area {
             flex: 1;
             overflow-y: auto;
@@ -206,9 +146,7 @@
             margin: 12px 0;
             background: #0a0a0a;
             border-radius: 16px;
-            transition: background 0.3s;
         }
-
         .chat-area::-webkit-scrollbar {
             width: 4px;
         }
@@ -216,8 +154,7 @@
             background: #a855f7;
             border-radius: 10px;
         }
-
-        /* ===== MESSAGES ===== */
+        
         .message {
             margin-bottom: 16px;
             padding: 12px 18px;
@@ -229,30 +166,35 @@
             animation: fadeIn 0.3s ease;
         }
         .message.user {
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid rgba(168, 85, 247, 0.2);
+            background: rgba(168,85,247,0.2);
+            border: 1px solid rgba(168,85,247,0.2);
             margin-right: auto;
             border-bottom-right-radius: 4px;
         }
         .message.bot {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
             margin-left: auto;
             border-bottom-left-radius: 4px;
         }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .message.bot {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
-
-        /* ===== MODEL DISPLAY ===== */
+        .message.user {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .model-display {
             display: flex;
             flex-direction: column;
@@ -261,7 +203,7 @@
             padding: 10px 0 10px 0;
             gap: 12px;
         }
-
+        
         .model-avatar {
             width: 120px;
             height: 120px;
@@ -269,7 +211,7 @@
             border: 3px solid #a855f7;
             padding: 4px;
             background: #0a0a0a;
-            box-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
+            box-shadow: 0 0 40px rgba(168,85,247,0.2);
         }
         .model-avatar img {
             width: 100%;
@@ -277,7 +219,7 @@
             border-radius: 50%;
             object-fit: cover;
         }
-
+        
         .model-name {
             font-size: 20px;
             font-weight: 600;
@@ -286,13 +228,12 @@
         .model-provider {
             font-size: 13px;
             color: #888;
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255,255,255,0.04);
             padding: 4px 16px;
             border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255,255,255,0.06);
         }
-
-        /* ===== ACTION BUTTONS - 2x2 GRID ===== */
+        
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -301,7 +242,7 @@
             max-width: 360px;
             margin-top: 6px;
         }
-
+        
         .action-btn {
             display: flex;
             align-items: center;
@@ -309,8 +250,8 @@
             gap: 8px;
             padding: 12px 16px;
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.02);
             color: #ffffff;
             font-size: 14px;
             font-weight: 500;
@@ -321,67 +262,66 @@
         }
         .action-btn:hover {
             transform: translateY(-2px);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
         }
         .action-btn svg {
             width: 20px;
             height: 20px;
         }
-
+        
         .action-btn.image svg {
             stroke: #3b82f6;
             fill: none;
         }
         .action-btn.image {
-            border-color: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59,130,246,0.3);
             color: #3b82f6;
         }
         .action-btn.image:hover {
-            background: rgba(59, 130, 246, 0.08);
+            background: rgba(59,130,246,0.08);
         }
-
+        
         .action-btn.video svg {
             stroke: #ef4444;
             fill: none;
         }
         .action-btn.video {
-            border-color: rgba(239, 68, 68, 0.3);
+            border-color: rgba(239,68,68,0.3);
             color: #ef4444;
         }
         .action-btn.video:hover {
-            background: rgba(239, 68, 68, 0.08);
+            background: rgba(239,68,68,0.08);
         }
-
+        
         .action-btn.audio svg {
             stroke: #22c55e;
             fill: none;
         }
         .action-btn.audio {
-            border-color: rgba(34, 197, 94, 0.3);
+            border-color: rgba(34,197,94,0.3);
             color: #22c55e;
         }
         .action-btn.audio:hover {
-            background: rgba(34, 197, 94, 0.08);
+            background: rgba(34,197,94,0.08);
         }
-
+        
         .action-btn.pdf svg {
             stroke: #eab308;
             fill: none;
         }
         .action-btn.pdf {
-            border-color: rgba(234, 179, 8, 0.3);
+            border-color: rgba(234,179,8,0.3);
             color: #eab308;
         }
         .action-btn.pdf:hover {
-            background: rgba(234, 179, 8, 0.08);
+            background: rgba(234,179,8,0.08);
         }
-
-        /* ===== INPUT ===== */
+        
         .input-area {
             display: flex;
             gap: 12px;
             padding-top: 14px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255,255,255,0.06);
             flex-shrink: 0;
             align-items: center;
         }
@@ -389,12 +329,11 @@
             flex: 1;
             padding: 12px 18px;
             border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
             color: #ffffff;
             font-size: 14px;
             outline: none;
-            transition: 0.3s;
             font-family: inherit;
         }
         .input-area input:focus {
@@ -403,8 +342,13 @@
         .input-area input::placeholder {
             color: #666;
         }
-
-        /* ===== SEND BUTTON ===== */
+        .input-area input {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        
         .send-btn {
             width: 52px;
             height: 52px;
@@ -421,7 +365,7 @@
         }
         .send-btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
+            box-shadow: 0 8px 30px rgba(168,85,247,0.4);
         }
         .send-btn svg {
             width: 24px;
@@ -432,8 +376,7 @@
             stroke-linecap: round;
             stroke-linejoin: round;
         }
-
-        /* ===== HISTORY PANEL ===== */
+        
         .history-panel {
             position: absolute;
             left: -320px;
@@ -441,7 +384,7 @@
             width: 300px;
             height: 100%;
             background: #0a0a0a;
-            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            border-right: 1px solid rgba(255,255,255,0.06);
             padding: 24px 16px;
             transition: 0.3s;
             z-index: 999;
@@ -466,25 +409,15 @@
             border: 1px solid transparent;
         }
         .history-item:hover {
-            background: rgba(168, 85, 247, 0.08);
-            border-color: rgba(168, 85, 247, 0.2);
+            background: rgba(168,85,247,0.08);
+            border-color: rgba(168,85,247,0.2);
         }
         .history-item .date {
             font-size: 10px;
             color: #666;
             margin-top: 4px;
         }
-
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 4px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #a855f7;
-            border-radius: 10px;
-        }
-
-        /* ===== RESPONSIVE ===== */
+        
         @media (max-width: 700px) {
             .app {
                 padding: 16px;
@@ -524,111 +457,152 @@
 </head>
 <body>
 
-    <div class="app" id="app">
+<div class="app" id="app">
 
-        <!-- ===== HEADER ===== -->
-        <div class="header">
-            <div class="header-left">
-                <span class="logo">AI Team</span>
-                <span class="model-badge" id="currentModelBadge">OpenAI</span>
+    <div class="header">
+        <div class="header-left">
+            <span class="logo">AI Team</span>
+            <span class="model-badge" id="currentModelBadge">OpenAI</span>
+        </div>
+        <div class="header-right">
+            <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;padding:4px;" id="themeBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
+            </button>
+            <button class="hamburger" onclick="toggleMenu()">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="menu-dropdown" id="menuDropdown">
+        <button class="menu-item" onclick="selectModel('OpenAI')">
+            <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
+            OpenAI
+        </button>
+        <button class="menu-item" onclick="selectModel('Gemini')">
+            <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true" alt="Gemini" />
+            Gemini
+        </button>
+        <button class="menu-item" onclick="selectModel('DeepSeek')">
+            <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true" alt="DeepSeek" />
+            DeepSeek
+        </button>
+        <div class="menu-divider"></div>
+        <button class="menu-item" onclick="toggleHistory()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            History
+        </button>
+        <button class="menu-item" onclick="clearChat()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Clear
+        </button>
+        <button class="menu-item" onclick="exportChat()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Export
+        </button>
+    </div>
+
+    <div class="history-panel" id="historyPanel">
+        <h3>History</h3>
+        <div id="historyList"></div>
+    </div>
+
+    <div class="chat-area" id="chatArea">
+
+        <div class="model-display" id="modelDisplay">
+            <div class="model-avatar">
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="Model" id="modelAvatar" />
             </div>
-            <div class="header-right">
-                <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;padding:4px;" id="themeBtn">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"/>
-                        <line x1="12" y1="1" x2="12" y2="3"/>
-                        <line x1="12" y1="21" x2="12" y2="23"/>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-                        <line x1="1" y1="12" x2="3" y2="12"/>
-                        <line x1="21" y1="12" x2="23" y2="12"/>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-                    </svg>
+            <div class="model-name" id="modelName">GPT-4</div>
+            <div class="model-provider" id="modelProvider">OpenAI</div>
+
+            <div class="action-buttons">
+                <button class="action-btn image" onclick="actionHandler('image')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><circle cx="8" cy="8" r="3"/><path d="M22 16l-6-6-4 4-4-4-6 6"/></svg>
+                    Image
                 </button>
-                <button class="hamburger" onclick="toggleMenu()">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
+                <button class="action-btn video" onclick="actionHandler('video')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polygon points="10 6 18 12 10 18"/></svg>
+                    Video
+                </button>
+                <button class="action-btn audio" onclick="actionHandler('audio')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M8 6v12M16 6v12M4 10v4M20 10v4"/></svg>
+                    Audio
+                </button>
+                <button class="action-btn pdf" onclick="actionHandler('pdf')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="16" x2="16" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    PDF
                 </button>
             </div>
         </div>
 
-        <!-- ===== DROPDOWN MENU ===== -->
-        <div class="menu-dropdown" id="menuDropdown">
-            <button class="menu-item" onclick="selectModel('OpenAI')">
-                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
-                OpenAI
-            </button>
-            <button class="menu-item" onclick="selectModel('Gemini')">
-                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true" alt="Gemini" />
-                Gemini
-            </button>
-            <button class="menu-item" onclick="selectModel('DeepSeek')">
-                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true" alt="DeepSeek" />
-                DeepSeek
-            </button>
-            <div class="menu-divider"></div>
-            <button class="menu-item" onclick="toggleHistory()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12 6 12 12 16 14"/>
-                </svg>
-                History
-            </button>
-            <button class="menu-item" onclick="clearChat()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="3 6 5 6 21 6"/>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                </svg>
-                Clear
-            </button>
-            <button class="menu-item" onclick="exportChat()">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14 2 14 8 20 8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <polyline points="10 9 9 9 8 9"/>
-                </svg>
-                Export
-            </button>
-        </div>
+        <div id="messages"></div>
+    </div>
 
-        <!-- ===== HISTORY PANEL ===== -->
-        <div class="history-panel" id="historyPanel">
-            <h3>History</h3>
-            <div id="historyList"></div>
-        </div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your message..." onkeydown="if(event.key==='Enter') sendMessage()" />
+        <button class="send-btn" onclick="sendMessage()" aria-label="Send">
+            <svg viewBox="0 0 24 24">
+                <line x1="22" y1="2" x2="11" y2="13"/>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+        </button>
+    </div>
 
-        <!-- ===== CHAT AREA ===== -->
-        <div class="chat-area" id="chatArea">
+</div>
 
-            <!-- Model Display -->
-            <div class="model-display" id="modelDisplay">
-                <div class="model-avatar">
-                    <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="Model" id="modelAvatar" />
-                </div>
-                <div class="model-name" id="modelName">GPT-4</div>
-                <div class="model-provider" id="modelProvider">OpenAI</div>
+<script>
+    let currentModel = 'OpenAI';
+    let chatHistory = [];
+    let allConversations = JSON.parse(localStorage.getItem('aiteam_history') || '[]');
 
-                <!-- Action Buttons - 2x2 Grid (ALL 4) -->
-                <div class="action-buttons">
-                    <button class="action-btn image" onclick="actionHandler('image')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="2" width="20" height="20" rx="2"/>
-                            <circle cx="8" cy="8" r="3"/>
-                            <path d="M22 16l-6-6-4 4-4-4-6 6"/>
-                        </svg>
-                        Image
-                    </button>
-                    <button class="action-btn video" onclick="actionHandler('video')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="4" width="20" height="16" rx="2"/>
-                            <polygon points="10 6 18 12 10 18"/>
-                        </svg>
-                        Video
-                    </button>
-                    <button class="action
+    const modelAvatars = {
+        'OpenAI': 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true',
+        'Gemini': 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true',
+        'DeepSeek': 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true'
+    };
+
+    const modelDisplayNames = {
+        'OpenAI': 'GPT-4 Turbo',
+        'Gemini': 'Gemini Pro 1.5',
+        'DeepSeek': 'DeepSeek-V3'
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadHistory();
+        updateModelDisplay();
+        addWelcomeMessage();
+    });
+
+    function toggleMenu() {
+        document.getElementById('menuDropdown').classList.toggle('active');
+    }
+
+    function toggleHistory() {
+        document.getElementById('historyPanel').classList.toggle('active');
+        renderHistory();
+        document.getElementById('menuDropdown').classList.remove('active');
+    }
+
+    function toggleTheme() {
+        document.body.classList.toggle('light');
+        const btn = document.getElementById('themeBtn');
+        btn.querySelector('svg').style.stroke = document.body.classList.contains('light') ? '#1a1a2e' : '#ffffff';
+        // تغییر پس‌زمینه برای حالت روشن
+        if(document.body.classList.contains('light')){
+            document.querySelector('.app').style.background = '#ffffff';
+            document.querySelector('.chat-area').style.back
