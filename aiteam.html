@@ -377,10 +377,11 @@
         /* ===== INPUT ===== */
         .input-area {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             padding-top: 14px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
             flex-shrink: 0;
+            align-items: center;
         }
         .input-area input {
             flex: 1;
@@ -400,21 +401,35 @@
         .input-area input::placeholder {
             color: #666;
         }
-        .input-area button {
-            padding: 12px 28px;
-            border-radius: 14px;
+
+        /* ===== SEND BUTTON (Circle Purple) ===== */
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
             border: none;
             background: #a855f7;
             color: #ffffff;
-            font-weight: 600;
-            font-size: 14px;
             cursor: pointer;
             transition: 0.3s;
-            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            padding: 0;
         }
-        .input-area button:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.3);
+        .send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(168, 85, 247, 0.4);
+        }
+        .send-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: #ffffff;
+            stroke-width: 2.5;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
         /* ===== HISTORY PANEL ===== */
@@ -491,6 +506,14 @@
                 width: 70px;
                 height: 70px;
             }
+            .send-btn {
+                width: 44px;
+                height: 44px;
+            }
+            .send-btn svg {
+                width: 20px;
+                height: 20px;
+            }
         }
     </style>
 </head>
@@ -531,15 +554,15 @@
         <!-- ===== DROPDOWN MENU ===== -->
         <div class="menu-dropdown" id="menuDropdown">
             <button class="menu-item" onclick="selectModel('OpenAI')">
-                <img src="https://via.placeholder.com/28/10a37f/ffffff?text=O" alt="OpenAI" />
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
                 OpenAI
             </button>
             <button class="menu-item" onclick="selectModel('Gemini')">
-                <img src="https://via.placeholder.com/28/4285f4/ffffff?text=G" alt="Gemini" />
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true" alt="Gemini" />
                 Gemini
             </button>
             <button class="menu-item" onclick="selectModel('DeepSeek')">
-                <img src="https://via.placeholder.com/28/6366f1/ffffff?text=D" alt="DeepSeek" />
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true" alt="DeepSeek" />
                 DeepSeek
             </button>
             <div class="menu-divider"></div>
@@ -581,7 +604,7 @@
             <!-- Model Display -->
             <div class="model-display" id="modelDisplay">
                 <div class="model-avatar">
-                    <img src="https://via.placeholder.com/90/a855f7/ffffff?text=AI" alt="Model" id="modelAvatar" />
+                    <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="Model" id="modelAvatar" />
                 </div>
                 <div class="model-name" id="modelName">GPT-4</div>
                 <div class="model-provider" id="modelProvider">OpenAI</div>
@@ -604,18 +627,4 @@
                         Image
                     </button>
                     <button class="action-btn audio" onclick="actionHandler('audio')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2v20M8 6v12M16 6v12M4 10v4M20 10v4"/>
-                        </svg>
-                        Audio
-                    </button>
-                    <button class="action-btn pdf" onclick="actionHandler('pdf')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="8" y1="16" x2="16" y2="16"/>
-                            <line x1="8" y1="12" x2="16" y2="12"/>
-                        </svg>
-                        PDF
-                    </button>
-      
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linec
