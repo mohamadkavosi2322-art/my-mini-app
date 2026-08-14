@@ -40,7 +40,6 @@
             overflow: hidden;
         }
         
-        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -60,7 +59,6 @@
             font-size: 22px;
             font-weight: 700;
             color: #a855f7;
-            /* این تکون نمیخوره */ 
         }
         
         .model-badge {
@@ -94,7 +92,6 @@
             stroke-linecap: round;
         }
         
-        /* ===== MENU ===== */
         .menu-dropdown {
             position: absolute;
             top: 80px;
@@ -142,7 +139,6 @@
             margin: 6px 16px;
         }
         
-        /* ===== CHAT AREA ===== */
         .chat-area {
             flex: 1;
             overflow-y: auto;
@@ -159,7 +155,6 @@
             border-radius: 10px;
         }
         
-        /* ===== MESSAGES ===== */
         .message {
             margin-bottom: 16px;
             padding: 12px 18px;
@@ -194,7 +189,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* ===== MODEL DISPLAY ===== */
         .model-display {
             display: flex;
             flex-direction: column;
@@ -238,7 +232,6 @@
             border: 1px solid rgba(255,255,255,0.06);
         }
         
-        /* ===== ACTION BUTTONS ===== */
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -269,8 +262,6 @@
             width: 100%;
         }
         .action-btn:active {
-            background: #3b82f6 !important;
-            border-color: #3b82f6 !important;
             transform: scale(0.95);
         }
         .action-btn:hover {
@@ -358,7 +349,6 @@
             stroke: #ffffff !important;
         }
         
-        /* ===== INPUT ===== */
         .input-area {
             display: flex;
             gap: 8px;
@@ -426,7 +416,6 @@
             stroke-linejoin: round;
         }
         
-        /* ===== HISTORY ===== */
         .history-panel {
             position: absolute;
             left: -320px;
@@ -513,7 +502,6 @@
 
 <div class="app" id="app">
 
-    <!-- ===== HEADER ===== -->
     <div class="header">
         <div class="header-left">
             <span class="logo" id="logoText">AI Team</span>
@@ -543,7 +531,6 @@
         </div>
     </div>
 
-    <!-- ===== MENU ===== -->
     <div class="menu-dropdown" id="menuDropdown">
         <button class="menu-item" onclick="selectModel('OpenAI')">
             <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
@@ -576,13 +563,11 @@
         </button>
     </div>
 
-    <!-- ===== HISTORY ===== -->
     <div class="history-panel" id="historyPanel">
         <h3>History</h3>
         <div id="historyList"></div>
     </div>
 
-    <!-- ===== CHAT ===== -->
     <div class="chat-area" id="chatArea">
 
         <div class="model-display" id="modelDisplay">
@@ -614,4 +599,12 @@
                     </svg>
                     Audio
                 </button>
-                <button class="actio
+                <button class="action-btn pdf" onclick="actionHandler('pdf')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="8" y1="16" x2="16" y2="16"/>
+                        <line x1="8" y1="12" x2="16" y2="12"/>
+                    </svg>
+                    PDF
+              
