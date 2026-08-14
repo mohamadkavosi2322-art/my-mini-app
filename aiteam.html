@@ -236,25 +236,21 @@
         .action-btn.image:hover { background: rgba(59, 130, 246, 0.08); }
         .action-btn.image:active { background: #3b82f6 !important; color: #fff !important; }
         .action-btn.image:active svg { stroke: #fff !important; }
-        
         .action-btn.video svg { stroke: #ef4444; fill: none; }
         .action-btn.video { border-color: rgba(239, 68, 68, 0.3); color: #ef4444; }
         .action-btn.video:hover { background: rgba(239, 68, 68, 0.08); }
         .action-btn.video:active { background: #ef4444 !important; color: #fff !important; }
         .action-btn.video:active svg { stroke: #fff !important; }
-        
         .action-btn.audio svg { stroke: #22c55e; fill: none; }
         .action-btn.audio { border-color: rgba(34, 197, 94, 0.3); color: #22c55e; }
         .action-btn.audio:hover { background: rgba(34, 197, 94, 0.08); }
         .action-btn.audio:active { background: #22c55e !important; color: #fff !important; }
         .action-btn.audio:active svg { stroke: #fff !important; }
-        
         .action-btn.pdf svg { stroke: #eab308; fill: none; }
         .action-btn.pdf { border-color: rgba(234, 179, 8, 0.3); color: #eab308; }
         .action-btn.pdf:hover { background: rgba(234, 179, 8, 0.08); }
         .action-btn.pdf:active { background: #eab308 !important; color: #fff !important; }
         .action-btn.pdf:active svg { stroke: #fff !important; }
-        
         .input-area {
             display: flex;
             gap: 8px;
@@ -344,7 +340,8 @@
             margin-left: auto;
             border-bottom-left-radius: 4px;
         }
-        .message.bot, .message.user {
+        .message.bot,
+        .message.user {
             -webkit-user-select: text;
             -moz-user-select: text;
             -ms-user-select: text;
@@ -394,15 +391,21 @@
             stroke: #ef4444;
             fill: #ef4444;
         }
-        .message.user + .message-actions {
+        .message.user+.message-actions {
             justify-content: flex-start;
         }
-        .message.user + .message-actions button:hover svg {
+        .message.user+.message-actions button:hover svg {
             stroke: #a855f7;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .history-panel {
             position: absolute;
@@ -465,11 +468,23 @@
             margin: 0 2px;
             animation: typing 1.4s infinite both;
         }
-        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
         @keyframes typing {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-            40% { transform: scale(1); opacity: 1; }
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         .toast {
             position: fixed;
@@ -487,77 +502,113 @@
             animation: fadeIn 0.3s ease;
         }
         @media (max-width: 700px) {
-            .app { padding: 16px; border-radius: 0; max-height: 100vh; }
-            .menu-dropdown { right: 8px; min-width: 200px; }
-            .history-panel { width: 260px; left: -280px; }
-            .action-btn { padding: 10px 12px; font-size: 12px; }
-            .action-btn svg { width: 18px; height: 18px; }
-            .model-avatar { width: 100px; height: 100px; }
-            .send-btn { width: 34px; height: 34px; }
-            .send-btn svg { width: 16px; height: 16px; }
-            .input-area input { padding-right: 44px; height: 40px; }
-            .message-actions { gap: 8px; }
-            .message-actions button svg { width: 16px; height: 16px; }
+            .app {
+                padding: 16px;
+                border-radius: 0;
+                max-height: 100vh;
+            }
+            .menu-dropdown {
+                right: 8px;
+                min-width: 200px;
+            }
+            .history-panel {
+                width: 260px;
+                left: -280px;
+            }
+            .action-btn {
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+            .action-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+            .model-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            .send-btn {
+                width: 34px;
+                height: 34px;
+            }
+            .send-btn svg {
+                width: 16px;
+                height: 16px;
+            }
+            .input-area input {
+                padding-right: 44px;
+                height: 40px;
+            }
+            .message-actions {
+                gap: 8px;
+            }
+            .message-actions button svg {
+                width: 16px;
+                height: 16px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="app" id="app">
+    <div class="app" id="app">
 
-    <div class="header">
-        <div class="header-left">
-            <span class="logo" id="logoText">AI Team</span>
-            <span class="model-badge" id="currentModelBadge">OpenAI</span>
+        <div class="header">
+            <div class="header-left">
+                <span class="logo" id="logoText">AI Team</span>
+                <span class="model-badge" id="currentModelBadge">OpenAI</span>
+            </div>
+            <div class="header-right">
+                <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;padding:4px;" id="themeBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2">
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" />
+                        <line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" />
+                        <line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                    </svg>
+                </button>
+                <button class="hamburger" onclick="toggleMenu()">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <line x1="3" y1="6" x2="21" y2="6" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                        <line x1="3" y1="18" x2="21" y2="18" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="header-right">
-            <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;padding:4px;" id="themeBtn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </button>
-            <button class="hamburger" onclick="toggleMenu()">
-                <svg viewBox="0 0 24 24" fill="none"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-        </div>
-    </div>
 
-    <div class="menu-dropdown" id="menuDropdown">
-        <button class="menu-item" onclick="selectModel('OpenAI')">
-            <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
-            OpenAI
-        </button>
-        <button class="menu-item" onclick="selectModel('Gemini')">
-            <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true" alt="Gemini" />
-            Gemini
-        </button>
-        <button class="menu-item" onclick="selectModel('DeepSeek')">
-            <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true" alt="DeepSeek" />
-            DeepSeek
-        </button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="toggleHistory()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            History
-        </button>
-        <button class="menu-item" onclick="clearChat()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            Clear
-        </button>
-        <button class="menu-item" onclick="exportChat()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Export
-        </button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="showUserStatus()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-            Status
-        </button>
-        <button class="menu-item" onclick="showPlans()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            Plans
-        </button>
-        <div class="menu-divider"></div>
-        <button class="menu-item" onclick="showModelsList()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
-            Models
-        </button>
-        <button class="menu-item" onclick="showModeration(
+        <div class="menu-dropdown" id="menuDropdown">
+            <button class="menu-item" onclick="selectModel('OpenAI')">
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true" alt="OpenAI" />
+                OpenAI
+            </button>
+            <button class="menu-item" onclick="selectModel('Gemini')">
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true" alt="Gemini" />
+                Gemini
+            </button>
+            <button class="menu-item" onclick="selectModel('DeepSeek')">
+                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true" alt="DeepSeek" />
+                DeepSeek
+            </button>
+            <div class="menu-divider"></div>
+            <button class="menu-item" onclick="toggleLanguage()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                </svg>
+                <span id="langText">فارسی</span>
+            </button>
+            <button class="menu-item" onclick="toggleHistory()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                </svg>
+                History
+            </button>
+            <button class="menu-item" onclick="clearChat()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strok
