@@ -134,6 +134,8 @@
             margin: 12px 0;
             background: #0a0a0a;
             border-radius: 16px;
+            display: flex;
+            flex-direction: column;
         }
         .chat-area::-webkit-scrollbar {
             width: 4px;
@@ -142,98 +144,23 @@
             background: #a855f7;
             border-radius: 10px;
         }
-        .message-wrapper {
-            margin-bottom: 20px;
-        }
-        .message {
-            padding: 12px 18px;
-            border-radius: 18px;
-            max-width: 80%;
-            word-wrap: break-word;
-            font-size: 14px;
-            line-height: 1.7;
-            animation: fadeIn 0.3s ease;
-        }
-        .message.user {
-            background: rgba(168, 85, 247, 0.2);
-            border: 1px solid rgba(168, 85, 247, 0.2);
-            margin-right: auto;
-            border-bottom-right-radius: 4px;
-        }
-        .message.bot {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            margin-left: auto;
-            border-bottom-left-radius: 4px;
-        }
-        .message.bot, .message.user {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-        }
-        .message-actions {
+        /* ===== مرکز کردن دکمه‌ها ===== */
+        .center-wrapper {
+            flex: 1;
             display: flex;
-            gap: 12px;
-            margin-top: 6px;
-            opacity: 0.5;
-            transition: opacity 0.3s;
-            justify-content: flex-end;
-        }
-        .message-wrapper:hover .message-actions {
-            opacity: 1;
-        }
-        .message-actions button {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 2px;
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: 0.3s;
-        }
-        .message-actions button:hover {
-            transform: scale(1.2);
-        }
-        .message-actions button svg {
-            width: 18px;
-            height: 18px;
-            stroke: #888;
-            fill: none;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-        .message-actions button:hover svg {
-            stroke: #ffffff;
-        }
-        .message-actions button.liked svg {
-            stroke: #3b82f6;
-            fill: #3b82f6;
-        }
-        .message-actions button.disliked svg {
-            stroke: #ef4444;
-            fill: #ef4444;
-        }
-        .message.user + .message-actions {
-            justify-content: flex-start;
-        }
-        .message.user + .message-actions button:hover svg {
-            stroke: #a855f7;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+            min-height: 300px;
         }
         .model-display {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px 0 10px 0;
             gap: 12px;
             transition: all 0.5s ease;
+            width: 100%;
         }
         .model-display.hidden {
             display: none;
@@ -329,6 +256,7 @@
         .action-btn.pdf:active { background: #eab308 !important; color: #fff !important; }
         .action-btn.pdf:active svg { stroke: #fff !important; }
         
+        /* ===== دکمه ارسال ===== */
         .input-area {
             display: flex;
             gap: 8px;
@@ -394,6 +322,93 @@
             stroke-linecap: round;
             stroke-linejoin: round;
         }
+        
+        /* ===== پیام‌ها ===== */
+        .message-wrapper {
+            margin-bottom: 20px;
+        }
+        .message {
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            font-size: 14px;
+            line-height: 1.7;
+            animation: fadeIn 0.3s ease;
+        }
+        .message.user {
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            margin-right: auto;
+            border-bottom-right-radius: 4px;
+        }
+        .message.bot {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            margin-left: auto;
+            border-bottom-left-radius: 4px;
+        }
+        .message.bot, .message.user {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+        .message-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 6px;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            justify-content: flex-end;
+        }
+        .message-wrapper:hover .message-actions {
+            opacity: 1;
+        }
+        .message-actions button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .message-actions button:hover {
+            transform: scale(1.2);
+        }
+        .message-actions button svg {
+            width: 18px;
+            height: 18px;
+            stroke: #888;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .message-actions button:hover svg {
+            stroke: #ffffff;
+        }
+        .message-actions button.liked svg {
+            stroke: #3b82f6;
+            fill: #3b82f6;
+        }
+        .message-actions button.disliked svg {
+            stroke: #ef4444;
+            fill: #ef4444;
+        }
+        .message.user + .message-actions {
+            justify-content: flex-start;
+        }
+        .message.user + .message-actions button:hover svg {
+            stroke: #a855f7;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         .history-panel {
             position: absolute;
             left: -320px;
@@ -546,18 +561,4 @@
             Status
         </button>
         <button class="menu-item" onclick="showPlans()">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-            Plans
-        </button>
-    </div>
-
-    <div class="history-panel" id="historyPanel">
-        <h3>History</h3>
-        <div id="historyList"></div>
-    </div>
-
-    <div class="chat-area" id="chatArea">
-
-        <div class="model-display" id="modelDisplay">
-            <div class="model-avatar">
-                <img src="https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></
