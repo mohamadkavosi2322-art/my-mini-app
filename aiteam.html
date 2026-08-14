@@ -294,18 +294,20 @@
 
         /* ===== ACTION BUTTONS ===== */
         .action-buttons {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
             margin-top: 10px;
         }
 
         .action-btn {
             display: flex;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 10px 20px;
+            padding: 12px 16px;
             border-radius: 14px;
             border: 1px solid rgba(255, 255, 255, 0.08);
             background: rgba(255, 255, 255, 0.02);
@@ -316,6 +318,7 @@
             transition: 0.3s;
             font-family: inherit;
             background: transparent;
+            width: 100%;
         }
         .action-btn:hover {
             transform: translateY(-2px);
@@ -499,8 +502,12 @@
                 left: -280px;
             }
             .action-btn {
-                padding: 8px 14px;
+                padding: 10px 12px;
                 font-size: 12px;
+            }
+            .action-btn svg {
+                width: 18px;
+                height: 18px;
             }
             .model-avatar {
                 width: 70px;
@@ -609,7 +616,7 @@
                 <div class="model-name" id="modelName">GPT-4</div>
                 <div class="model-provider" id="modelProvider">OpenAI</div>
 
-                <!-- Action Buttons -->
+                <!-- Action Buttons - 2x2 Grid -->
                 <div class="action-buttons">
                     <button class="action-btn video" onclick="actionHandler('video')">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -625,6 +632,4 @@
                             <path d="M22 16l-6-6-4 4-4-4-6 6"/>
                         </svg>
                         Image
-                    </button>
-                    <button class="action-btn audio" onclick="actionHandler('audio')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linec
+                   
