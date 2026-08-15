@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Team — Super Mini App</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#a855f7;--primary-dark:#7c3aed;--primary-light:#c084fc;--bg:#0a0a0a;--bg-card:#14141e;--bg-hover:#1e1e2e;--text:#fff;--muted:#8888aa;--border:rgba(255,255,255,.07);--radius:16px}
+body{font-family:Segoe UI,Tahoma,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow:hidden}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}.app{height:100vh;display:flex;flex-direction:column}
+.header{height:64px;display:flex;align-items:center;gap:18px;padding:10px 20px;background:var(--bg-card);border-bottom:1px solid var(--border);z-index:5}
+.logo{font-size:21px;font-weight:800;background:linear-gradient(135deg,var(--primary),var(--primary-light));-webkit-background-clip:text;color:transparent;white-space:nowrap}
+.logo span{font-weight:300;color:var(--muted)}
+.badge{font-size:10px;background:var(--primary);padding:3px 9px;border-radius:20px}.premium{display:none;background:#f59e0b;color:#111;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:800}
+.search{flex:1;max-width:560px;margin:auto}.search input{width:100%;height:40px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:11px;color:var(--text);padding:0 14px;outline:none}
+.header-right{display:flex;align-items:center;gap:8px}.icon{border:0;background:transparent;color:var(--muted);padding:8px;border-radius:9px}.icon:hover{background:var(--bg-hover);color:var(--text)}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--primary);display:grid;place-items:center;font-weight:700}
+.layout{flex:1;display:flex;min-height:0}.sidebar{width:62px;background:var(--bg-card);border-left:1px solid var(--border);display:flex;flex-direction:column;padding:12px 6px;gap:5px;overflow:auto;transition:.25s;z-index:4}.sidebar:hover{width:205px}
+.nav{border:0;background:transparent;color:var(--muted);border-radius:10px;padding:11px 10px;display:flex;align-items:center;gap:11px;white-space:nowrap;overflow:hidden}.nav:hover,.nav.active{background:rgba(168,85,247,.14);color:var(--text)}.nav span{display:none}.sidebar:hover .nav span{display:block}.nav b{width:22px;text-align:center}
+main{flex:1;min-width:0;padding:20px 24px;overflow:auto}.page{display:none}.page.active{display:block}.page-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px}.page-head h1{font-size:24px}.muted{color:var(--muted);font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:0;border-radius:10px;padding:9px 15px;font-weight:700;background:var(--bg-hover);color:var(--text)}.btn.primary{background:var(--primary)}.btn:hover{filter:brightness(1.1)}
+.grid{display:grid;gap:14px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:17px}.card h3{font-size:14px;margin-bottom:7px}.value{font-size:28px;font-weight:800;color:var(--primary)}.card p{color:var(--muted);font-size:12px;line-height:1.7}
+.hero{padding:28px;background:linear-gradient(135deg,rgba(168,85,247,.18),rgba(124,58,237,.05));border:1px solid rgba(168,85,247,.2);border-radius:20px;margin-bottom:16px}.hero h2{font-size:28px;margin-bottom:8px}.hero p{color:var(--muted);max-width:800px;line-height:1.8}
+.list{display:flex;flex-direction:column;gap:8px}.row{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border)}.row:last-child{border:0}
+.chat{height:calc(100vh - 125px);display:flex;flex-direction:column}.messages{flex:1;overflow:auto;padding:5px 0}.msg{max-width:78%;padding:12px 15px;border-radius:15px;margin:0 0 11px;line-height:1.8;white-space:pre-wrap}.msg.user{margin-right:0;margin-left:auto;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.2)}.msg.bot{margin-left:0;margin-right:auto;background:var(--bg-hover);border:1px solid var(--border)}
+.composer{display:flex;gap:8px;border-top:1px solid var(--border);padding-top:12px}.composer textarea{flex:1;resize:none;height:50px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:12px;color:var(--text);padding:12px;outline:none}
+.typing{display:none;color:var(--muted);font-size:12px;padding:6px}.typing.show{display:block}
+input.control,textarea.control,select.control{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:10px;outline:none}.form{display:grid;gap:10px}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#050505;color:#fff;border:1px solid var(--border);padding:11px 18px;border-radius:12px;z-index:1000}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(5px);display:none;place-items:center;z-index:999}.modal.show{display:grid}.modal-box{width:min(520px,92vw);background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:20px}.modal-box h2{margin-bottom:15px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+@media(max-width:800px){.search{display:none}.sidebar{width:52px}.sidebar:hover{width:52px}.sidebar:hover .nav span{display:none}main{padding:14px}.g2,.g3,.g4{grid-template-columns:1fr}.page-head h1{font-size:19px}.msg{max-width:90%}}
+
+.model-card{position:relative;overflow:hidden}
+.model-card .model-top{display:flex;align-items:center;gap:12px}
+.model-logo{width:58px;height:58px;border-radius:14px;object-fit:cover;background:#fff;border:1px solid var(--border);flex-shrink:0}
+.model-meta{min-width:0}
+.model-meta h3{margin-bottom:3px}
+.model-meta small{color:var(--muted);font-size:11px}
+.api-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;margin-top:8px;color:var(--muted)}
+.api-dot{width:7px;height:7px;border-radius:50%;background:#ef4444}
+.api-dot.ok{background:#22c55e}
+.api-key-row{display:flex;gap:8px;align-items:center}
+.api-key-row .control{flex:1}
+
+
+/* ===== AI TEAM PREMIUM UI ===== */
+:root {
+    --accent: #a855f7;
+    --accent-2: #7c3aed;
+    --accent-soft: rgba(168,85,247,.14);
+}
+body, button, input, textarea, select { font-family: 'Segoe UI', Tahoma, sans-serif; }
+button { -webkit-tap-highlight-color: transparent; }
+.header { box-shadow: 0 8px 30px rgba(0,0,0,.18); }
+.logo { font-size: 22px; }
+.main-content { padding-top: 16px; }
+
+.chat-page-shell {
+    width: min(920px, 100%);
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.chat-page-shell .chat-container { min-height: 0; }
+.chat-messages { padding: 18px 8px 24px; scroll-behavior: smooth; }
+.chat-empty {
+    margin: auto;
+    text-align: center;
+    color: var(--text-muted);
+    padding: 40px 20px;
+}
+.chat-empty .chat-empty-logo {
+    width: 64px; height: 64px; margin: 0 auto 14px;
+    border-radius: 20px;
+    display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#fff; font-size:25px; font-weight:800;
+    box-shadow: 0 18px 45px rgba(124,58,237,.3);
+}
+.msg-wrap { display:flex; flex-direction:column; margin-bottom:18px; }
+.msg-wrap.user-wrap { align-items:flex-start; }
+.msg-wrap.bot-wrap { align-items:flex-end; }
+.msg { max-width:min(78%, 720px); position:relative; }
+.msg.user, .msg.bot { margin-left:0; margin-right:0; }
+.message-actions {
+    display:flex; gap:5px; margin-top:7px; opacity:.72;
+    direction:ltr;
+}
+.message-action {
+    width:34px; height:34px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:transparent; border:1px solid transparent;
+    color:var(--text-muted); cursor:pointer;
+    transition:.2s ease;
+}
+.message-action:hover { color:var(--text); background:var(--bg-hover); border-color:var(--border); transform:translateY(-1px); }
+.message-action.active-like { color:#22c55e; }
+.message-action.active-dislike { color:#ef4444; }
+.message-action svg, .chat-send svg, .chat-stop svg, .tool-btn svg {
+    width:18px; height:18px; fill:none; stroke:currentColor;
+    stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+}
+.chat-input {
+    border-top:0;
+    padding:10px 0 0;
+    gap:8px;
+    align-items:center;
+}
+.chat-input-inner {
+    position:relative; flex:1;
+}
+.chat-input input {
+    width:100%; height:52px; padding:10px 58px 10px 16px;
+    border-radius:18px; background:var(--bg-card);
+    border:1px solid var(--border);
+    box-shadow:0 10px 30px rgba(0,0,0,.14);
+}
+.chat-send, .chat-stop {
+    width:38px; height:38px; border-radius:50%;
+    position:absolute; left:7px; top:7px;
+    border:0; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; color:#fff; background:var(--accent);
+    transition:.2s ease; z-index:2;
+}
+.chat-send:hover { transform:scale(1.05); box-shadow:0 8px 24px rgba(168,85,247,.35); }
+.chat-stop {
+    display:none; border-radius:11px; background:var(--text);
+    color:var(--bg); width:38px; height:38px;
+}
+.chat-stop.show { display:flex; }
+.chat-send.hide { display:none; }
+.chat-disclaimer { text-align:center; font-size:10px; color:var(--text-muted); padding:7px 0 2px; }
+
+.theme-panel {
+    position:fixed; top:70px; right:18px; width:280px; z-index:500;
+    background:var(--bg-card); border:1px solid var(--border);
+    border-radius:18px; padding:16px; box-shadow:var(--shadow); display:none;
+}
+.theme-panel.show { display:block; animation:fadeUp .18s ease; }
+.theme-panel h3 { font-size:14px; margin-bottom:12px; }
+.color-row { display:grid; grid-template-columns:repeat(6,1fr); gap:8px; }
+.color-dot {
+    width:34px; height:34px; border-radius:50%; border:2px solid transparent;
+    cursor:pointer; outline:0;
+}
+.color-dot.selected { border-color:#fff; box-shadow:0 0 0 2px var(--accent); }
+.custom-color {
+    width:100%; height:38px; margin-top:12px; border:1px solid var(--border);
+    border-radius:10px; background:var(--bg-hover); cursor:pointer;
+}
+.plus-modal {
+    position:fixed; inset:0; background:rgba(0,0,0,.65); backdrop-filter:blur(8px);
+    display:none; align-items:center; justify-content:center; z-index:1000;
+}
+.plus-modal.show { display:flex; }
+.plus-box {
+    width:min(420px,92vw); background:var(--bg-card); border:1px solid rgba(245,158,11,.3);
+    border-radius:22px; padding:22px; box-shadow:var(--shadow);
+}
+.plus-box h2 { font-size:20px; margin-bottom:6px; }
+.plus-price { font-size:30px; font-weight:800; color:#f59e0b; margin:8px 0 14px; }
+.card-mask {
+    background:var(--bg-hover); border:1px solid var(--border); border-radius:13px;
+    padding:12px 14px; direction:ltr; text-align:center; letter-spacing:2px; font-weight:700;
+}
+.plus-note { color:var(--text-muted); font-size:12px; line-height:1.8; margin-top:12px; }
+.plus-actions { display:flex; gap:8px; margin-top:16px; }
+.plus-actions button { flex:1; }
+.tool-btn {
+    width:42px; height:42px; border-radius:13px; border:1px solid var(--border);
+    background:var(--bg-card); color:var(--text-muted); cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+}
+.tool-btn:hover { color:var(--text); background:var(--bg-hover); }
+
+.model-card-enhanced {
+    display:flex; gap:14px; align-items:center; cursor:pointer;
+}
+.model-avatar {
+    width:54px; height:54px; border-radius:15px; object-fit:cover;
+    border:1px solid var(--border); flex-shrink:0;
+}
+.model-card-enhanced.selected { box-shadow:0 0 0 1px var(--accent), 0 12px 30px rgba(168,85,247,.12); }
+@media(max-width:768px) {
+    .chat-page-shell { width:100%; }
+    .msg { max-width:88%; }
+    .theme-panel { right:10px; top:62px; }
+    .chat-input input { height:50px; }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header class="header">
+  <div class="logo">AI Team</div><span class="badge">v4.0</span><span id="premiumBadge" class="premium">PREMIUM</span>
+  <div class="search"><input id="globalSearch" placeholder="Search anything... (Ctrl+K)"></div>
+  <div class="header-right">
+            <button class="icon-btn" onclick="openThemePanel()" aria-label="رنگ">
+                <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a2 2 0 0 0 0-4H12a2 2 0 0 1 0-4h2a7 7 0 0 0 0-10h-2z"></path><circle cx="7.5" cy="10" r="1"></circle><circle cx="10" cy="7" r="1"></circle><circle cx="15" cy="7" r="1"></circle></svg>
+            </button>
+            <button class="icon-btn" onclick="openPlusModal()" aria-label="Plus">
+                <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"></path></svg>
+            </button><button class="icon" onclick="toggleTheme()">☀</button><button class="icon" onclick="showStatus()">◷</button><div class="avatar" onclick="showProfile()">AI</div></div>
+</header>
+<div class="layout">
+<nav class="sidebar">
+  <button class="nav active" data-page="dashboard" onclick="navigate('dashboard')"><b>▦</b><span>Dashboard</span></button>
+  <button class="nav" data-page="models" onclick="navigate('models')"><b>◈</b><span>AI Models</span></button>
+  <button class="nav" data-page="chat" onclick="navigate('chat')"><b>☵</b><span>Chat</span></button>
+  <button class="nav" data-page="agents" onclick="navigate('agents')"><b>♙</b><span>Agents</span></button>
+  <button class="nav" data-page="prompts" onclick="navigate('prompts')"><b>✦</b><span>Prompts</span></button>
+  <button class="nav" data-page="studio" onclick="navigate('studio')"><b>◆</b><span>AI Studio</span></button>
+  <button class="nav" data-page="projects" onclick="navigate('projects')"><b>▣</b><span>Projects</span></button>
+  <button class="nav" data-page="workflows" onclick="navigate('workflows')"><b>⌘</b><span>Workflows</span></button>
+  <button class="nav" data-page="learning" onclick="navigate('learning')"><b>◇</b><span>Learning</span></button>
+  <button class="nav" data-page="settings" onclick="navigate('settings')"><b>⚙</b><span>Settings</span></button>
+</nav>
+<main>
+<section id="page-dashboard" class="page active">
+ <div class="hero"><h2>AI Team</h2><p>یک سوپر مینی‌اپ برای مدیریت چت، مدل‌ها، Agentها، پرامپت‌ها، پروژه‌ها و ابزارهای هوش مصنوعی.</p><div class="actions" style="margin-top:15px"><button class="btn primary" onclick="navigate('chat')">شروع چت</button><button class="btn" onclick="navigate('studio')">AI Studio</button></div></div>
+ <div class="grid g4">
+  <div class="card"><h3>Chats</h3><div id="totalChats" class="value">0</div><p>تعداد پیام‌ها</p></div>
+  <div class="card"><h3>Agents</h3><div id="totalAgents" class="value">5</div><p>دستیارهای فعال</p></div>
+  <div class="card"><h3>Tokens</h3><div id="totalTokens" class="value">0</div><p>در این مرورگر</p></div>
+  <div class="card"><h3>Plan</h3><div id="premiumStatusDisplay" class="value">Free</div><p id="dailyLimitDisplay">5 questions</p></div>
+ </div>
+ <div class="grid g2" style="margin-top:14px"><div class="card"><h3>Recent activity</h3><div id="activityList"></div></div><div class="card"><h3>Quick actions</h3><div class="list"><div class="row"><span>Code Workspace</span><button class="btn" onclick="startCoding()">Open</button></div><div class="row"><span>Content Studio</span><button class="btn" onclick="startContent()">Open</button></div><div class="row"><span>Research</span><button class="btn" onclick="startResearch()">Run</button></div></div></div></div>
+</section>
+
+<section id="page-models" class="page"><div class="page-head"><h1>AI Models</h1><div class="actions"><button class="btn primary" onclick="fetchModels()">Refresh</button></div></div><div id="modelsList" class="grid g3"></div></section>
+
+<section id="page-chat" class="page"><div class="page-head"><h1>Team Chat <small class="muted">ChatGPT + Gemini + DeepSeek</small></h1><div class="actions"><select id="modelSelect" class="control" style="width:170px" onchange="currentModel=this.value"><option>OpenAI</option><option>Gemini</option><option>DeepSeek</option></select><button class="btn" onclick="newChat()">New Chat</button><button class="btn" onclick="clearChat()">Clear</button></div></div>
+<div class="chat"><div id="chatMessages" class="messages"><div class="msg bot">سلام! من AI Team هستم. می‌توانی مدل را انتخاب کنی و پیام بفرستی.</div></div><div id="typingIndicator" class="typing">در حال پردازش...</div><div class="composer"><textarea id="chatInput" placeholder="پیامت را بنویس..."></textarea><button class="btn primary" onclick="sendChatMessage()">ارسال</button></div></div></section>
+
+<section id="page-agents" class="page"><div class="page-head"><h1>Agents</h1><button class="btn primary" onclick="createAgent()">+ Agent</button></div><div id="agentsList" class="grid g3"></div></section>
+<section id="page-prompts" class="page"><div class="page-head"><h1>Prompt Library</h1><button class="btn primary" onclick="addPrompt()">+ Prompt</button></div><div id="promptsList" class="grid g3"></div></section>
+
+<section id="page-studio" class="page"><div class="page-head"><h1>AI Studio</h1></div><div class="grid g3">
+<div class="card"><h3>Image</h3><p>ساخت تصویر با API متصل‌شده.</p><button class="btn primary" style="margin-top:12px" onclick="generateImage()">Generate</button></div>
+<div class="card"><h3>Video</h3><p>شروع فرایند تولید ویدئو.</p><button class="btn primary" style="margin-top:12px" onclick="generateVideo()">Generate</button></div>
+<div class="card"><h3>Voice</h3><p>تبدیل متن به صدا.</p><button class="btn primary" style="margin-top:12px" onclick="generateAudio()">Generate</button></div>
+<div class="card"><h3>Moderation</h3><p>بررسی محتوای ورودی.</p><button class="btn" style="margin-top:12px" onclick="showModeration()">Check</button></div>
+</div></section>
+
+<section id="page-projects" class="page"><div class="page-head"><h1>Projects</h1><button class="btn primary" onclick="newProject()">+ Project</button></div><div class="grid g3"><div class="card"><h3>AI Team Workspace</h3><p>پروژه پیش‌فرض برای مدیریت فعالیت‌ها.</p></div><div class="card"><h3>Code Lab</h3><p>فضای آماده برای پروژه‌های کدنویسی.</p></div><div class="card"><h3>Research Hub</h3><p>مرکز تحقیقات و یادداشت‌ها.</p></div></div></section>
+
+<section id="page-workflows" class="page"><div class="page-head"><h1>Workflows</h1><button class="btn primary" onclick="newWorkflow()">+ Workflow</button></div><div class="grid g2"><div class="card"><h3>Research → Analyze → Write</h3><p>جریان نمونه برای تحقیق و تولید محتوا.</p></div><div class="card"><h3>Idea → Code → Review</h3><p>جریان نمونه برای توسعه نرم‌افزار.</p></div></div></section>
+
+<section id="page-learning" class="page"><div class="page-head"><h1>Learning Center</h1><button class="btn primary" onclick="startLearning()">Start</button></div><div class="grid g3"><div class="card"><h3>Prompt Engineering</h3><p>ساخت پرامپت‌های دقیق و قابل استفاده مجدد.</p></div><div class="card"><h3>AI Agents</h3><p>آشنایی با طراحی Agentهای تخصصی.</p></div><div class="card"><h3>AI Workflows</h3><p>ترکیب چند مرحله برای خودکارسازی کارها.</p></div></div></section>
+
+<section id="page-settings" class="page"><div class="page-head"><h1>Settings</h1></div><div class="grid g2">
+<div class="card"><h3>Account</h3><div class="form"><input class="control" id="profileName" placeholder="نام نمایشی"><button class="btn primary" onclick="saveProfile()">Save</button></div></div>
+<div class="card">
+<h3>AvalAI API</h3>
+<p class="muted" style="margin:6px 0 10px">کلید فقط در LocalStorage همین مرورگر ذخیره می‌شود. برای سایت عمومی، بهتر است API Key از طریق بک‌اند امن ارسال شود.</p>
+<div class="api-key-row"><input class="control" id="apiKeyInput" type="password" placeholder="AvalAI API Key"><button class="btn primary" onclick="saveApiKey()">Save</button></div>
+<div style="display:flex;gap:8px;margin-top:8px"><button class="btn" onclick="testApiKey()">Test API</button><span id="apiStatus" class="api-status"><span class="api-dot"></span>Not configured</span></div>
+</div>
+<div class="card"><h3>Usage</h3><p id="settingsUsage"></p><button class="btn" style="margin-top:10px" onclick="activatePremium()">Activate demo premium</button></div>
+</div></section>
+</main></div></div>
+<div id="modal" class="modal"><div class="modal-box"><h2 id="modalTitle"></h2><div id="modalBody"></div><div class="modal-actions"><button class="btn" onclick="closeModal()">Close</button></div></div></div>
+
+<script>
+const API_BASE = 'https://api.avalai.ir/v1';
+const DAILY_LIMIT = 5;
+
+const MODEL_CONFIG = {
+    OpenAI: {
+        id: 'gpt-5.5',
+        image: 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true'
+    },
+    Gemini: {
+        id: 'gemini-2.5-flash',
+        image: 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true'
+    },
+    DeepSeek: {
+        id: 'deepseek-v3.2',
+        image: 'https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true'
+    }
+};
+
+let currentModel = localStorage.getItem('aiTeamModel') || 'OpenAI';
+let chatHistory = JSON.parse(localStorage.getItem('aiTeamChat') || '[]');
+let userId = localStorage.getItem('aiTeamUserId') || 'user_' + Date.now();
+localStorage.setItem('aiTeamUserId', userId);
+
+function getApiKey(){ return localStorage.getItem('avalaiApiKey') || ''; }
+
+function getToday(){ return new Date().toDateString(); }
+function getUserData(){
+    try { return JSON.parse(localStorage.getItem('aiTeamUser_' + userId) || '{}'); }
+    catch { return {}; }
+}
+function setUserData(d){ localStorage.setItem('aiTeamUser_' + userId, JSON.stringify(d)); }
+function isPremiumActive(){
+    const d = getUserData();
+    return d.plan === 'premium' && new Date(d.expiry) > new Date();
+}
+function getTodayUsage(){
+    const d = getUserData();
+    return d.usage?.[getToday()] || 0;
+}
+function incrementTodayUsage(){
+    const d = getUserData();
+    d.usage = d.usage || {};
+    d.usage[getToday()] = (d.usage[getToday()] || 0) + 1;
+    d.totalChats = (d.totalChats || 0) + 1;
+    setUserData(d);
+}
+function canUserAsk(){
+    if(isPremiumActive()) return {allowed:true};
+    const u = getTodayUsage();
+    return u < DAILY_LIMIT
+        ? {allowed:true}
+        : {allowed:false,message:'سقف روزانه ۵ سؤال برای حساب رایگان پر شده است.'};
+}
+
+function showToast(m){
+    const old = document.querySelector('.toast');
+    if(old) old.remove();
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = m;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2600);
+}
+
+function navigate(id){
+    document.querySelectorAll('.page').forEach(x => x.classList.remove('active'));
+    document.getElementById('page-' + id)?.classList.add('active');
+    document.querySelectorAll('.nav').forEach(x => x.classList.toggle('active', x.dataset.page === id));
+}
+
+function toggleTheme(){
+    const light = document.body.dataset.theme === 'light';
+    document.body.dataset.theme = light ? 'dark' : 'light';
+    if(!light){
+        document.documentElement.style.setProperty('--bg','#f0f2f5');
+        document.documentElement.style.setProperty('--bg-card','#fff');
+        document.documentElement.style.setProperty('--bg-hover','#e8eaed');
+        document.documentElement.style.setProperty('--text','#1a1a2e');
+        document.documentElement.style.setProperty('--muted','#666680');
+    } else {
+        location.reload();
+    }
+}
+
+function showStatus(){ showToast('وضعیت: رابط کاربری فعال است'); }
+function showProfile(){ showToast('پروفایل AI Team'); }
+
+function updateApiStatus(){
+    const status = document.getElementById('apiStatus');
+    if(!status) return;
+    const hasKey = !!getApiKey();
+    status.innerHTML = '<span class="api-dot ' + (hasKey ? 'ok' : '') + '"></span>' + (hasKey ? 'API Key configured' : 'Not configured');
+}
+
+function saveApiKey(){
+    const input = document.getElementById('apiKeyInput');
+    const key = input.value.trim();
+    if(!key){ showToast('یک API Key وارد کنید.'); return; }
+    localStorage.setItem('avalaiApiKey', key);
+    input.value = '';
+    updateApiStatus();
+    showToast('API Key ذخیره شد.');
+}
+
+async function testApiKey(){
+    const key = getApiKey();
+    if(!key){ showToast('ابتدا API Key را ذخیره کنید.'); return; }
+    try{
+        const response = await fetch(API_BASE + '/models', {
+            method:'GET',
+            headers:{'Authorization':'Bearer ' + key}
+        });
+        if(response.ok){
+            updateApiStatus();
+            showToast('اتصال AvalAI موفق بود.');
+        }else{
+            showToast('خطای API: HTTP ' + response.status);
+        }
+    }catch(e){
+        showToast('خطای اتصال: ' + e.message);
+    }
+}
+
+async function callAPI(endpoint, body = null, method = 'POST'){
+    const key = getApiKey();
+    if(!key){
+        showToast('ابتدا AvalAI API Key را از Settings وارد کنید.');
+        navigate('settings');
+        return null;
+    }
+    try{
+        const options = {
+            method,
+            headers:{
+                'Content-Type':'application/json',
+                'Authorization':'Bearer ' + key
+            }
+        };
+        if(body !== null) options.body = JSON.stringify(body);
+        const response = await fetch(API_BASE + endpoint, options);
+        const data = await response.json().catch(() => ({}));
+        if(!response.ok){
+            const message = data?.error?.message || data?.message || ('HTTP ' + response.status);
+            throw new Error(message);
+        }
+        return data;
+    }catch(error){
+        showToast('API Error: ' + error.message);
+        return null;
+    }
+}
+
+async function chatCompletion(messages){
+    return callAPI('/chat/completions',{
+        model: MODEL_CONFIG[currentModel].id,
+        messages,
+        max_tokens: 2000,
+        temperature: 0.7
+    });
+}
+
+async function generateImageAPI(prompt){
+    return callAPI('/images/generations',{
+        model:'gpt-image-2',
+        prompt,
+        size:'1024x1024',
+        n:1,
+        response_format:'b64_json'
+    });
+}
+
+async function textToSpeechAPI(text){
+    return callAPI('/audio/speech',{
+        model:'tts-1',
+        input:text,
+        voice:'alloy',
+        response_format:'mp3'
+    });
+}
+
+async function moderationAPI(text){
+    return callAPI('/moderations',{input:text});
+}
+
+async function modelsListAPI(){
+    return callAPI('/models',null,'GET');
+}
+
+function newChat(){
+    chatHistory=[];
+    localStorage.removeItem('aiTeamChat');
+    document.getElementById('chatMessages').innerHTML='<div class="msg bot">چت جدید آماده است.</div>';
+}
+
+function clearChat(){
+    if(confirm('پیام‌ها پاک شوند؟')) newChat();
+}
+
+function appendMsg(role,text){
+    const box=document.getElementById('chatMessages');
+    const el=document.createElement('div');
+    el.className='msg '+role;
+    el.textContent=text;
+    box.appendChild(el);
+    box.scrollTop=box.scrollHeight;
+}
+
+async function sendChatMessage(){
+    const input=document.getElementById('chatInput');
+    const text=input.value.trim();
+    if(!text)return;
+
+    const limit=canUserAsk();
+    if(!limit.allowed){showToast(limit.message);return;}
+
+    if(!getApiKey()){
+        showToast('ابتدا API Key را از Settings وارد کنید.');
+        navigate('settings');
+        return;
+    }
+
+    input.value='';
+    appendMsg('user',text);
+    incrementTodayUsage();
+
+    chatHistory.push({role:'user',content:text});
+    localStorage.setItem('aiTeamChat',JSON.stringify(chatHistory));
+
+    document.getElementById('typingIndicator').classList.add('show');
+    const result=await chatCompletion(chatHistory);
+    document.getElementById('typingIndicator').classList.remove('show');
+
+    if(result?.choices?.[0]){
+        const r=result.choices[0].message?.content || 'پاسخ خالی بود.';
+        appendMsg('bot',r);
+        chatHistory.push({role:'assistant',content:r});
+        localStorage.setItem('aiTeamChat',JSON.stringify(chatHistory));
+
+        const d=getUserData();
+        d.totalTokens=(d.totalTokens||0)+(result.usage?.total_tokens||0);
+        setUserData(d);
+    }else{
+        appendMsg('bot','پاسخی از API دریافت نشد.');
+    }
+
+    updateUI();
+    refreshDashboard();
+}
+
+function askPrompt(text){
+    document.getElementById('chatInput').value=text;
+    navigate('chat');
+}
+
+function createAgent(){
+    const n=prompt('نام Agent:');
+    if(!n)return;
+    const c=document.getElementById('agentsList');
+    const x=document.createElement('div');
+    x.className='card';
+    x.innerHTML='<h3>'+escapeHtml(n)+'</h3><p>Custom AI Agent — آماده به کار</p>';
+    c.prepend(x);
+    const d=getUserData();
+    d.totalAgents=(d.totalAgents||5)+1;
+    setUserData(d);
+    updateUI();
+}
+
+function addPrompt(){
+    const n=prompt('نام Prompt:');
+    if(!n)return;
+    const c=document.getElementById('promptsList');
+    const x=document.createElement('div');
+    x.className='card';
+    x.innerHTML='<h3>'+escapeHtml(n)+'</h3><p>Custom prompt template</p>';
+    c.prepend(x);
+}
+
+function newProject(){showToast('Project جدید ایجاد شد');}
+function newWorkflow(){showToast('Workflow جدید ایجاد شد');}
+function startCoding(){askPrompt('یک Workspace برای کدنویسی بساز');}
+function startContent(){askPrompt('برای تولید محتوای حرفه‌ای یک برنامه پیشنهاد بده');}
+function startLearning(){navigate('learning');}
+function uploadFile(){showToast('آپلود فایل در نسخه بعدی');}
+function viewTasks(){showToast('Tasks آماده بررسی است');}
+function viewReports(){showToast('Reports آماده بررسی است');}
+function addModel(){navigate('models');}
+
+async function generateImage(){
+    const promptText=prompt('توضیح تصویر را وارد کنید:');
+    if(!promptText?.trim())return;
+    const result=await generateImageAPI(promptText.trim());
+    if(!result?.data?.[0])return;
+
+    const item=result.data[0];
+    const box=document.getElementById('chatMessages');
+    const msg=document.createElement('div');
+    msg.className='msg bot';
+    msg.textContent='تصویر تولید شد.';
+
+    const img=document.createElement('img');
+    img.style.maxWidth='100%';
+    img.style.borderRadius='12px';
+    img.style.display='block';
+    img.style.marginTop='8px';
+
+    if(item.url){
+        img.src=item.url;
+    }else if(item.b64_json){
+        img.src='data:image/png;base64,'+item.b64_json;
+    }
+
+    msg.appendChild(img);
+    box.appendChild(msg);
+    box.scrollTop=box.scrollHeight;
+    showToast('تصویر با موفقیت تولید شد.');
+}
+
+async function generateAudio(){
+    const text=prompt('متن برای تبدیل به صدا:');
+    if(!text?.trim())return;
+    const result=await textToSpeechAPI(text.trim());
+    if(result?.audio_url){
+        const box=document.getElementById('chatMessages');
+        const msg=document.createElement('div');
+        msg.className='msg bot';
+        const audio=document.createElement('audio');
+        audio.controls=true;
+        audio.src=result.audio_url;
+        msg.textContent='فایل صوتی آماده شد.';
+        msg.appendChild(audio);
+        box.appendChild(msg);
+        box.scrollTop=box.scrollHeight;
+        showToast('صدا تولید شد.');
+    }
+}
+
+function generateVideo(){
+    showToast('برای Video باید مدل و endpoint ویدئو در حساب AvalAI فعال باشد.');
+}
+
+async function showModeration(){
+    const text=prompt('متن برای بررسی:');
+    if(!text?.trim())return;
+    const result=await moderationAPI(text.trim());
+    if(result?.results?.[0]){
+        const r=result.results[0];
+        const cats=Object.entries(r.categories||{}).filter(([,v])=>v).map(([k])=>k).join(', ')||'None';
+        appendMsg('bot','Moderation: '+(r.flagged?'Flagged':'Safe')+'\nCategories: '+cats);
+    }
+}
+
+function startResearch(){askPrompt('درباره موضوع زیر تحقیق ساختاریافته انجام بده: ');}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));}
+
+function fetchModels(){
+    const localModels=Object.entries(MODEL_CONFIG);
+    document.getElementById('modelsList').innerHTML=localModels.map(([name,cfg])=>`
+        <div class="card model-card">
+            <div class="model-top">
+                <img class="model-logo" src="${cfg.image}" alt="${name}">
+                <div class="model-meta">
+                    <h3>${name}</h3>
+                    <small>${cfg.id}</small>
+                </div>
+            </div>
+            <p style="margin-top:10px">مدل آماده استفاده از طریق AvalAI API.</p>
+            <button class="btn primary model-btn" data-model="${name}" style="margin-top:12px">Use model</button>
+        </div>
+    `).join('');
+
+    document.querySelectorAll('.model-btn').forEach(b=>{
+        b.onclick=()=>{
+            currentModel=b.dataset.model;
+            localStorage.setItem('aiTeamModel',currentModel);
+            document.getElementById('modelSelect').value=currentModel;
+            navigate('chat');
+            showToast(currentModel+' انتخاب شد.');
+        };
+    });
+}
+
+function refreshDashboard(){
+    const d=getUserData();
+    document.getElementById('totalChats').textContent=d.totalChats||0;
+    document.getElementById('totalAgents').textContent=d.totalAgents||5;
+    document.getElementById('totalTokens').textContent=d.totalTokens||0;
+    document.getElementById('activityList').innerHTML=
+        '<div class="row"><span>Today usage</span><span class="muted">'+getTodayUsage()+'/'+(isPremiumActive()?'∞':DAILY_LIMIT)+'</span></div>'+
+        '<div class="row"><span>Current model</span><span class="muted">'+currentModel+'</span></div>';
+    updateUI();
+}
+
+function updateUI(){
+    const p=isPremiumActive();
+    document.getElementById('premiumBadge').style.display=p?'inline-block':'none';
+    document.getElementById('premiumStatusDisplay').textContent=p?'Premium':'Free';
+    document.getElementById('dailyLimitDisplay').textContent=p?'Unlimited':DAILY_LIMIT+' questions';
+    const usage=document.getElementById('settingsUsage');
+    if(usage)usage.textContent='مصرف امروز: '+getTodayUsage()+' / '+(p?'∞':DAILY_LIMIT);
+    updateApiStatus();
+}
+
+function activatePremium(days=30){
+    const d=getUserData();
+    d.plan='premium';
+    d.expiry=new Date(Date.now()+days*864e5).toISOString();
+    setUserData(d);
+    updateUI();
+    showToast('Premium آزمایشی فعال شد');
+}
+
+function saveProfile(){
+    const d=getUserData();
+    d.name=document.getElementById('profileName').value.trim();
+    setUserData(d);
+    showToast('پروفایل ذخیره شد');
+}
+
+function openModal(title,body){
+    document.getElementById('modalTitle').textContent=title;
+    document.getElementById('modalBody').innerHTML=body;
+    document.getElementById('modal').classList.add('show');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');}
+
+document.addEventListener('keydown',e=>{
+    if(e.ctrlKey&&e.key.toLowerCase()==='k'){
+        e.preventDefault();
+        document.getElementById('globalSearch').focus();
+    }
+    if(e.key==='Escape')document.getElementById('globalSearch').blur();
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('modelSelect').value=currentModel;
+
+    const agents=['Researcher','Coder','Writer','Analyst','Designer'];
+    document.getElementById('agentsList').innerHTML=agents.map(a=>
+        '<div class="card"><h3>'+a+'</h3><p>AI Agent — آماده برای '+a.toLowerCase()+' tasks.</p></div>'
+    ).join('');
+
+    const prompts=['Code Review Expert','Research Assistant','Creative Storyteller','SEO Writer','Data Analyst'];
+    document.getElementById('promptsList').innerHTML=prompts.map(p=>
+        '<div class="card"><h3>'+p+'</h3><p>Professional prompt template</p></div>'
+    ).join('');
+
+    const savedName=getUserData().name;
+    if(savedName)document.getElementById('profileName').value=savedName;
+
+    const keyInput=document.getElementById('apiKeyInput');
+    if(keyInput)keyInput.value='';
+
+    fetchModels();
+    refreshDashboard();
+    updateApiStatus();
+});
+</script>
+
+<div class="theme-panel" id="themePanel">
+  <h3>رنگ رابط کاربری</h3>
+  <div class="color-row" id="colorRow">
+    <button class="color-dot" style="background:#a855f7" onclick="setAccent('#a855f7')"></button>
+    <button class="color-dot" style="background:#3b82f6" onclick="setAccent('#3b82f6')"></button>
+    <button class="color-dot" style="background:#06b6d4" onclick="setAccent('#06b6d4')"></button>
+    <button class="color-dot" style="background:#22c55e" onclick="setAccent('#22c55e')"></button>
+    <button class="color-dot" style="background:#f59e0b" onclick="setAccent('#f59e0b')"></button>
+    <button class="color-dot" style="background:#ef4444" onclick="setAccent('#ef4444')"></button>
+  </div>
+  <input class="custom-color" id="customColor" type="color" value="#a855f7" onchange="setAccent(this.value)" />
+</div>
+
+<div class="plus-modal" id="plusModal">
+  <div class="plus-box">
+    <h2>AI Team Plus</h2>
+    <div class="plus-price">۱۰۰٬۰۰۰ تومان</div>
+    <div class="card-mask">۶۲۲۱ •••• •••• ۹۲۸۱</div>
+    <div class="plus-note">
+      برای پرداخت، مبلغ اشتراک را به کارت نمایش‌داده‌شده واریز کن.
+      برای حفظ حریم خصوصی، شماره کارت کامل در رابط کاربری نمایش داده نمی‌شود.
+    </div>
+    <div class="plus-actions">
+      <button class="btn btn-secondary" onclick="closePlusModal()">بستن</button>
+      <button class="btn btn-primary" onclick="showToast('پس از تأیید پرداخت، Plus فعال می‌شود.')">ادامه</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ===== AI TEAM UI ENHANCEMENTS ===== */
+let generationController = null;
+
+const MODEL_IMAGES = {
+  OpenAI: "https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000009dc481f4beac7bb7a39278af.png?raw=true",
+  Gemini: "https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000007e9882468eaa77a150b3cda2.png?raw=true",
+  DeepSeek: "https://github.com/mohamadkavosi2322-art/my-mini-app/blob/main/file_000000006d3c81f48d3fc75a45a76480.png?raw=true"
+};
+
+function setAccent(hex) {
+  const root = document.documentElement;
+  root.style.setProperty('--accent', hex);
+  root.style.setProperty('--primary', hex);
+  root.style.setProperty('--primary-light', hex);
+  root.style.setProperty('--primary-dark', hex);
+  localStorage.setItem('aiTeamAccent', hex);
+  const picker = document.getElementById('customColor');
+  if (picker) picker.value = hex;
+  document.querySelectorAll('.color-dot').forEach(b => {
+    b.classList.toggle('selected', b.style.backgroundColor === hex || b.style.background === hex);
+  });
+}
+function openThemePanel() { document.getElementById('themePanel')?.classList.toggle('show'); }
+function openPlusModal() { document.getElementById('plusModal')?.classList.add('show'); }
+function closePlusModal() { document.getElementById('plusModal')?.classList.remove('show'); }
+
+function stopGeneration() {
+  if (generationController) generationController.abort();
+  generationController = null;
+  document.getElementById('chatStopBtn')?.classList.remove('show');
+  document.getElementById('chatSendBtn')?.classList.remove('hide');
+  document.getElementById('typingIndicator')?.classList.remove('active');
+  showToast('Generation stopped');
+}
+
+function escapeHTML(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+}
+
+function addMessageActions(wrapper, replyText) {
+  const actions = document.createElement('div');
+  actions.className = 'message-actions';
+  const make = (label, svg, fn, cls='') => {
+    const b = document.createElement('button');
+    b.className = 'message-action ' + cls;
+    b.title = label; b.setAttribute('aria-label', label);
+    b.innerHTML = svg;
+    b.onclick = fn;
+    return b;
+  };
+  const like = make('لایک', '<svg viewBox="0 0 24 24"><path d="M7 10v11H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3z"></path><path d="M7 10l4-8a3 3 0 0 1 3 3v3h5a2 2 0 0 1 2 2l-1 8a2 2 0 0 1-2 2H7"></path></svg>', () => like.classList.toggle('active-like'));
+  const copy = make('کپی', '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>', async () => {
+    try { await navigator.clipboard.writeText(replyText); showToast('کپی شد'); } catch { showToast('کپی انجام نشد'); }
+  });
+  const dislike = make('دیس‌لایک', '<svg viewBox="0 0 24 24"><path d="M17 14V3h3a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-3z"></path><path d="M17 14l-4 8a3 3 0 0 1-3-3v-3H5a2 2 0 0 1-2-2l1-8a2 2 0 0 1 2-2h11"></path></svg>', () => dislike.classList.toggle('active-dislike'));
+  const share = make('اشتراک‌گذاری', '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.6 13.5l6.8 4"></path><path d="M15.4 6.5l-6.8 4"></path></svg>', async () => {
+    try {
+      if (navigator.share) await navigator.share({title:'AI Team', text:replyText});
+      else { await navigator.clipboard.writeText(replyText); showToast('متن برای اشتراک‌گذاری کپی شد'); }
+    } catch {}
+  });
+  actions.append(like, copy, dislike, share);
+  wrapper.appendChild(actions);
+}
+
+function addEnhancedMessage(text, role='bot') {
+  const container = document.getElementById('chatMessages');
+  document.getElementById('chatEmpty')?.remove();
+  const wrap = document.createElement('div');
+  wrap.className = 'msg-wrap ' + (role === 'user' ? 'user-wrap' : 'bot-wrap');
+  const msg = document.createElement('div');
+  msg.className = 'msg ' + role;
+  msg.textContent = text;
+  wrap.appendChild(msg);
+  if (role === 'bot') addMessageActions(wrap, text);
+  container.appendChild(wrap);
+  container.scrollTop = container.scrollHeight;
+  return msg;
+}
+
+/* Make the existing send flow use the polished message/action UI while keeping the AvalAI API. */
+const originalSendChatMessage = window.sendChatMessage;
+window.sendChatMessage = async function() {
+  const input = document.getElementById('chatInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const limit = typeof canUserAsk === 'function' ? canUserAsk() : {allowed:true};
+  if (!limit.allowed) { showToast(limit.message || 'Daily limit reached!'); return; }
+  input.value = '';
+  document.getElementById('chatEmpty')?.remove();
+  addEnhancedMessage(text, 'user');
+  if (typeof incrementTodayUsage === 'function') incrementTodayUsage();
+  if (typeof updateUI === 'function') updateUI();
+
+  const typing = document.getElementById('typingIndicator');
+  typing?.classList.add('active');
+  document.getElementById('chatSendBtn')?.classList.add('hide');
+  document.getElementById('chatStopBtn')?.classList.add('show');
+
+  generationController = new AbortController();
+  try {
+    const messages = (chatHistory || []).map(m => ({role:m.role, content:m.content}));
+    messages.push({role:'user', content:text});
+    const result = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : 'https://api.avalai.ir/v1') + '/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer ' + AVALAI_KEY},
+      body:JSON.stringify({
+        model: currentModel === 'OpenAI' ? 'gpt-5.5' : currentModel === 'Gemini' ? 'gemini-3.5-flash' : 'deepseek-v4-flash',
+        messages, max_tokens:2000, temperature:.7
+      }),
+      signal:generationController.signal
+    }).then(r=>r.json());
+
+    if (result?.choices?.[0]?.message?.content) {
+      const reply = result.choices[0].message.content;
+      chatHistory.push({role:'user',content:text});
+      chatHistory.push({role:'assistant',content:reply});
+      addEnhancedMessage(reply, 'bot');
+    } else {
+      showToast(result?.error?.message || 'پاسخی از API دریافت نشد');
+    }
+  } catch(e) {
+    if (e.name !== 'AbortError') showToast('API Error: ' + e.message);
+  } finally {
+    generationController = null;
+    typing?.classList.remove('active');
+    document.getElementById('chatStopBtn')?.classList.remove('show');
+    document.getElementById('chatSendBtn')?.classList.remove('hide');
+  }
+};
+
+function bindChatInput() {
+  const input = document.getElementById('chatInput');
+  if (!input || input.dataset.bound) return;
+  input.dataset.bound = '1';
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      window.sendChatMessage();
+    }
+  });
+}
+
+function enhanceModels() {
+  const container = document.getElementById('modelsList');
+  if (!container) return;
+  const cards = container.querySelectorAll('.card');
+  cards.forEach(card => {
+    const id = card.textContent || '';
+    const key = id.includes('Gemini') ? 'Gemini' : id.includes('DeepSeek') ? 'DeepSeek' : id.includes('OpenAI') ? 'OpenAI' : null;
+    if (!key) return;
+    card.classList.add('model-card-enhanced');
+    if (!card.querySelector('.model-avatar')) {
+      const img = document.createElement('img');
+      img.className = 'model-avatar';
+      img.src = MODEL_IMAGES[key];
+      img.alt = key;
+      card.prepend(img);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('aiTeamAccent') || '#a855f7';
+  setAccent(saved);
+  bindChatInput();
+  setTimeout(enhanceModels, 700);
+});
+</script>
+
+</body>
+</html>
