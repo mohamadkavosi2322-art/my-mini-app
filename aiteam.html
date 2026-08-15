@@ -311,10 +311,13 @@
         .action-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
+            gap: 10px;
             width: 100%;
             max-width: 500px;
             margin-top: 6px;
+        }
+        .action-buttons.hidden {
+            display: none;
         }
         
         .action-btn {
@@ -370,6 +373,18 @@
         .action-btn.audio:active { background: #22c55e !important; color: #fff !important; }
         .action-btn.audio:active svg { stroke: #fff !important; }
         
+        .action-btn.tts svg { stroke: #14b8a6; fill: none; }
+        .action-btn.tts { border-color: rgba(20,184,166,0.3); color: #14b8a6; }
+        .action-btn.tts:hover { background: rgba(20,184,166,0.08); }
+        .action-btn.tts:active { background: #14b8a6 !important; color: #fff !important; }
+        .action-btn.tts:active svg { stroke: #fff !important; }
+        
+        .action-btn.stt svg { stroke: #f59e0b; fill: none; }
+        .action-btn.stt { border-color: rgba(245,158,11,0.3); color: #f59e0b; }
+        .action-btn.stt:hover { background: rgba(245,158,11,0.08); }
+        .action-btn.stt:active { background: #f59e0b !important; color: #fff !important; }
+        .action-btn.stt:active svg { stroke: #fff !important; }
+        
         .action-btn.pdf svg { stroke: #eab308; fill: none; }
         .action-btn.pdf { border-color: rgba(234,179,8,0.3); color: #eab308; }
         .action-btn.pdf:hover { background: rgba(234,179,8,0.08); }
@@ -394,27 +409,11 @@
         .action-btn.models:active { background: #8b5cf6 !important; color: #fff !important; }
         .action-btn.models:active svg { stroke: #fff !important; }
         
-        .action-btn.tts svg { stroke: #14b8a6; fill: none; }
-        .action-btn.tts { border-color: rgba(20,184,166,0.3); color: #14b8a6; }
-        .action-btn.tts:hover { background: rgba(20,184,166,0.08); }
-        .action-btn.tts:active { background: #14b8a6 !important; color: #fff !important; }
-        .action-btn.tts:active svg { stroke: #fff !important; }
-        
-        .action-btn.stt svg { stroke: #f59e0b; fill: none; }
-        .action-btn.stt { border-color: rgba(245,158,11,0.3); color: #f59e0b; }
-        .action-btn.stt:hover { background: rgba(245,158,11,0.08); }
-        .action-btn.stt:active { background: #f59e0b !important; color: #fff !important; }
-        .action-btn.stt:active svg { stroke: #fff !important; }
-        
         .action-btn.ocr svg { stroke: #ec4899; fill: none; }
         .action-btn.ocr { border-color: rgba(236,72,153,0.3); color: #ec4899; }
         .action-btn.ocr:hover { background: rgba(236,72,153,0.08); }
         .action-btn.ocr:active { background: #ec4899 !important; color: #fff !important; }
         .action-btn.ocr:active svg { stroke: #fff !important; }
-        
-        .action-buttons.hidden {
-            display: none;
-        }
         
         .input-area {
             display: flex;
@@ -625,4 +624,4 @@
         </div>
         <div class="header-right">
             <button onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;padding:4px;" id="themeBtn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/
